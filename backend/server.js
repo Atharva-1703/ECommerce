@@ -1,18 +1,19 @@
-const express = require("express");
-const mongoose = require("mongoose");
 require("dotenv").config();
-const PORT = 3000;
+const express = require("express");
 const cors = require("cors");
+const connectDB = require("./utils/db");
+const authRoutes = require("./routes/authRoutes");
+
+const PORT = 3000;
 
 const app = express();
 app.use(express.json());
 
-mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => {
-    console.log("Database connected");
-    app.listen(PORT, () => console.log("Server is running"));
-  })
-  .catch((err) => {
-    console.log("Couldn't connect to database", err);
-  });
+connectDB();
+app.listen(PORT, () => {
+  console.log("Server is running on port 3000");
+});
+
+app.use("/api/auth", authRoutes);
+
+module.exports = app;
