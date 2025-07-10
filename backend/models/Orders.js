@@ -12,13 +12,13 @@ const orderSchema = {
   },
 
   quantity: { type: Number, required: true,min:1 },
-  image: { type: String, required: true },
-  price: { type: Number, required: true },
   product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
     required: true,
   },
+  delivered: { type: Boolean, required: true, default: false },
+
   shippingAddress: {
     address: { type: String, required: true },
     city: { type: String, required: true },

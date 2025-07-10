@@ -66,7 +66,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
   if (!isMatch) {
     return res.status(404).json({
       success: false,
-      message: "Incorrect Password",
+      message: "Incorrect Credentials",
     });
   }
 

@@ -10,11 +10,6 @@ const ratingSchema = new mongoose.Schema(
     comment: {
       type: String,
     },
-    date: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    },
     name: {
       type: String,
       required: true,
