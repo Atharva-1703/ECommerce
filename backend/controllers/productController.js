@@ -2,8 +2,15 @@ const asyncHandler = require("express-async-handler");
 const Product = require("../models/Product");
 const productValidationSchema = require("../validators/productValidator");
 const Ratings = require("../models/Rating");
+const mongoose = require("mongoose");
 
 exports.addProduct = asyncHandler(async (req, res) => {
+  if (!req.body) {
+    return res.status(400).json({
+      success: false,
+      message: "No data provided",
+    });
+  }
   const { error, value } = productValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
@@ -30,7 +37,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
   if (title) {
     query.$or = [
       { title: { $regex: title, $options: "i" } },
-      { description: { $regex: title, $options: "i" } }
+      { description: { $regex: title, $options: "i" } },
     ];
   }
 
@@ -43,9 +50,21 @@ exports.getProducts = asyncHandler(async (req, res) => {
   });
 });
 
-
 exports.getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Product ID format",
+    });
+  }
+  const product = await Product.findById(id);
+  if (!product) {
+    return res.status(404).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
   return res.status(200).json({
     success: true,
     message: "Product fetched successfully",
@@ -54,23 +73,34 @@ exports.getProductById = asyncHandler(async (req, res) => {
 });
 
 exports.updateProduct = asyncHandler(async (req, res) => {
-  const id=req.params.id;
-  const updates=req.body;
+  const id = req.params.id;
+  const updates = req.body;
   if (!id || !updates) {
     return res.status(400).json({
       success: false,
-      message: "Incomplete fields"
+      message: "Incomplete fields",
     });
   }
-  
-  const product = await Product.findByIdAndUpdate(id, {$set: updates}, {
-    new: true,runValidators: true
-  });
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Product ID format",
+    });
+  }
 
-  if(!product){
+  const product = await Product.findByIdAndUpdate(
+    id,
+    { $set: updates },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  if (!product) {
     return res.status(404).json({
       success: false,
-      message: "Product not found"
+      message: "Product not found",
     });
   }
 
@@ -82,20 +112,27 @@ exports.updateProduct = asyncHandler(async (req, res) => {
 });
 
 exports.removeProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Product ID format",
+    });
+  }
+  const product = await Product.findById(id);
 
-  if(!product){
+  if (!product) {
     return res.status(404).json({
       success: false,
-      message: "Product not found"
+      message: "Product not found",
     });
   }
 
-  const reviews = product.reviews
-  if(reviews.length>0){
+  const reviews = product.reviews;
+  if (reviews.length > 0) {
     reviews.forEach(async (review) => {
       await Ratings.findByIdAndDelete(review);
-    })
+    });
   }
 
   await Product.findByIdAndDelete(req.params.id);
