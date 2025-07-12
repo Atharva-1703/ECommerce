@@ -29,13 +29,16 @@ const userSchema = new mongoose.Schema(
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Rating",
+        ref: "Ratings",
       },
     ],
     cart: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        quantity: { type: Number, required: true,default: 1 ,min: 1 },
       },
     ],
     address: [
@@ -46,6 +49,7 @@ const userSchema = new mongoose.Schema(
         postalCode: { type: String, required: true },
         country: { type: String, required: true },
         phone: { type: String, required: true },
+        default: { type: Boolean, required: true, default: false },
       },
     ],
   },
