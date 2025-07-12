@@ -4,6 +4,8 @@ const cors = require("cors");
 const connectDB = require("./utils/db");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
+const ratingRoutes = require("./routes/ratingRoutes");
+const isAuthenticated = require("./middlewares/isAuthenticated");
 
 const PORT = 3000;
 
@@ -17,5 +19,6 @@ app.listen(PORT, () => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products",productRoutes);
+app.use('/api/reviews',isAuthenticated,ratingRoutes)
 
 module.exports = app;

@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema(
         ref: "Product",
       },
     ],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Rating",
+      },
+    ],
     cart: [
       {
         products: {
