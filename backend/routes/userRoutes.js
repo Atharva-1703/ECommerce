@@ -1,5 +1,5 @@
 const express=require('express');
-const { getUser, getFavourites, getCart, getReviews, addFavourite, removeFavourite, addToCart, removeFromCart, clearCart, editCart } = require('../controllers/userController');
+const { getUser, getFavourites, getCart, getReviews, addFavourite, removeFavourite, addToCart, removeFromCart, clearCart, editCart, addAddress, removeAddress } = require('../controllers/userController');
 
 const userRoutes=express.Router();
 
@@ -16,5 +16,8 @@ userRoutes.post('/cart/add',addToCart);
 userRoutes.delete('/cart/remove',removeFromCart);
 userRoutes.put('/cart/edit',editCart)
 userRoutes.delete('/cart/clear',clearCart);
+
+userRoutes.get('/address/add',addAddress)
+userRoutes.get('/address/remove',removeAddress)
 
 module.exports=userRoutes;

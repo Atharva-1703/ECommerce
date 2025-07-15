@@ -41,6 +41,12 @@ const userSchema = new mongoose.Schema(
         quantity: { type: Number, required: true,default: 1 ,min: 1 },
       },
     ],
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
     address: [
       {
         name: { type: String, required: true },
@@ -48,8 +54,7 @@ const userSchema = new mongoose.Schema(
         city: { type: String, required: true },
         postalCode: { type: String, required: true },
         country: { type: String, required: true },
-        phone: { type: String, required: true },
-        default: { type: Boolean, required: true, default: false },
+        phone: { type: String, required: true }
       },
     ],
   },

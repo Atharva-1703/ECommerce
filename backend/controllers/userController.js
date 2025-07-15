@@ -19,7 +19,7 @@ exports.getUser=(asyncHandler(async (req, res) => {
 
 exports.getReviews=asyncHandler(async(req,res)=>{
     const user=req.user;
-    const userFound=await User.findById(user.id).populate("reviews").select("-password");
+    const reviews=await User.findById(user.id).populate("reviews").select("reviews");
     if(!userFound){
         return res.status(404).json({
             success:false,
@@ -28,7 +28,7 @@ exports.getReviews=asyncHandler(async(req,res)=>{
     }
     res.status(200).json({
         success:true,
-        reviews:userFound.reviews
+        reviews
     })
 })
 
@@ -82,7 +82,7 @@ exports.removeFavourite=asyncHandler(async(req,res)=>{
 
 exports.getFavourites=asyncHandler(async(req,res)=>{
     const user=req.user;
-    const userFound=await User.findById(user.id).populate("favourites").select("-password");
+    const favourites=await User.findById(user.id).populate("favourites").select("favourites");
     if(!userFound){
         return res.status(404).json({
             success:false,
@@ -91,7 +91,7 @@ exports.getFavourites=asyncHandler(async(req,res)=>{
     }
     res.status(200).json({
         success:true,
-        favourites:userFound.favourites
+        favourites
     })
 })
 
@@ -195,8 +195,8 @@ exports.removeFromCart=asyncHandler(async(req,res)=>{
 
 exports.getCart=asyncHandler(async(req,res)=>{
     const user=req.user;
-    const userFound=await User.findById(user.id).populate("cart.product").select("-password");
-    if(!userFound){
+    const cart=await User.findById(user.id).populate("cart.product").select("cart");
+    if(!cart){
         return res.status(404).json({
             success:false,
             message:"User not found"
@@ -204,7 +204,7 @@ exports.getCart=asyncHandler(async(req,res)=>{
     }
     res.status(200).json({
         success:true,
-        cart:userFound.cart
+        cart
     })
 })
 
@@ -224,4 +224,50 @@ exports.clearCart=asyncHandler(async(req,res)=>{
         success:true,
         message:"Cart cleared"
     })
+})
+
+exports.addAddress=asyncHandler(async(req,res)=>{
+    const user=req.user;
+    const address=req.body;
+    address.name=address.name.toLowerCase();
+    
+    const userFound=await User.findById(user.id);
+    if(!userFound){
+        return res.status(404).json({
+            success:false,
+            message:"User not found"
+        })
+    }
+    if(userFound.address.find((item)=>item.name===address.name)){
+        return res.status(400).json({
+            success:false,
+            message:"Address with same name already exists"
+        })
+    }
+    userFound.address.push(address);
+    await userFound.save();
+    return res.status(200).json({
+        success:true,
+        message:"Address added"
+    })
+})
+
+exports.removeAddress=asyncHandler(async(req,res)=>{
+    const user=req.user;
+    const {name}=req.body;
+    name=name.toLowerCase();
+    const userFound=await User.findById(user.id);
+    if(!userFound){
+        return res.status(404).json({
+            success:false,
+            message:"User not found"
+        })
+    }
+    userFound.address=userFound.address.filter((item)=>item.name!==name);
+    await userFound.save();
+    return res.status(200).json({
+        success:true,
+        message:"Address deleted"
+    })
+
 })
