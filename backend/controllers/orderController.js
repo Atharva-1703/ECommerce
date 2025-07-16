@@ -1,7 +1,7 @@
 const asyncHandler=require("express-async-handler");
 const Order=require("../models/Order");
 const User=require("../models/User");
-const product=require("../models/Product");
+const Product=require("../models/Product");
 
 exports.addOrderDirectly=asyncHandler(async(req,res)=>{
     const user=req.user;
