@@ -6,3 +6,5 @@ const orderRoutes=express.Router();
 orderRoutes.post('/add/directly',addOrderDirectly);
 orderRoutes.get('/user',getOrders);
 orderRoutes.delete('/cancel',cancelOrder);
+
+module.exports=orderRoutes

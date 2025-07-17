@@ -17,7 +17,7 @@ userRoutes.delete('/cart/remove',removeFromCart);
 userRoutes.put('/cart/edit',editCart)
 userRoutes.delete('/cart/clear',clearCart);
 
-userRoutes.get('/address/add',addAddress)
-userRoutes.get('/address/remove',removeAddress)
+userRoutes.put('/address/add',addAddress)
+userRoutes.put('/address/remove',removeAddress)
 
 module.exports=userRoutes;

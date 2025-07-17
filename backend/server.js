@@ -7,6 +7,7 @@ const productRoutes = require("./routes/productRoutes");
 const ratingRoutes = require("./routes/ratingRoutes");
 const userRoutes = require("./routes/userRoutes");
 const isAuthenticated = require("./middlewares/isAuthenticated");
+const orderRoutes = require("./routes/orderRoutes");
 
 const PORT = 3000;
 
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products",productRoutes);
 app.use('/api/reviews',isAuthenticated,ratingRoutes);
 app.use('/api/user',isAuthenticated,userRoutes);
+app.use('/api/orders',isAuthenticated,orderRoutes)
 
 
 module.exports = app;

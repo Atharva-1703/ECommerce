@@ -1,12 +1,13 @@
 const asyncHandler=require("express-async-handler");
-const Order=require("../models/Order");
+const mongoose=require('mongoose')
+const Orders=require("../models/Orders");
 const User=require("../models/User");
 const Product=require("../models/Product");
 
 exports.addOrderDirectly=asyncHandler(async(req,res)=>{
     const user=req.user;
-    const {productId,quantity}=req.body;
-    if(!mongoose.Types.ObjectId,isValid(productId)){
+    const {productId,quantity,addressName}=req.body;
+    if(!mongoose.Types.ObjectId.isValid(productId)){
         return res.status(400).json({
             success:false,
             message:"Invalid Product ID format"
@@ -26,14 +27,15 @@ exports.addOrderDirectly=asyncHandler(async(req,res)=>{
         })
     }
     
-    product.quantity=product.quantity-quantity;
+    if(product.stock<quantity){
+        return res.status(400).json({
+            success:false,
+            refresh:true,
+            message:"Product quantity is less than the quantity you want to add to cart"
+        })
+    }
+    product.stock=product.stock-quantity;
     await product.save();
-    
-    const order=await Order.create({
-        user:user.id,
-        product:productId,
-        quantity
-    });
 
     const userFound=await User.findById(user.id);
     if(!userFound){
@@ -43,12 +45,32 @@ exports.addOrderDirectly=asyncHandler(async(req,res)=>{
         })
     }
 
+    const deliveryAddress=userFound.address.find((item)=>item.name===addressName)
+    if(!deliveryAddress){
+        return res.status(404).json({
+            success:false,
+            message:"Delivery address not found"
+        })
+    }
+
+    delete deliveryAddress.name;
+
+    
+    const order=await Orders.create({
+        name:product.title,
+        user:user.id,
+        product:productId,
+        quantity,
+        shippingAddress:deliveryAddress
+    });
+
+
     userFound.orders.push(order._id);
     await userFound.save();
     
     res.status(200).json({
         success:true,
-        message:"Product added to cart"
+        message:"Ordered Successfully"
     })
 
 })
@@ -71,6 +93,12 @@ exports.getOrders=asyncHandler(async(req,res)=>{
 exports.cancelOrder=asyncHandler(async(req,res)=>{
     const user=req.user;
     const {orderId}=req.body;
+    if(!orderId){
+        return res.status(400).json({
+            success:false,
+            message:"Order ID is required"
+        })
+    }
     if(!mongoose.Types.ObjectId.isValid(orderId)){
         return res.status(400).json({
             success:false,
@@ -78,7 +106,7 @@ exports.cancelOrder=asyncHandler(async(req,res)=>{
         })
     }
     
-    const orders=await Order.findbyIdAndDelete(orderId);
+    const orders=await Orders.findByIdAndDelete(orderId);
     if(!orders){
         return res.status(404).json({
             success:false,
@@ -95,7 +123,7 @@ exports.cancelOrder=asyncHandler(async(req,res)=>{
         })
     }
     
-    product.quantity=product.quantity+orders.quantity;
+    product.stock=product.stock+orders.quantity;
     await product.save();
     
     const userFound=await User.findById(user.id);
