@@ -6,7 +6,7 @@ const Product=require("../models/Product");
 
 exports.addOrderDirectly=asyncHandler(async(req,res)=>{
     const user=req.user;
-    const {productId,quantity,addressName}=req.body;
+    const {productId,quantity,addressId}=req.body;
     if(!mongoose.Types.ObjectId.isValid(productId)){
         return res.status(400).json({
             success:false,
@@ -45,7 +45,7 @@ exports.addOrderDirectly=asyncHandler(async(req,res)=>{
         })
     }
 
-    const deliveryAddress=userFound.address.find((item)=>item.name===addressName)
+    const deliveryAddress=userFound.address.id(addressId)||userFound.address[0];
     if(!deliveryAddress){
         return res.status(404).json({
             success:false,
@@ -141,3 +141,45 @@ exports.cancelOrder=asyncHandler(async(req,res)=>{
         message:"Order cancelled"
     })
 })
+
+exports.addOrderFromCart = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const { addressId } = req.body; 
+
+  const user = await User.findById(userId).populate('cart.product');
+  if (!user || user.cart.length === 0) {
+    return res.status(400).json({ success: false, message: "Cart is empty or user not found" });
+  }
+
+  const address = user.address.id(addressId) || user.address[0];
+  if (!address) {
+    return res.status(400).json({ success: false, message: "No valid shipping address found" });
+  }
+  delete address.name
+
+  const createdOrders = [];
+
+  for (const item of user.cart) {
+    const product = item.product;
+    const quantity = item.quantity;
+
+    const newOrder = await Orders.create({
+      name: product.title,
+      user: user._id,
+      product: product._id,
+      quantity,
+      shippingAddress: address
+    });
+
+    user.orders.push(newOrder._id);
+    createdOrders.push(newOrder);
+  }
+  user.cart = [];
+  await user.save();
+
+  res.status(201).json({
+    success: true,
+    message: "Orders placed successfully",
+    orders: createdOrders,
+  });
+});
