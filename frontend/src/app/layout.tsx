@@ -22,7 +22,7 @@ export default function RootLayout({
         className={inter.className}
         >
         <Header/>
-        <main className="min-h-screen px-4 md:px-8 max-w-7xl mx-auto py-6">
+        <main className="min-h-screen px-4 md:px-8 max-w-7xl mx-auto py-6 mt-20">
           {children}
         </main>
       <Footer/>
