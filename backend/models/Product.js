@@ -21,6 +21,15 @@ const productSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
+  weight:{
+    type:Number,
+    required:true
+  },
+  dimensions:{
+    length:{type:String,required:true},
+    width:{type:String,required:true},
+    height:{type:String,required:true}, 
+  },
   discountPercentage: {
     type: Number,
     required: true,
@@ -32,7 +41,8 @@ const productSchema = new mongoose.Schema({
   },
   brand: {
     type: String,
-    required: true,
+    // required: true,
+    default: "Generic",
   },
   thumbnail: {
     type: String,
