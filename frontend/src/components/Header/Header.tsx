@@ -15,7 +15,7 @@ const icons: IconItem[] = [
 
 export default function Header() {
   return (
-    <header className="w-full h-20 bg-white shadow-sm lg:px-30 px-10 py-4 flex justify-between items-center fixed top-0 left-0 gap-4">
+    <header className="w-full h-20 bg-white shadow-sm lg:px-30 px-10 py-4 flex justify-between items-center fixed top-0 left-0 gap-4 z-50">
       <h1 className="flex-shrink-0 text-xl font-bold">🛒 E-Shop</h1>
       <div className="rounded-lg max-w-3xl bg-[#f5f5f5] p-2 h-14 gap-2 flex-1 flex   items-center">
         <Icon icon='mdi:search' className="w-6 h-6" color="#9e9e9e" />

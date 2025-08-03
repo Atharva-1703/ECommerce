@@ -1,10 +1,10 @@
-import Hero from "@/components/Hero/Hero";
+import HeroContainer from "@/containers/HomeContainer/HomeContainer";
 
 
 export default function Home() {
   return (
     <div>
-      <Hero/>
+      <HeroContainer/>
     </div>
   );
 }

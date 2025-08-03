@@ -1,2 +1,12 @@
 @import "tailwindcss";
 
+.swiper-scrollbar{
+    background: #e0e0e0;
+    border-radius: 9999px;
+    height: 6px;
+}
+
+.swiper-scrollbar-drag{
+    background: #222;
+    border-radius: 9999px;
+}
