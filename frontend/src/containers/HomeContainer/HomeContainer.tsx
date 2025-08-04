@@ -4,7 +4,7 @@ import { dummyProducts } from "@/sample data/discountedProducts";
 
 export default function HomeContainer() {
   return (
-    <div className="min-h-screen  px-4 py-10 flex flex-col">
+    <div className="min-h-screen  px-1 py-10 flex flex-col">
       <Hero />
 
       <Discounts products={dummyProducts} />

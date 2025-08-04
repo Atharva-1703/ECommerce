@@ -7,7 +7,7 @@ export default function ProductCard({ product }: { product: Product }) {
     (1 - product.discountPercentage / 100)
   ).toFixed(2);
   return (
-    <article className="relative max-w-xs w-full h-[432px] p-4 rounded-2xl bg-[#f6f6f6] flex flex-col gap-3 shadow-md hover:shadow-xl transition">
+    <article className="relative  min-w-56 h-[350px] p-4 rounded-2xl bg-[#f6f6f6] flex flex-col gap-3 shadow-md hover:shadow-xl transition">
       <button
         className="w-8 h-8 flex items-center justify-center absolute top-4 right-4 bg-white rounded-full shadow hover:bg-gray-100"
         aria-label="Add to favourites"
@@ -25,15 +25,15 @@ export default function ProductCard({ product }: { product: Product }) {
       <img
         src={product.thumbnail}
         alt={product.title}
-        className="w-full h-48 rounded-2xl object-cover"
+        className="w-full h-40 rounded-2xl object-cover"
         loading="lazy"
       />
       <h2 className="text-xl text-center font-bold truncate">
         {product.title}
       </h2>
       <div className="flex flex-col items-center gap-1">
-        <p className="text-gray-400 line-through text-sm">${product.price}</p>
-        <p className="text-black font-bold text-2xl">${discountedPrice}</p>
+        <p className="text-gray-400 line-through text-xs">${product.price}</p>
+        <p className="text-black font-bold text-xl">${discountedPrice}</p>
       </div>
       <button className="bg-black text-white px-6 py-2 rounded-xl w-2/3 hover:bg-gray-800 transition mx-auto mt-auto">
         Buy Now
