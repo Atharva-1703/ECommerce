@@ -1,5 +1,6 @@
-import Discounts from "@/components/Discounts/Discounts";
-import Hero from "@/components/Hero/Hero";
+import Catalogue from "@/components/Catalogue/Catalogue";
+import Discounts from "@/components/Home/Discounts/Discounts";
+import Hero from "@/components/Home/Hero/Hero";
 import { dummyProducts } from "@/sample data/discountedProducts";
 
 export default function HomeContainer() {
@@ -8,6 +9,8 @@ export default function HomeContainer() {
       <Hero />
 
       <Discounts products={dummyProducts} />
+
+      <Catalogue products={dummyProducts} />
     </div>
   );
 }
