@@ -8,9 +8,6 @@ const ratingRoutes = require("./routes/ratingRoutes");
 const userRoutes = require("./routes/userRoutes");
 const isAuthenticated = require("./middlewares/isAuthenticated");
 const orderRoutes = require("./routes/orderRoutes");
-const axios = require("axios");
-const Product = require("./models/Product");
-const Ratings = require("./models/Rating");
 
 const PORT = 3000;
 
