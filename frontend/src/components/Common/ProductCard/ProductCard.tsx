@@ -3,11 +3,9 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import Ratings from "../Rating/Ratings";
 
 export default function ProductCard({
-  product,
-  showDiscount = true,
+  product
 }: {
   product: Product;
-  showDiscount?: boolean;
 }) {
   const discountedPrice = (
     product.price *
@@ -24,7 +22,7 @@ export default function ProductCard({
         <Icon className="w-6 h-6" icon="mdi:favourite-border" />
       </button>
       {/* Discount badge */}
-      {showDiscount && product.discountPercentage > 0 && (
+      {product.discountPercentage > 0 && (
         <div className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold">
           -{product.discountPercentage}%
         </div>
