@@ -1,4 +1,5 @@
 import Catalogue from "@/components/Catalogue/Catalogue";
+import Ratings from "@/components/Common/Rating/Ratings";
 import Discounts from "@/components/Home/Discounts/Discounts";
 import Hero from "@/components/Home/Hero/Hero";
 import { dummyProducts } from "@/sample data/discountedProducts";

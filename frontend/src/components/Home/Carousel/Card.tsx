@@ -11,9 +11,9 @@ interface CardProps{
 export default function Card({image,title,description,index,bgColor}:CardProps) {
     
   return (
-    <section className={`flex flex-col ${index%2==0?'md:flex-row-reverse':'md:flex-row'} items-center gap-8 px-12 py-12 w-full h-[500px] rounded-2xl `} 
+    <section className={`flex flex-col-reverse ${index%2==0?'md:flex-row-reverse':'md:flex-row'} items-center md:gap-8 px-4 sm:px-6 md:px-12 py-10  w-full h-[500px] rounded-2xl `} 
     style={{backgroundColor:bgColor}}>
-      <div className="md:w-1/2 space-y-4">
+      <div className="md:w-1/2 w-full text-center md:text-left space-y-4">
         <h2 className="text-3xl font-bold text-gray-900">
           {title}
         </h2>
@@ -25,11 +25,11 @@ export default function Card({image,title,description,index,bgColor}:CardProps) 
         </button>
       </div>
 
-      <div className="md:w-1/2">
+      <div className="md:w-1/2 w-full">
         <img
           src={image}
           alt="Men's Watch"
-          className="w-full object-contain h-[400px] rounded-xl "
+          className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-contain rounded-xl"
         />
       </div>
     </section>
