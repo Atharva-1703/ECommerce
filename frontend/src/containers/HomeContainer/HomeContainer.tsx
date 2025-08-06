@@ -1,4 +1,5 @@
 import Catalogue from "@/components/Catalogue/Catalogue";
+import CategoryGrid from "@/components/Home/CategoryGrid/CategoryGrid";
 import Hero from "@/components/Home/Hero/Hero";
 import { dummyProducts } from "@/sample data/discountedProducts";
 
@@ -6,7 +7,9 @@ export default function HomeContainer() {
   return (
     <div className="min-h-screen  px-1 py-10 flex flex-col">
       <Hero />
-      
+
+      <CategoryGrid/>
+
       <Catalogue products={dummyProducts} title="Huge Discounts" />
 
       <Catalogue products={dummyProducts} title="New Arrivals"/>
