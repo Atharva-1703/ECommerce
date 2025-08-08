@@ -7,7 +7,7 @@ interface StarProps {
 
 export default function Star({ size, fillLevel }: StarProps) {
   return (
-    <div className={`relative w-${size} h-${size}`}>
+    <div className={`relative`} style={{ width: size, height: size }}>
         
       <Icon icon="line-md:star-filled" className=" text-gray-300" width={size} height={size}/>
       <div

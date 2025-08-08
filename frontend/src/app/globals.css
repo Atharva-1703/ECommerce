@@ -32,3 +32,10 @@
     scrollbar-width: none;
   }
 }
+
+.swiper-pagination-bullet {
+  background: black !important;
+}
+.swiper-pagination-bullet-active {
+  background: #ffb400 !important; /* matches star yellow if you want theme consistency */
+}
