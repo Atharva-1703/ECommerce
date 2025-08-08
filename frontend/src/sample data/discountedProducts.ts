@@ -4,30 +4,36 @@ export const dummyProducts: Product[] = [
   {
     _id: "1",
     title: "Samsung Galaxy S22",
-    description: "A high-end smartphone with a sleek design and powerful features.",
+    description:
+      "A high-end smartphone with a sleek design and powerful features.",
     category: "smartphones",
     price: 799,
     tags: ["android", "mobile", "flagship"],
     discountPercentage: 10,
-    stock: 30,
+    stock: 0,
     brand: "Samsung",
-    thumbnail: "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/thumbnail.webp",
+    thumbnail:
+      "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/thumbnail.webp",
     images: [
-      "https://cdn.dummyjson.com/product-images/3/1.jpg",
-      "https://cdn.dummyjson.com/product-images/3/2.jpg"
+      "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/1.webp",
+      "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/2.webp",
+      "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/3.webp",
     ],
     weight: 180,
     dimensions: {
       width: 7.1,
       height: 14.6,
-      length: 0.8
+      length: 0.8,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.3,
+    reviewCount: 122,
   },
   {
     _id: "2",
     title: "Apple MacBook Pro 14”",
-    description: "Powerful laptop for professionals with M1 Pro chip and stunning display.",
+    description:
+      "Powerful laptop for professionals with M1 Pro chip and stunning display.",
     category: "laptops",
     price: 1999,
     tags: ["macbook", "apple", "laptop"],
@@ -36,21 +42,25 @@ export const dummyProducts: Product[] = [
     brand: "Apple",
     thumbnail: "https://cdn.dummyjson.com/product-images/6/thumbnail.png",
     images: [
-      "https://cdn.dummyjson.com/product-images/6/1.png",
-      "https://cdn.dummyjson.com/product-images/6/2.jpg"
+      "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/1.webp",
+      "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/2.webp",
+      "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/3.webp",
     ],
     weight: 1400,
     dimensions: {
       width: 31,
       height: 22,
-      length: 1.5
+      length: 1.5,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.7,
+    reviewCount: 89,
   },
   {
     _id: "3",
     title: "Sony WH-1000XM4 Headphones",
-    description: "Industry-leading noise cancellation headphones with up to 30 hours of battery life.",
+    description:
+      "Industry-leading noise cancellation headphones with up to 30 hours of battery life.",
     category: "audio",
     price: 349,
     tags: ["headphones", "sony", "wireless"],
@@ -58,16 +68,16 @@ export const dummyProducts: Product[] = [
     stock: 50,
     brand: "Sony",
     thumbnail: "https://cdn.dummyjson.com/product-images/14/thumbnail.jpg",
-    images: [
-      "https://cdn.dummyjson.com/product-images/14/1.jpg"
-    ],
+    images: ["https://cdn.dummyjson.com/product-images/14/1.jpg"],
     weight: 254,
     dimensions: {
       width: 18,
       height: 20,
-      length: 8
+      length: 8,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.6,
+    reviewCount: 210,
   },
   {
     _id: "4",
@@ -82,20 +92,23 @@ export const dummyProducts: Product[] = [
     thumbnail: "https://cdn.dummyjson.com/product-images/57/thumbnail.jpg",
     images: [
       "https://cdn.dummyjson.com/product-images/57/1.jpg",
-      "https://cdn.dummyjson.com/product-images/57/2.jpg"
+      "https://cdn.dummyjson.com/product-images/57/2.jpg",
     ],
     weight: 900,
     dimensions: {
       width: 27,
       height: 10,
-      length: 8
+      length: 8,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.1,
+    reviewCount: 178,
   },
   {
     _id: "5",
     title: "Fossil Men’s Watch",
-    description: "Elegant analog watch with leather strap, perfect for formal wear.",
+    description:
+      "Elegant analog watch with leather strap, perfect for formal wear.",
     category: "accessories",
     price: 120,
     tags: ["watch", "fossil", "men"],
@@ -103,16 +116,16 @@ export const dummyProducts: Product[] = [
     stock: 60,
     brand: "Fossil",
     thumbnail: "https://cdn.dummyjson.com/product-images/75/thumbnail.jpg",
-    images: [
-      "https://cdn.dummyjson.com/product-images/75/1.jpg"
-    ],
+    images: ["https://cdn.dummyjson.com/product-images/75/1.jpg"],
     weight: 200,
     dimensions: {
       width: 4.2,
       height: 4.2,
-      length: 1
+      length: 1,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.5,
+    reviewCount: 94,
   },
   {
     _id: "6",
@@ -125,21 +138,22 @@ export const dummyProducts: Product[] = [
     stock: 15,
     brand: "Canon",
     thumbnail: "https://cdn.dummyjson.com/product-images/96/thumbnail.jpg",
-    images: [
-      "https://cdn.dummyjson.com/product-images/96/1.jpg"
-    ],
+    images: ["https://cdn.dummyjson.com/product-images/96/1.jpg"],
     weight: 701,
     dimensions: {
       width: 13.6,
       height: 10.4,
-      length: 7.6
+      length: 7.6,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.4,
+    reviewCount: 67,
   },
   {
     _id: "7",
     title: "Logitech MX Master 3",
-    description: "Ergonomic wireless mouse with advanced productivity features.",
+    description:
+      "Ergonomic wireless mouse with advanced productivity features.",
     category: "electronics",
     price: 99,
     tags: ["mouse", "logitech", "wireless"],
@@ -147,21 +161,22 @@ export const dummyProducts: Product[] = [
     stock: 80,
     brand: "Logitech",
     thumbnail: "https://cdn.dummyjson.com/product-images/84/thumbnail.jpg",
-    images: [
-      "https://cdn.dummyjson.com/product-images/84/1.jpg"
-    ],
+    images: ["https://cdn.dummyjson.com/product-images/84/1.jpg"],
     weight: 141,
     dimensions: {
       width: 8.4,
       height: 5.1,
-      length: 12.5
+      length: 12.5,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.8,
+    reviewCount: 256,
   },
   {
     _id: "8",
     title: "Amazon Echo Dot (4th Gen)",
-    description: "Smart speaker with Alexa voice control and crisp audio quality.",
+    description:
+      "Smart speaker with Alexa voice control and crisp audio quality.",
     category: "smart-home",
     price: 49,
     tags: ["echo", "alexa", "speaker"],
@@ -169,21 +184,22 @@ export const dummyProducts: Product[] = [
     stock: 100,
     brand: "Amazon",
     thumbnail: "https://cdn.dummyjson.com/product-images/89/thumbnail.jpg",
-    images: [
-      "https://cdn.dummyjson.com/product-images/89/1.jpg"
-    ],
+    images: ["https://cdn.dummyjson.com/product-images/89/1.jpg"],
     weight: 328,
     dimensions: {
       width: 10,
       height: 10,
-      length: 8.9
+      length: 8.9,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.2,
+    reviewCount: 320,
   },
   {
     _id: "9",
     title: "Dell XPS 13",
-    description: "Ultra-portable laptop with InfinityEdge display and long battery life.",
+    description:
+      "Ultra-portable laptop with InfinityEdge display and long battery life.",
     category: "laptops",
     price: 1399,
     tags: ["dell", "xps", "ultrabook"],
@@ -193,20 +209,23 @@ export const dummyProducts: Product[] = [
     thumbnail: "https://cdn.dummyjson.com/product-images/8/thumbnail.jpg",
     images: [
       "https://cdn.dummyjson.com/product-images/8/1.jpg",
-      "https://cdn.dummyjson.com/product-images/8/2.jpg"
+      "https://cdn.dummyjson.com/product-images/8/2.jpg",
     ],
     weight: 1200,
     dimensions: {
       width: 30.2,
       height: 19.9,
-      length: 1.5
+      length: 1.5,
     },
-    reviews: []
+    reviews: [],
+    rating: 4.6,
+    reviewCount: 150,
   },
   {
     _id: "10",
     title: "Google Pixel 7",
-    description: "Google’s latest smartphone with Tensor chip and brilliant display.",
+    description:
+      "Google’s latest smartphone with Tensor chip and brilliant display.",
     category: "smartphones",
     price: 699,
     tags: ["google", "pixel", "android"],
@@ -214,15 +233,15 @@ export const dummyProducts: Product[] = [
     stock: 40,
     brand: "Google",
     thumbnail: "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg",
-    images: [
-      "https://cdn.dummyjson.com/product-images/1/1.jpg"
-    ],
+    images: ["https://cdn.dummyjson.com/product-images/1/1.jpg"],
     weight: 197,
     dimensions: {
       width: 7.3,
       height: 15,
-      length: 0.8
+      length: 0.8,
     },
-    reviews: []
-  }
+    reviews: [],
+    rating: 4.5,
+    reviewCount: 198,
+  },
 ];

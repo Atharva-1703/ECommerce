@@ -9,6 +9,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  bigDescription: {
+    type: String,
+    required: true,
+  },
   category: {
     type: String,
     required: true,
@@ -51,6 +55,17 @@ const productSchema = new mongoose.Schema({
   images: {
     type: [String],
     required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 0,
+    max: 5,
+  },
+  reviewCount: {
+    type: Number,
+    required: true,
+    min: 0,
   },
   reviews:[{
     type:mongoose.Schema.Types.ObjectId,
