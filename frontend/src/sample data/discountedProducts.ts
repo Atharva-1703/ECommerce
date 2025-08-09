@@ -18,6 +18,7 @@ export const dummyProducts: Product[] = [
       "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/1.webp",
       "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/2.webp",
       "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/3.webp",
+      "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/3.webp",
     ],
     weight: 180,
     dimensions: {

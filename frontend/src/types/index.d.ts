@@ -29,8 +29,9 @@ export interface Product {
   weight: number;   
   rating: number;
   reviewCount: number;          
-  dimensions?: Dimensions;     
-  reviews:ProductReview[];
+  dimensions?: Dimensions;
+  bigDescription?:string     
+  reviews:string[] | ProductReview[];
   createdAt?: string;          
   updatedAt?: string; 
 }
