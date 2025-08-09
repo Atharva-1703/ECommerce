@@ -26,9 +26,61 @@ export const dummyProducts: Product[] = [
       height: 14.6,
       length: 0.8,
     },
-    reviews: [],
+    reviews: [
+      {
+        _id: "rev1",
+        rating: 5,
+        comment:
+          "Excellent product! Quality is top-notch and delivery was super fast.",
+        name: "Ravi Kumar",
+        product: "prod1",
+        user: "user1",
+      },
+      {
+        _id: "rev2",
+        rating: 4,
+        comment: "Good overall, but the packaging could be better.",
+        name: "Ananya Sharma",
+        product: "prod1",
+        user: "user2",
+      },
+      {
+        _id: "rev2",
+        rating: 4,
+        comment: "Good overall, but the packaging could be better.",
+        name: "Ananya Sharma",
+        product: "prod1",
+        user: "user2",
+      },
+      {
+        _id: "rev3",
+        rating: 3,
+        comment:
+          "Average experience. Product works fine but not as described in the listing.",
+        name: "Vikram Singh",
+        product: "prod1",
+        user: "user3",
+      },
+      {
+        _id: "rev4",
+        rating: 2,
+        comment: "Not satisfied. The build quality feels cheap for the price.",
+        name: "Pooja Verma",
+        product: "prod1",
+        user: "user4",
+      },
+      {
+        _id: "rev5",
+        rating: 1,
+        comment:
+          "Terrible! Received a defective piece and customer support was unhelpful.",
+        name: "Amit Patel",
+        product: "prod1",
+        user: "user5",
+      },
+    ],
     rating: 4.3,
-    reviewCount: 122,
+    reviewCount: 6,
   },
   {
     _id: "2",
