@@ -7,12 +7,15 @@ import "swiper/css/pagination";
 import { useEffect, useState } from "react";
 import { Product } from "@/types";
 import Ratings from "../Common/Rating/Ratings";
+import getDiscountedPrice from "@/lib/getDiscountedPrice";
 
 export default function ProductInfo({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState<number>(1);
   const [discountedPrice, setDiscountedPrice] = useState<number>(0);
   useEffect(() => {
-    setDiscountedPrice(product.price * (1 - product.discountPercentage! / 100));
+    setDiscountedPrice(
+      getDiscountedPrice(product.price, product.discountPercentage)
+    );
   }, []);
   return (
     <>

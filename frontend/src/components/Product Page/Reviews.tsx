@@ -1,6 +1,7 @@
 import { ProductReview } from "@/types";
 import Ratings from "../Common/Rating/Ratings";
 import RatingBar from "./RatingBar";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface ReviewProps {
   reviews: ProductReview[];
@@ -30,6 +31,9 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
           return (
             <div key={idx} className="border-b border-gray-500 pb-3">
               <div className="flex items-center gap-2">
+                <span className="flex justify-center items-center w-7 h-7 rounded-full bg-gray-300">
+                  <Icon icon="mdi:person" className="w-5 h-5 text-gray-600" />
+                </span>
                 <span className="text-normal font-semibold leading-none text-gray-600">{review.name}</span>
                 <Ratings rating={review.rating} size={18} />
               </div>
