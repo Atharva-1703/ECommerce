@@ -6,6 +6,7 @@ import { dummyProducts } from "@/sample data/discountedProducts";
 import ProductInfo from "@/components/Product Page/Info";
 import Policies from "@/components/Product Page/Policies";
 import Reviews from "@/components/Product Page/Reviews";
+import { useProductsStore } from "@/stores/useProductStore";
 
 
 
@@ -21,20 +22,20 @@ const policies: policyProps[] = [
 ];
 
 export default function ProductContainer() {
-  const id = parseInt(useParams().id as string);
-  const [product, setProduct] = useState<Product>();
+  const id = useParams().id as string
+  const {productData,fetchProductData,loading}=useProductsStore();
 
-  useEffect(() => {
-    setProduct(dummyProducts[id]);
+  useEffect (() => {
+    fetchProductData(id);
   }, [id]);
 
   return (
     <div className="px-4">
-      <ProductInfo product={dummyProducts[id]}/>
+      <ProductInfo product={dummyProducts[0]}/>
 
       <Policies policies={policies} />
 
-      <Reviews reviews={dummyProducts[id].reviews as ProductReview[]} rating={dummyProducts[id].rating} ratingCount={dummyProducts[id].reviewCount}/> 
+      <Reviews reviews={dummyProducts[0].reviews as ProductReview[]} rating={dummyProducts[0].rating} ratingCount={dummyProducts[0].reviewCount}/> 
       
     </div>
   );
