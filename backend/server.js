@@ -9,14 +9,20 @@ const userRoutes = require("./routes/userRoutes");
 const isAuthenticated = require("./middlewares/isAuthenticated");
 const orderRoutes = require("./routes/orderRoutes");
 
-const PORT = 3000;
+const PORT = process.env.PORT ;
 
 const app = express();
 app.use(express.json());
 
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
+
 connectDB();
 app.listen(PORT, () => {
-  console.log("Server is running on port 3000");
+  console.log("Server is running on port ",PORT);
 });
 
 app.use("/api/auth", authRoutes);

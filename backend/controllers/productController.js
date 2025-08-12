@@ -28,7 +28,8 @@ exports.addProduct = asyncHandler(async (req, res) => {
 });
 
 exports.getProducts = asyncHandler(async (req, res) => {
-  const { category, title } = req.query;
+  const { category, title, sortBy, order, minPrice, maxPrice, brand, limit } =
+    req.query;
 
   const query = {};
 
@@ -40,8 +41,21 @@ exports.getProducts = asyncHandler(async (req, res) => {
       { description: { $regex: title, $options: "i" } },
     ];
   }
+  let sort={}
+  if (sortBy) {
+    sort[sortBy] = order === "asc" ? 1 : -1;
+  }
 
-  const products = await Product.find(query);
+  if (minPrice || maxPrice) {
+    query.price = {};
+    if (minPrice) query.price.$gte = Number(minPrice);
+    if (maxPrice) query.price.$lte = Number(maxPrice);
+  }
+  if (brand) {
+    query.brand = brand;
+  }
+
+  const products = await Product.find(query).sort(sort).limit(10);
 
   return res.status(200).json({
     success: true,
@@ -58,7 +72,7 @@ exports.getProductById = asyncHandler(async (req, res) => {
       message: "Invalid Product ID format",
     });
   }
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate("reviews");
   if (!product) {
     return res.status(404).json({
       success: false,
