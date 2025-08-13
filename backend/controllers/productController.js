@@ -28,7 +28,7 @@ exports.addProduct = asyncHandler(async (req, res) => {
 });
 
 exports.getProducts = asyncHandler(async (req, res) => {
-  const { category, title, sortBy, order, minPrice, maxPrice, brand, limit } =
+  const { category, title, sortBy, order, minPrice, maxPrice, brand, offset } =
     req.query;
 
   const query = {};
@@ -41,7 +41,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
       { description: { $regex: title, $options: "i" } },
     ];
   }
-  let sort={}
+  let sort = {};
   if (sortBy) {
     sort[sortBy] = order === "asc" ? 1 : -1;
   }
@@ -55,7 +55,10 @@ exports.getProducts = asyncHandler(async (req, res) => {
     query.brand = brand;
   }
 
-  const products = await Product.find(query).sort(sort).limit(10);
+  const products = await Product.find(query)
+    .sort(sort)
+    .limit(10)
+    .skip(offset ? offset : 0);
 
   return res.status(200).json({
     success: true,
