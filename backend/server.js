@@ -9,7 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 const isAuthenticated = require("./middlewares/isAuthenticated");
 const orderRoutes = require("./routes/orderRoutes");
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT;
 
 const app = express();
 app.use(express.json());
@@ -20,16 +20,16 @@ app.use(
   })
 );
 
-connectDB();
-app.listen(PORT, () => {
-  console.log("Server is running on port ",PORT);
+connectDB(() => {
+  app.listen(PORT, () => {
+    console.log("Server is running on port ", PORT);
+  });
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/products",productRoutes);
-app.use('/api/reviews',isAuthenticated,ratingRoutes);
-app.use('/api/user',isAuthenticated,userRoutes);
-app.use('/api/orders',isAuthenticated,orderRoutes)
-
+app.use("/api/products", productRoutes);
+app.use("/api/reviews", isAuthenticated, ratingRoutes);
+app.use("/api/user", isAuthenticated, userRoutes);
+app.use("/api/orders", isAuthenticated, orderRoutes);
 
 module.exports = app;
