@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import { useEffect, useState } from "react";
 import { Product } from "@/types";
 import Ratings from "../Common/Rating/Ratings";
-import getDiscountedPrice from "@/lib/getDiscountedPrice";
+import getDiscountedPrice from "@/lib/utils";
 
 export default function ProductInfo({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState<number>(1);
@@ -34,11 +34,11 @@ export default function ProductInfo({ product }: { product: Product }) {
             className=""
           >
             {product?.images?.map((image: string, index: number) => (
-              <SwiperSlide key={index}>
+              <SwiperSlide key={index} className="">
                 <img
                   src={image}
                   alt={product?.title}
-                  className="w-full h-full object-contain transition-transform ease-in-out duration-500 hover:scale-105"
+                  className="w-full h-full object-contain transition-transform ease-in-out duration-500 hover:scale-105 py-4"
                 />
               </SwiperSlide>
             ))}
