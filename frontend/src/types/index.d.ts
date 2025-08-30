@@ -17,21 +17,21 @@ export interface ProductReview {
 export interface Product {
   _id: string;
   title: string;
-  description: string;
-  category: string;
+  description?: string;
+  category?: string;
   price: number;
-  tags: string[];
+  tags?: string[];
   discountPercentage: number;
   stock: number;
-  brand: string;
+  brand?: string;
   thumbnail: string;
-  images: string[];
-  weight: number;   
+  images?: string[];
+  weight?: number;   
   rating: number;
   reviewCount: number;          
   dimensions?: Dimensions;
   bigDescription?:string     
-  reviews:string[] | ProductReview[];
+  reviews?:string[] | ProductReview[];
   createdAt?: string;          
   updatedAt?: string; 
 }
