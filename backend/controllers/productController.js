@@ -181,14 +181,20 @@ exports.getFilters = asyncHandler(async (req, res) => {
   if (!category) {
     const categories = await Product.distinct("category", query);
   }
-  const minPrice = await Product.find(query).sort({ price: 1 }).limit(1).select("price");
-  const maxPrice = await Product.find(query).sort({ price: -1 }).limit(1).select("price");
+  const minPrice = await Product.find(query)
+    .sort({ price: 1 })
+    .limit(1)
+    .select("price");
+  const maxPrice = await Product.find(query)
+    .sort({ price: -1 })
+    .limit(1)
+    .select("price");
   return res.status(200).json({
     success: true,
     message: "Filters fetched successfully",
-    brands,
-    categories,
-    priceRange: {
+    filters: {
+      brands,
+      categories,
       min: minPrice,
       max: maxPrice,
     },
