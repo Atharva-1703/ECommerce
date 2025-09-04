@@ -160,3 +160,37 @@ exports.removeProduct = asyncHandler(async (req, res) => {
     product,
   });
 });
+
+exports.getFilters = asyncHandler(async (req, res) => {
+  const { category, title } = req.query;
+  const query = [];
+
+  if (category) {
+    query.push({ category: category });
+  }
+
+  if (title) {
+    query.push({
+      $or: [
+        { title: { $regex: title, $options: "i" } },
+        { description: { $regex: title, $options: "i" } },
+      ],
+    });
+  }
+  const brands = await Product.distinct("brand", query);
+  if (!category) {
+    const categories = await Product.distinct("category", query);
+  }
+  const minPrice = await Product.find(query).sort({ price: 1 }).limit(1).select("price");
+  const maxPrice = await Product.find(query).sort({ price: -1 }).limit(1).select("price");
+  return res.status(200).json({
+    success: true,
+    message: "Filters fetched successfully",
+    brands,
+    categories,
+    priceRange: {
+      min: minPrice,
+      max: maxPrice,
+    },
+  });
+});
