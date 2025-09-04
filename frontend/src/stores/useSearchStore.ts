@@ -54,6 +54,7 @@ export const useSearchStore = create<SearchState>((set, get) => ({
   },
   setfilters: (updates: Partial<Filters>) => {
     set({ filters: { ...get().filters, ...updates } });
+    get().fetchProducts(get().filters);
   },
   resetFilters: () => {
     set({ filters: { order: "asc" } });
