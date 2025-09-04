@@ -45,7 +45,7 @@ export default function ProductCardResponsive({
         <img
           src={product.thumbnail}
           alt={product.title}
-          className="w-full h-full lg:object-contain object-cover max-sm:object-contain"
+          className="w-full h-full object-contain"
         />
       </div>
 
