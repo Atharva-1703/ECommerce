@@ -28,7 +28,7 @@ exports.addProduct = asyncHandler(async (req, res) => {
 });
 
 exports.getProducts = asyncHandler(async (req, res) => {
-  const { category, title, sortBy, order, minPrice, maxPrice, brand, offset } =
+  const { category, title, sortBy, order, minPrice, maxPrice, brands, offset } =
     req.query;
 
   const query = {};
@@ -52,7 +52,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
     if (maxPrice) query.price.$lte = Number(maxPrice);
   }
   if (brand) {
-    query.brand = brand;
+    query.brand = { $in: brands };
   }
 
   const products = await Product.find(query)
@@ -179,22 +179,12 @@ exports.getFilters = asyncHandler(async (req, res) => {
   }
 
   // Parallel queries for better performance
-  const [brands, categories, priceRange] = await Promise.all([
+  const [brands, categories,totalProducts] = await Promise.all([
     Product.distinct("brand", matchConditions),
     category ? [] : Product.distinct("category", matchConditions),
-    Product.aggregate([
-      { $match: matchConditions },
-      {
-        $group: {
-          _id: null,
-          minPrice: { $min: "$price" },
-          maxPrice: { $max: "$price" }
-        }
-      }
-    ])
+    Product.countDocuments(matchConditions)
   ]);
 
-  const { minPrice = 0, maxPrice = 0 } = priceRange[0] || {};
 
   return res.status(200).json({
     success: true,
@@ -202,8 +192,7 @@ exports.getFilters = asyncHandler(async (req, res) => {
     filters: {
       brands,
       categories,
-      min: minPrice,
-      max: maxPrice,
     },
+    totalProducts
   });
 });
