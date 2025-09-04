@@ -38,7 +38,7 @@ export default function ProductInfo({ product }: { product: Product }) {
                 <img
                   src={image}
                   alt={product?.title}
-                  className="w-full h-full object-contain transition-transform ease-in-out duration-500 hover:scale-105 py-4"
+                  className="w-full max-h-96  object-contain transition-transform ease-in-out duration-500 hover:scale-105 py-4"
                 />
               </SwiperSlide>
             ))}
