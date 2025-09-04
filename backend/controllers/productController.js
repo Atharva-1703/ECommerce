@@ -51,7 +51,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
     if (minPrice) query.price.$gte = Number(minPrice);
     if (maxPrice) query.price.$lte = Number(maxPrice);
   }
-  if (brand) {
+  if (brands) {
     query.brand = { $in: brands };
   }
 
