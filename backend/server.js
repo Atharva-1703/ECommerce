@@ -32,4 +32,12 @@ app.use("/api/reviews", isAuthenticated, ratingRoutes);
 app.use("/api/user", isAuthenticated, userRoutes);
 app.use("/api/orders", isAuthenticated, orderRoutes);
 
+app.get("/healthz", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(), // how long server has been running
+    timestamp: Date.now(),
+  });
+});
+
 module.exports = app;
