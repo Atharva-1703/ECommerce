@@ -3,11 +3,11 @@ const { addProduct, getProducts, getProductById, updateProduct, removeProduct, g
 
 const productRoutes=express.Router();
 
+productRoutes.get('/filters',getFilters)
 productRoutes.post('/add',addProduct);
 productRoutes.get('/',getProducts)
 productRoutes.get('/:id',getProductById);
 productRoutes.patch('/update/:id',updateProduct);
 productRoutes.delete('/delete/:id',removeProduct);
-productRoutes.get('/filters',getFilters)
 
 module.exports=productRoutes

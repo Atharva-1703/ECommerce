@@ -163,32 +163,39 @@ exports.removeProduct = asyncHandler(async (req, res) => {
 
 exports.getFilters = asyncHandler(async (req, res) => {
   const { category, title } = req.query;
-  const query = [];
-
+  
+  // Build match conditions
+  const matchConditions = {};
+  
   if (category) {
-    query.push({ category: category });
+    matchConditions.category = category;
+  }
+  
+  if (title) {
+    matchConditions.$or = [
+      { title: { $regex: title, $options: "i" } },
+      { description: { $regex: title, $options: "i" } },
+    ];
   }
 
-  if (title) {
-    query.push({
-      $or: [
-        { title: { $regex: title, $options: "i" } },
-        { description: { $regex: title, $options: "i" } },
-      ],
-    });
-  }
-  const brands = await Product.distinct("brand", query);
-  if (!category) {
-    const categories = await Product.distinct("category", query);
-  }
-  const minPrice = await Product.find(query)
-    .sort({ price: 1 })
-    .limit(1)
-    .select("price");
-  const maxPrice = await Product.find(query)
-    .sort({ price: -1 })
-    .limit(1)
-    .select("price");
+  // Parallel queries for better performance
+  const [brands, categories, priceRange] = await Promise.all([
+    Product.distinct("brand", matchConditions),
+    category ? [] : Product.distinct("category", matchConditions),
+    Product.aggregate([
+      { $match: matchConditions },
+      {
+        $group: {
+          _id: null,
+          minPrice: { $min: "$price" },
+          maxPrice: { $max: "$price" }
+        }
+      }
+    ])
+  ]);
+
+  const { minPrice = 0, maxPrice = 0 } = priceRange[0] || {};
+
   return res.status(200).json({
     success: true,
     message: "Filters fetched successfully",
