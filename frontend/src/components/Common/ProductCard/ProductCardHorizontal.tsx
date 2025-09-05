@@ -77,7 +77,7 @@ export default function ProductCardResponsive({
           {product.discountPercentage > 0 && (
             <div className="flex items-center gap-2">
               <span className="text-gray-400 line-through text-sm">
-                ₹{product.price}
+                ₹{product.price.toFixed(2)}
               </span>
               <span className="bg-red-100 text-red-600 text-xs font-medium px-2 py-0.5 rounded-full">
                 -{product.discountPercentage}%

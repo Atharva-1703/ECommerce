@@ -38,7 +38,7 @@ export default function SearchPage() {
     ]);
   }, []);
 
-  const loadMore = () => {
+  const loadMore = () => {    
     fetchProducts(filters);
   };
 

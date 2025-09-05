@@ -13,7 +13,7 @@ interface CatalogueProps {
 export default function Catalogue({ products, title,route }: CatalogueProps) {
   const router=useRouter();
   const handleSeeMore=()=>{
-    router.push(`/search?sortBy=${route}?order=desc`);
+    router.push(`/search?sortBy=${route}&order=desc`);
   }
   return (
     <section className="relative py-8 ">
