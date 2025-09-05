@@ -15,7 +15,7 @@ export default function HomeContainer() {
   },[])
 
   return (
-    <div className="min-h-screen  px-1 py-10 flex flex-col">
+    <div className="min-h-screen  px-1 flex flex-col">
       <Hero />
 
       <CategoryGrid/>
