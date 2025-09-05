@@ -20,11 +20,11 @@ export default function HomeContainer() {
 
       <CategoryGrid/>
 
-      <Catalogue products={highDiscount} title="Huge Discounts" />
+      <Catalogue products={highDiscount} title="Huge Discounts" route="discountPercentage"/>
 
-      <Catalogue products={latest} title="New Arrivals"/>
+      <Catalogue products={latest} title="New Arrivals" route="createdAt"/>
 
-      <Catalogue products={TopRated} title="Top Rated"/>
+      <Catalogue products={TopRated} title="Top Rated" route="rating"/>
     </div>
   );
 }
