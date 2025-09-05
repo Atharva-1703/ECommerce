@@ -70,7 +70,7 @@ export default function SearchPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
         {/* Sidebar Filters (Desktop) */}
-        <aside className="hidden lg:block h-screen sticky top-0">
+        <aside className="hidden lg:block h-screen sticky top-32">
           <ProductFilterForm />
         </aside>
 
@@ -130,10 +130,6 @@ export default function SearchPage() {
               </button>
             </div>
             <ProductFilterForm
-            // onFilter={(filters) => {
-            //   setfilters(filters);
-            //   setShowFilters(false); // close after applying
-            // }}
             />
           </div>
         </div>

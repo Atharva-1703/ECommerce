@@ -9,8 +9,6 @@ interface ProductFiltersFormProps {
 export default function ProductFilterForm({}: // onFilter,
 ProductFiltersFormProps) {
   const { productFilter, setfilters,resetOffset } = useSearchStore();
-  console.log(productFilter);
-
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [category, setCategory] = useState<string>("");
   const [minPrice, setMinPrice] = useState<number | "">("");
