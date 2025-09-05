@@ -64,7 +64,7 @@ ProductFiltersFormProps) {
               <span>{openSection === "brands" ? "-" : "+"}</span>
             </button>
             {openSection === "brands" && (
-              <div className="mt-3 space-y-2 pl-1">
+              <div className="mt-3 space-y-2 pl-1 overflow-y-scroll max-h-32">
                 {productFilter.brands.map((brand) => (
                   <label
                     key={brand}
