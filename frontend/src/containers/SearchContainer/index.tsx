@@ -19,7 +19,6 @@ export default function SearchPage() {
     totalProducts
   } = useSearchStore();
   const [showFilters, setShowFilters] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
 
   // Load filters from URL on mount
   useEffect(() => {
@@ -37,21 +36,11 @@ export default function SearchPage() {
       // fetchProducts(initialFilters),
       fetchProductFilters(initialFilters.title, initialFilters.category),
     ]);
-
-    setHydrated(true);
   }, []);
 
   const loadMore = () => {
     fetchProducts(filters);
   };
-
-  // useEffect(() => {
-  //   if (hydrated) {
-  //     fetchProducts();
-  //     console.log("temp");
-      
-  //   }
-  // }, [filters]);
 
   return (
     <div className="px-4 py-6">
