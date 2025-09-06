@@ -35,3 +35,25 @@ export interface Product {
   createdAt?: string;          
   updatedAt?: string; 
 }
+
+interface address{
+  address:string;
+  city:string;
+  state:string;
+  country:string;
+  pincode:string
+  phone:string
+}
+
+export interface User{
+  username:string;
+  email:string;
+  isAdmin:boolean;
+  address:address[];
+  cart:Product[]
+}
+
+export interface Cart{
+  product:Product|string;
+  quantity:number
+}

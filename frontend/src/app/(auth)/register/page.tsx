@@ -2,8 +2,10 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
+import { useUserStore } from "@/stores/useUserStore";
 
 const Register = () => {
+  const  {register}= useUserStore();
   const [formState, setFormState] = useState({
     username:"",
     email: "",
@@ -12,12 +14,12 @@ const Register = () => {
 
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-  const { email, password } = formState;
+  const { username,email, password } = formState;
 
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let valid = true;
@@ -32,7 +34,7 @@ const Register = () => {
     }
 
     if (valid) {
-      console.log("Form submitted:", formState);
+      register(username, email, password);
     }
   };
 

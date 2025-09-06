@@ -2,21 +2,25 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
+import { useUserStore } from "@/stores/useUserStore";
 
 const Login = () => {
+  const { login, isLoading, isLogin, errorMessage } = useUserStore();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
-  const { email, password } = formState;
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-      console.log("Form submitted:", formState);
-      // 🔑 Call your login API here
+    await login(formState.email, formState.password);
 
+    if (isLogin) {
+      window.location.href = "/";
+    }
+    
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +81,9 @@ const Login = () => {
                 className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-black"
               >
                 <Icon
-                  icon={showPassword ? "mdi:eye-off-outline" : "mdi:eye-outline"}
+                  icon={
+                    showPassword ? "mdi:eye-off-outline" : "mdi:eye-outline"
+                  }
                   className="text-xl"
                 />
               </button>
