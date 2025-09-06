@@ -53,7 +53,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
   }
 
   // ? check if User exists
-  const userFound = await User.findOne({ email });
+  const userFound = await User.findOne({ email }).select("-cart -orders -reviews -updatedAt -__v -createdAt -_id ");
   if (!userFound) {
     return res.status(404).json({
       success: false,
@@ -79,8 +79,12 @@ exports.loginUser = asyncHandler(async (req, res) => {
     success: true,
     message: "User LoggedIn",
     token,
-    id: userFound._id,
-    email: userFound.email,
-    username: userFound.username,
+    user: {
+      username: userFound.username,
+      email: userFound.email,
+      role: userFound.isAdmin,
+      address:userFound.address
+    },
+    favourites: userFound.favourites
   });
 });
