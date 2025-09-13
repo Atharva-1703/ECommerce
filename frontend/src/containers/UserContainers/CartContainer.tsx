@@ -5,9 +5,9 @@ import React from 'react'
 
 const CartContainer = () => {
   return (
-    <div className='px-4'>
+    <div className='px-4 flex flex-col lg:flex-row gap-6'>
       <ProductCardResponsive product={dummyProducts[0]} mode='cart'/>
-      <CartBudget/>
+      <CartBudget subtotal={100}/>
     </div>
   )
 }

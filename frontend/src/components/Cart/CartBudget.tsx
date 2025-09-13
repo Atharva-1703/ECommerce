@@ -1,12 +1,38 @@
-import React from 'react'
+"use client";
+import React from "react";
 
-const CartBudget = () => {
-  return (
-    <div className='fixed bottom-0 right-0 flex flex-row w-full border-t z-50 bg-white justify-between p-2'>
-        <span className='text-lg font-semibold'>Total Cart Cost</span>
-      <button className='bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition hover:scale-105 w-32'>Buy All</button>
-    </div>
-  )
+interface CartBudgetProps {
+  subtotal: number;
+  shipping?: number;
 }
 
-export default CartBudget
+const CartBudget: React.FC<CartBudgetProps> = ({ subtotal, shipping = 0 }) => {
+  const total = subtotal + shipping;
+
+  return (
+    <div className="w-full lg:w-1/3 bg-white shadow-md rounded-2xl p-6 flex flex-col gap-4 sticky bottom-0 lg:top-24">
+      <h2 className="text-lg font-semibold text-gray-800">Order Summary</h2>
+
+      <div className="flex justify-between text-sm text-gray-600">
+        <span>Subtotal</span>
+        <span>₹{subtotal.toFixed(2)}</span>
+      </div>
+
+      <div className="flex justify-between text-sm text-gray-600">
+        <span>Shipping</span>
+        <span>{shipping === 0 ? "Free" : `₹${shipping.toFixed(2)}`}</span>
+      </div>
+
+      <div className="border-t pt-3 flex justify-between font-semibold text-gray-900">
+        <span>Total</span>
+        <span>₹{total.toFixed(2)}</span>
+      </div>
+
+      <button className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition">
+        Proceed to Checkout
+      </button>
+    </div>
+  );
+};
+
+export default CartBudget;
