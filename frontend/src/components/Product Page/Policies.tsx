@@ -1,4 +1,4 @@
-import { policyProps } from "@/containers/ProductContainer/ProductContainer"
+import { policyProps } from "@/containers/ProductContainer"
 import {Icon} from "@iconify/react"
 
 export default function Policies({policies}:{policies:policyProps[]}){

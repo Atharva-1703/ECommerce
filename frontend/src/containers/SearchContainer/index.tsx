@@ -6,6 +6,7 @@ import { useSearchStore } from "@/stores/useSearchStore";
 import ProductCardHorizontal from "@/components/Common/ProductCard/ProductCardHorizontal";
 import ProductFilterForm from "@/components/ProductFilters";
 import { ProductCardSkeletonHorizontal } from "@/components/skeletons/ProductCards/horizontal";
+import { Icon } from "@iconify/react";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -16,7 +17,7 @@ export default function SearchPage() {
     products,
     loading,
     fetchProductFilters,
-    totalProducts
+    totalProducts,
   } = useSearchStore();
   const [showFilters, setShowFilters] = useState(false);
 
@@ -38,7 +39,7 @@ export default function SearchPage() {
     ]);
   }, []);
 
-  const loadMore = () => {    
+  const loadMore = () => {
     fetchProducts(filters);
   };
 
@@ -105,7 +106,21 @@ export default function SearchPage() {
               <ProductCardHorizontal key={product._id} product={product} />
             ))
           )}
-          {totalProducts > products.length && <button className="px-4 w-44 py-2 bg-black text-white rounded-md hover:bg-gray-800 mx-auto" onClick={loadMore}>Load More</button>}
+          {(loading && !products)? (
+            <Icon
+              icon="eos-icons:bubble-loading"
+              className="text-black w-10 h-10 mx-auto"
+            />
+          ) : (
+            totalProducts > products.length && (
+              <button
+                className="px-4 w-44 py-2 bg-black text-white rounded-md hover:bg-gray-800 mx-auto"
+                onClick={loadMore}
+              >
+                Load More
+              </button>
+            )
+          )}
         </section>
       </div>
 
@@ -129,8 +144,7 @@ export default function SearchPage() {
                 ✕
               </button>
             </div>
-            <ProductFilterForm
-            />
+            <ProductFilterForm />
           </div>
         </div>
       )}
