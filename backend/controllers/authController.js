@@ -82,7 +82,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
     user: {
       username: userFound.username,
       email: userFound.email,
-      role: userFound.isAdmin,
+      isAdmin: userFound.isAdmin,
       address:userFound.address
     },
     favourites: userFound.favourites
