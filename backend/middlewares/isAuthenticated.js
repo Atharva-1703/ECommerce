@@ -28,6 +28,7 @@ const isAuthenticated = async (req, res, next) => {
     };
     next();
   } else {
+    res.clearCookie("token");
     return req.status(401).json({
       success: false,
       message: "Token invalid , Login again",
