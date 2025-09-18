@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useUserStore } from "@/stores/useUserStore";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const LoginContainer = () => {
   const { login, isLoading, isLogin } = useUserStore();
