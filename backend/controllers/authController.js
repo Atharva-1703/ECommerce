@@ -53,7 +53,9 @@ exports.loginUser = asyncHandler(async (req, res) => {
   }
 
   // ? check if User exists
-  const userFound = await User.findOne({ email }).select("-cart -orders -reviews -updatedAt -__v -createdAt ");
+  const userFound = await User.findOne({ email }).select(
+    "-cart -orders -reviews -updatedAt -__v -createdAt "
+  );
   if (!userFound) {
     return res.status(404).json({
       success: false,
@@ -71,16 +73,20 @@ exports.loginUser = asyncHandler(async (req, res) => {
   }
 
   // ? generate tokens
-  const token = jwt.sign({ id: userFound._id , name: userFound.username}, process.env.JWT_SECRET, {
-    expiresIn: "30d",
-  });
+  const token = jwt.sign(
+    { id: userFound._id, name: userFound.username },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "30d",
+    }
+  );
 
-  res.cookie("token",token,{
+  res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 30 * 24 * 60 * 60 * 1000,
-  })
+  });
 
   return res.status(200).json({
     success: true,
@@ -90,8 +96,22 @@ exports.loginUser = asyncHandler(async (req, res) => {
       username: userFound.username,
       email: userFound.email,
       isAdmin: userFound.isAdmin,
-      address:userFound.address
+      address: userFound.address,
     },
-    favourites: userFound.favourites
+    favourites: userFound.favourites,
+  });
+});
+
+exports.logoutUser = asyncHandler(async (req, res) => {
+  if (!req.cookies.token) {
+    return res.status(400).json({
+      success: false,
+      message: "No token found",
+    });
+  }
+  res.clearCookie("token");
+  return res.status(200).json({
+    success: true,
+    message: "User LoggedOut",
   });
 });
