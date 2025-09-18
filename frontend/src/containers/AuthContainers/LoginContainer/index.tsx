@@ -3,13 +3,15 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useUserStore } from "@/stores/useUserStore";
+import { useRouter } from "next/router";
 
 const LoginContainer = () => {
-  const { login, isLoading, isLogin, errorMessage } = useUserStore();
+  const { login, isLoading, isLogin } = useUserStore();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
+  const router=useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
@@ -18,7 +20,7 @@ const LoginContainer = () => {
     await login(formState.email, formState.password);
 
     if (isLogin) {
-      window.location.href = "/";
+      router.push("/");
     }
     
   };

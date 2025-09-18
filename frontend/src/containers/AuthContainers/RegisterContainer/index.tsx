@@ -3,38 +3,42 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useUserStore } from "@/stores/useUserStore";
+import { useRouter } from "next/navigation";
 
 const RegisterContainer = () => {
-  const  {register}= useUserStore();
+  const { register } = useUserStore();
   const [formState, setFormState] = useState({
-    username:"",
+    username: "",
     email: "",
     password: "",
   });
+  const router = useRouter();
 
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-  const { username,email, password } = formState;
+  const { username, email, password } = formState;
 
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let valid = true;
 
     if (!passwordRegex.test(password)) {
-      setPasswordError(
-        "Invalid Password"
-      );
+      setPasswordError("Invalid Password");
       valid = false;
     } else {
       setPasswordError("");
     }
 
     if (valid) {
-      register(username, email, password);
+      const success = await register(username, email, password);
+
+      if (success) {
+        router.push("/login");
+      }
     }
   };
 
@@ -58,7 +62,7 @@ const RegisterContainer = () => {
               htmlFor="username"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Usrename
+              Username
             </label>
             <input
               id="username"
@@ -115,7 +119,9 @@ const RegisterContainer = () => {
                 className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-black"
               >
                 <Icon
-                  icon={showPassword ? "mdi:eye-off-outline" : "mdi:eye-outline"}
+                  icon={
+                    showPassword ? "mdi:eye-off-outline" : "mdi:eye-outline"
+                  }
                   className="text-xl"
                 />
               </button>
