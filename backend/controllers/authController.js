@@ -45,6 +45,8 @@ exports.registerUser = asyncHandler(async (req, res) => {
 exports.loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  const isProd = process.env.NODE_ENV === "production";
+
   if (!email || !password) {
     return res.status(400).json({
       success: false,
@@ -83,8 +85,8 @@ exports.loginUser = asyncHandler(async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
