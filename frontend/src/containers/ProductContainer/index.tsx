@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Product, ProductReview } from "@/types/index";
+import { useEffect } from "react";
+import { ProductReview } from "@/types/index";
 import ProductInfo from "@/components/Product Page/Info";
 import Policies from "@/components/Product Page/Policies";
 import Reviews from "@/components/Product Page/Reviews";
