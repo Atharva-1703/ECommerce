@@ -8,8 +8,8 @@ userRoutes.get('/',getUser);
 userRoutes.get('/reviews',getReviews);
 
 userRoutes.get('/favourites',getFavourites);
-userRoutes.post('/favourite/add',addFavourite);
-userRoutes.delete('/favourite/remove',removeFavourite);
+userRoutes.put('/favourite/add/:productId',addFavourite);
+userRoutes.delete('/favourite/remove/:productId',removeFavourite);
 
 userRoutes.get('/cart',getCart)
 userRoutes.post('/cart/add',addToCart);

@@ -36,7 +36,7 @@ exports.getReviews = asyncHandler(async (req, res) => {
 
 exports.addFavourite = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { productId } = req.body;
+  const { productId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(productId)) {
     return res.status(400).json({
       success: false,
@@ -60,7 +60,7 @@ exports.addFavourite = asyncHandler(async (req, res) => {
 
 exports.removeFavourite = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { productId } = req.body;
+  const { productId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(productId)) {
     return res.status(400).json({
       success: false,
