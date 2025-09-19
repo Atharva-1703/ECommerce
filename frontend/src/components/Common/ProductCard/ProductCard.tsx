@@ -1,23 +1,54 @@
 import { Product } from "@/types";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation";
 import Ratings from "../Rating/Ratings";
+import { useUserStore } from "@/stores/useUserStore";
+import { useEffect, useState } from "react";
 
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
+  const [isFavourite, setIsFavourite] = useState<boolean>(false);
+  const { addFavourite, favouritesIds, removeFavourite } = useUserStore();
+
+  useEffect(() => {
+    if (favouritesIds.includes(product._id)) setIsFavourite(true);
+  }, []);
+
+  const handleFavouriteClick = async() => {
+    if (isFavourite) {
+      await removeFavourite(product._id);
+      setIsFavourite(false);
+    } else {
+      await addFavourite(product._id);
+      setIsFavourite(true);
+    }
+  };
+
   const discountedPrice = (
     product.price *
     (1 - product.discountPercentage / 100)
   ).toFixed(2);
   return (
-    <article className="relative cursor-pointer  min-w-56 h-[465px] p-4 rounded-2xl bg-[#f6f6f6] flex flex-col  gap-3 " onClick={() => { router.push(`/product/${product._id}`) }}>
+    <article
+      className="relative cursor-pointer  min-w-56 h-[465px] p-4 rounded-2xl bg-[#f6f6f6] flex flex-col  gap-3 "
+      onClick={() => {
+        router.push(`/product/${product._id}`);
+      }}
+    >
       <button
         className="w-8 h-8 cursor-pointer flex items-center justify-center absolute top-4 right-4 bg-white rounded-full shadow hover:bg-gray-100"
         aria-label="Add to favourites"
         tabIndex={0}
-        // onClick={handleFavouriteClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleFavouriteClick();
+        }}
       >
-        <Icon className="w-6 h-6" icon="mdi:favourite-border" />
+        {isFavourite ? (
+          <Icon className="w-6 h-6 text-red-500" icon="mdi:favourite" />
+        ) : (
+          <Icon className="w-6 h-6" icon="mdi:favourite-border" />
+        )}
       </button>
       {/* Discount badge */}
       {product.discountPercentage > 0 && (

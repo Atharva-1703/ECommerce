@@ -20,11 +20,13 @@ interface UserStoreState {
     password: string
   ) => Promise<boolean>;
   fetchFavourites: () => Promise<void>;
+  addFavourite: (id: string) => Promise<void>;
+  removeFavourite: (id: string) => Promise<void>;
 }
 
 export const useUserStore = create<UserStoreState>()(
   persist(
-    (set) => ({
+    (set,get) => ({
       user: null,
       token: null,
       isLogin: false,
@@ -60,6 +62,7 @@ export const useUserStore = create<UserStoreState>()(
             token: data.token,
             isLogin: true,
             isLoading: false,
+            favouritesIds: data.favourites,
           });
           return true;
         } catch (err: any) {
@@ -148,6 +151,41 @@ export const useUserStore = create<UserStoreState>()(
         set({ favourites: data.favourites });
         set({ isLoading: false });
       },
+
+      addFavourite: async (id) => {
+        set({isLoading:true});
+        const res=await fetch(`${API_URL}/api/user/favourite/add/${id}`,{
+          method:"PUT",
+          credentials:"include"
+        });
+        const data=await res.json();
+        if(!data.success){
+          toast.error("Failed to add favourite\nPlease try again later");
+          set({isLoading:false});
+          return;
+        }
+        const favouritesIds=get().favouritesIds;
+        set({favouritesIds:[...favouritesIds,id]});
+        set({isLoading:false});
+      },
+
+      removeFavourite: async (id) => {
+        const favouritesIds = get().favouritesIds;
+        set({ isLoading: true });
+        const res=await fetch(`${API_URL}/api/user/favourite/remove/${id}`,{
+          method:"DELETE",
+          credentials:"include"
+        });
+        const data=await res.json();
+        if(!data.success){
+          toast.error("Failed to remove favourite\nPlease try again later");
+          set({isLoading:false});
+          return;
+        }
+        set({ favouritesIds: favouritesIds.filter((fId) => fId !== id) });
+        set({ isLoading: false });
+
+      },
     }),
     {
       name: "user-storage",
@@ -155,6 +193,7 @@ export const useUserStore = create<UserStoreState>()(
         user: state.user,
         token: state.token,
         isLogin: state.isLogin,
+        favouritesIds: state.favouritesIds,
       }),
     }
   )

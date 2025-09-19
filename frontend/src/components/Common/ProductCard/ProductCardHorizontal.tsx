@@ -31,7 +31,7 @@ export default function ProductCardResponsive({
   const router = useRouter();
 
   return (
-    <section className="flex flex-col sm:flex-row bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer"
+    <section className="flex flex-col sm:flex-row bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer max-md:w-full min-w-4/5"
     onClick={() => router.push(`/product/${product._id}`)}
     >
       {/* Image */}
@@ -54,8 +54,11 @@ export default function ProductCardResponsive({
         {/* Remove button */}
         {mode !== "default" && (
           <button
-            onClick={onRemove}
-            className="text-red-500 hover:text-red-600 absolute top-3 right-3"
+            onClick={(e)=>{
+              e.stopPropagation();
+              onRemove && onRemove();
+            }}
+            className="text-red-500 hover:text-red-600 absolute top-3 right-3 rounded-full shadow-md bg-white p-1 cursor-pointer"
           >
             <Icon icon="mynaui:trash" className="w-6 h-6" />
           </button>
