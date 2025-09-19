@@ -133,6 +133,7 @@ exports.addToCart = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Product added to cart",
+    cart: userFound.cart,
   });
 });
 
@@ -196,6 +197,7 @@ exports.removeFromCart = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Product removed from cart",
+    cart: userFound.cart,
   });
 });
 
