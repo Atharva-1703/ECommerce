@@ -26,7 +26,7 @@ interface UserStoreState {
 
 export const useUserStore = create<UserStoreState>()(
   persist(
-    (set,get) => ({
+    (set, get) => ({
       user: null,
       token: null,
       isLogin: false,
@@ -153,38 +153,41 @@ export const useUserStore = create<UserStoreState>()(
       },
 
       addFavourite: async (id) => {
-        set({isLoading:true});
-        const res=await fetch(`${API_URL}/api/user/favourite/add/${id}`,{
-          method:"PUT",
-          credentials:"include"
+        set({ isLoading: true });
+        const res = await fetch(`${API_URL}/api/user/favourite/add/${id}`, {
+          method: "PUT",
+          credentials: "include",
         });
-        const data=await res.json();
-        if(!data.success){
+        const data = await res.json();
+        if (!data.success) {
           toast.error("Failed to add favourite\nPlease try again later");
-          set({isLoading:false});
+          set({ isLoading: false });
           return;
         }
-        const favouritesIds=get().favouritesIds;
-        set({favouritesIds:[...favouritesIds,id]});
-        set({isLoading:false});
+        const favouritesIds = get().favouritesIds;
+        set({ favouritesIds: [...favouritesIds, id] });
+        set({ isLoading: false });
       },
 
       removeFavourite: async (id) => {
-        const favouritesIds = get().favouritesIds;
+        // const favouritesIds = get().favouritesIds;
+        const { favourites, favouritesIds } = get();
         set({ isLoading: true });
-        const res=await fetch(`${API_URL}/api/user/favourite/remove/${id}`,{
-          method:"DELETE",
-          credentials:"include"
+        const res = await fetch(`${API_URL}/api/user/favourite/remove/${id}`, {
+          method: "DELETE",
+          credentials: "include",
         });
-        const data=await res.json();
-        if(!data.success){
+        const data = await res.json();
+        if (!data.success) {
           toast.error("Failed to remove favourite\nPlease try again later");
-          set({isLoading:false});
+          set({ isLoading: false });
           return;
         }
         set({ favouritesIds: favouritesIds.filter((fId) => fId !== id) });
         set({ isLoading: false });
-
+        if (favourites.length) {
+          set({ favourites: favourites.filter((f) => f._id !== id) });
+        }
       },
     }),
     {
