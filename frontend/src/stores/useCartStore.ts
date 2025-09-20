@@ -45,7 +45,7 @@ export const useCartStore = create<CartState>((set, get) => ({
       if (!res.ok) throw new Error(data.message || "Failed to add to cart");
 
       set({ cart: data.cart });
-      toast.success("Added to cart");
+      toast.success(data.message);
     } catch (err: any) {
       toast.error(err.message);
     }
