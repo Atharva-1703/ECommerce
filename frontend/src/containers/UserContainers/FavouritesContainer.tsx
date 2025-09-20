@@ -3,9 +3,11 @@ import React from "react";
 import ProductCardResponsive from "@/components/Common/ProductCard/ProductCardHorizontal";
 import { useUserStore } from "@/stores/useUserStore";
 import { ProductCardSkeletonHorizontal } from "@/components/skeletons/ProductCards/horizontal";
+import { useCartStore } from "@/stores/useCartStore";
 
 const FavouritesContainer = () => {
   const { favourites, fetchFavourites, isLoading } = useUserStore();
+  const { addToCart } = useCartStore();
   React.useEffect(() => {
     fetchFavourites();
   }, []);
@@ -18,7 +20,15 @@ const FavouritesContainer = () => {
         })
       ) : favourites.length > 0 ? (
         favourites.map((product) => {
-          return <ProductCardResponsive key={product._id} product={product} mode="favourites" onRemove={()=>removeFavourite(product._id)}/>;
+          return (
+            <ProductCardResponsive
+              key={product._id}
+              product={product}
+              mode="favourites"
+              onRemove={() => removeFavourite(product._id)}
+              onAddToCart={() => addToCart(product._id)}
+            />
+          );
         })
       ) : (
         <h1 className="text-2xl font-bold text-gray-800">

@@ -54,6 +54,7 @@ export interface User{
 }
 
 export interface Cart{
-  product:Product|string;
+  _id:string;
+  product:Product;
   quantity:number
 }

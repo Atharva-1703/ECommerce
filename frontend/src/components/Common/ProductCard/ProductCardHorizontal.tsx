@@ -135,7 +135,11 @@ export default function ProductCardResponsive({
             </div>
           )}
         {mode === "favourites" && (
-            <button className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition">
+            <button className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition"
+            onClick={(e)=>{
+              e.stopPropagation();
+              onAddToCart && onAddToCart();
+            }}>
               Add to Cart
             </button>
           )}

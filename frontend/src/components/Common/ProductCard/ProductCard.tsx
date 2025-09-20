@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 import Ratings from "../Rating/Ratings";
 import { useUserStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
+import { useCartStore } from "@/stores/useCartStore";
 
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
   const { addFavourite, favouritesIds, removeFavourite } = useUserStore();
+  const {addToCart}=useCartStore();
 
   useEffect(() => {
     if (favouritesIds.includes(product._id)) setIsFavourite(true);
@@ -80,7 +82,11 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div className="flex flex-col  justify-center gap-4 mt-1 w-full">
-        <button className="bg-black text-white cursor-pointer px-4 py-2 rounded-xl hover:bg-gray-700 transition">
+        <button className="bg-black text-white cursor-pointer px-4 py-2 rounded-xl hover:bg-gray-700 transition" 
+        onClick={(e)=>{
+          e.stopPropagation();
+          addToCart(product._id)
+        }}>
           Add to cart
         </button>
         <button className="bg-black text-white px-4 cursor-pointer py-2 rounded-xl hover:bg-gray-700 transition">

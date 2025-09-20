@@ -44,7 +44,6 @@ export const useCartStore = create<CartState>((set, get) => ({
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to add to cart");
 
-      // ✅ Replace cart with backend's response for consistency
       set({ cart: data.cart });
       toast.success("Added to cart");
     } catch (err: any) {
@@ -64,31 +63,32 @@ export const useCartStore = create<CartState>((set, get) => ({
       if (!res.ok) throw new Error(data.message || "Failed to update quantity");
 
       // ✅ Update locally instead of full replace
-      set((state) => ({
-        cart: state.cart.map((item) =>
-          item.product === productId ? { ...item, quantity } : item
-        ),
-      }));
+      // set((state) => ({
+      //   cart: state.cart.map((item) =>
+      //     item.product === productId ? { ...item, quantity } : item
+      //   ),
+      // }));
     } catch (err: any) {
       toast.error(err.message);
     }
   },
 
-  removeFromCart: async (productId) => {
+  removeFromCart: async (cartId) => {
+    const {cart}=get();
     try {
       const res = await fetch(`${API_URL}/api/user/cart/remove`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ productId }),
+        body: JSON.stringify({ cartId }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to remove from cart");
-
-      // ✅ Remove locally
-      set((state) => ({
-        cart: state.cart.filter((item) => item.product !== productId),
-      }));
+      if (!data.success) {
+        throw new Error(data.message || "Failed to remove from cart");
+      }
+      set({
+        cart:cart.filter(({_id})=>_id!==cartId)
+      })
       toast.success("Item removed");
     } catch (err: any) {
       toast.error(err.message);
