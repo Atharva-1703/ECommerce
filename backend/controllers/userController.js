@@ -124,15 +124,27 @@ exports.addToCart = asyncHandler(async (req, res) => {
     });
   }
 
-  if (userFound.cart.includes(productId)) {
-    return res.status(405).json({
-      success: false,
-      message: "Product already in cart",
+  const productExists = userFound.cart.findIndex(
+    (item) => item.product.toString() === productId
+  );
+
+  if(productExists==-1){
+    userFound.cart.push({
+      product: productId,
+      quantity: quantity,
     });
   }
-
-  userFound.cart.push({ product: productId, quantity });
+  else{
+    userFound.cart[productExists].quantity+=quantity;
+  }
   await userFound.save();
+  if(productExists!=-1){
+    return res.status(200).json({
+      success: true,
+      message: "Product quantity updated in cart",
+      cart: userFound.cart,
+    })
+  }
   res.status(200).json({
     success: true,
     message: "Product added to cart",
