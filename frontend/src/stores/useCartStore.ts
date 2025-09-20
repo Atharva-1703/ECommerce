@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { API_URL } from "@/utils/url";
 import toast from "react-hot-toast";
 import { Cart } from "@/types";
+import { fetcher } from "@/utils/fetcher";
 
 interface CartState {
   cart: Cart[];
@@ -21,9 +22,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   fetchCart: async () => {
     set({ isLoading: true });
     try {
-      const res = await fetch(`${API_URL}/api/user/cart`, {
-        credentials: "include",
-      });
+      const res = await fetcher(`${API_URL}/api/user/cart`, "GET");
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to fetch cart");
       set({ cart: data.cart, isLoading: false });
@@ -35,12 +34,11 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   addToCart: async (productId, quantity = 1) => {
     try {
-      const res = await fetch(`${API_URL}/api/user/cart/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ productId, quantity }),
+      const res = await fetcher(`${API_URL}/api/user/cart/add`, "POST", {
+        productId,
+        quantity,
       });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to add to cart");
 
@@ -53,11 +51,9 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   updateQuantity: async (productId, quantity) => {
     try {
-      const res = await fetch(`${API_URL}/api/user/cart/edit`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ productId, quantity }),
+      const res = await fetcher(`${API_URL}/api/user/cart/edit`, "PUT", {
+        productId,
+        quantity,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update quantity");
@@ -74,21 +70,19 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   removeFromCart: async (cartId) => {
-    const {cart}=get();
+    const { cart } = get();
     try {
-      const res = await fetch(`${API_URL}/api/user/cart/remove`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ cartId }),
+      const res = await fetcher(`${API_URL}/api/user/cart/remove`, "DELETE", {
+        cartId,
       });
+
       const data = await res.json();
       if (!data.success) {
         throw new Error(data.message || "Failed to remove from cart");
       }
       set({
-        cart:cart.filter(({_id})=>_id!==cartId)
-      })
+        cart: cart.filter(({ _id }) => _id !== cartId),
+      });
       toast.success("Item removed");
     } catch (err: any) {
       toast.error(err.message);
@@ -97,10 +91,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   clearCart: async () => {
     try {
-      const res = await fetch(`${API_URL}/api/user/cart/clear`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const res = await fetcher(`${API_URL}/api/user/cart/clear`, "DELETE");
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to clear cart");
 

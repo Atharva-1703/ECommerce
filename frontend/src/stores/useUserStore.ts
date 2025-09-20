@@ -1,4 +1,5 @@
 import { User, Product } from "@/types";
+import { fetcher } from "@/utils/fetcher";
 import { API_URL } from "@/utils/url";
 import toast from "react-hot-toast";
 import { create } from "zustand";
@@ -22,6 +23,7 @@ interface UserStoreState {
   fetchFavourites: () => Promise<void>;
   addFavourite: (id: string) => Promise<void>;
   removeFavourite: (id: string) => Promise<void>;
+  clearStore: () => void;
 }
 
 export const useUserStore = create<UserStoreState>()(
@@ -137,10 +139,7 @@ export const useUserStore = create<UserStoreState>()(
 
       fetchFavourites: async () => {
         set({ isLoading: true });
-        const res = await fetch(`${API_URL}/api/user/favourites`, {
-          method: "GET",
-          credentials: "include",
-        });
+        const res = await fetcher(`${API_URL}/api/user/favourites`,"GET");
         if (!res.ok) {
           toast.error("Failed to fetch favourites\nPlease try again later");
           set({ isLoading: false });
@@ -154,10 +153,7 @@ export const useUserStore = create<UserStoreState>()(
 
       addFavourite: async (id) => {
         set({ isLoading: true });
-        const res = await fetch(`${API_URL}/api/user/favourite/add/${id}`, {
-          method: "PUT",
-          credentials: "include",
-        });
+        const res = await fetcher(`${API_URL}/api/user/favourite/add/${id}`, "PUT");
         const data = await res.json();
         if (!data.success) {
           toast.error("Failed to add favourite\nPlease try again later");
@@ -170,13 +166,9 @@ export const useUserStore = create<UserStoreState>()(
       },
 
       removeFavourite: async (id) => {
-        // const favouritesIds = get().favouritesIds;
         const { favourites, favouritesIds } = get();
         set({ isLoading: true });
-        const res = await fetch(`${API_URL}/api/user/favourite/remove/${id}`, {
-          method: "DELETE",
-          credentials: "include",
-        });
+        const res = await fetcher(`${API_URL}/api/user/favourite/remove/${id}`,"DELETE");
         const data = await res.json();
         if (!data.success) {
           toast.error("Failed to remove favourite\nPlease try again later");
@@ -188,6 +180,18 @@ export const useUserStore = create<UserStoreState>()(
         if (favourites.length) {
           set({ favourites: favourites.filter((f) => f._id !== id) });
         }
+      },
+
+      clearStore: () => {
+        set({
+          user: null,
+          token: null,
+          isLogin: false,
+          favourites: [],
+          favouritesIds: [],
+          isLoading: false,
+          errorMessage: "",
+        });
       },
     }),
     {
