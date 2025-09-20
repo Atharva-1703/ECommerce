@@ -13,6 +13,8 @@ interface UserStoreState {
   favouritesIds: string[];
   isLoading: boolean;
   errorMessage: string;
+  isRehydrated:boolean;
+  setRehydrated: () => void;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   register: (
@@ -36,6 +38,11 @@ export const useUserStore = create<UserStoreState>()(
       errorMessage: "",
       favourites: [],
       favouritesIds: [],
+      isRehydrated:false,
+
+      setRehydrated: () => {
+        set({isRehydrated:true});
+      },
 
       login: async (email, password) => {
         set({ isLoading: true, errorMessage: "" });
@@ -202,6 +209,9 @@ export const useUserStore = create<UserStoreState>()(
         isLogin: state.isLogin,
         favouritesIds: state.favouritesIds,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.setRehydrated();
+      },
     }
   )
 );

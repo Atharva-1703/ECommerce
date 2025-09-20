@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function AuthWrapper({
   children,
@@ -12,10 +13,13 @@ export default function AuthWrapper({
   const router = useRouter();
   const pathname = usePathname();
   const token = useUserStore((state) => state.token);
+  const isRehydrated = useUserStore((state) => state.isRehydrated);
 
   const protectedPages = ["/favourites", "/cart", "/orders", "/profile"];
 
   useEffect(() => {
+    if (!isRehydrated) return;
+
     const isProtected = protectedPages.some((p) => pathname.startsWith(p));
 
     if (!token && isProtected) {
@@ -26,10 +30,10 @@ export default function AuthWrapper({
     if (token && (pathname === "/login" || pathname === "/register")) {
       router.replace("/");
     }
-  }, [token, pathname, router]);
+  }, [token, pathname, router,isRehydrated]);
 
-  if (!token && protectedPages.some((p) => pathname.startsWith(p))) {
-    return <p className="text-center py-20">Redirecting to login...</p>;
+  if (!isRehydrated || (!token && protectedPages.some((p) => pathname.startsWith(p)))) {
+    return <Icon icon="eos-icons:loading" className="animate-spin" />
   }
 
   return <>{children}</>;
