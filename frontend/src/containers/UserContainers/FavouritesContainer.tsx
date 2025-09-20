@@ -4,6 +4,7 @@ import ProductCardResponsive from "@/components/Common/ProductCard/ProductCardHo
 import { useUserStore } from "@/stores/useUserStore";
 import { ProductCardSkeletonHorizontal } from "@/components/skeletons/ProductCards/horizontal";
 import { useCartStore } from "@/stores/useCartStore";
+import EmptyState from "@/components/Common/EmptyState";
 
 const FavouritesContainer = () => {
   const { favourites, fetchFavourites, isLoading } = useUserStore();
@@ -31,9 +32,11 @@ const FavouritesContainer = () => {
           );
         })
       ) : (
-        <h1 className="text-2xl font-bold text-gray-800">
-          No favourites found
-        </h1>
+        <EmptyState
+          icon="mdi:heart-outline"
+          title="Nothing in your favourites 💔"
+          subtitle="Tap the ❤️ icon on products to save them here."
+        />
       )}
     </div>
   );
