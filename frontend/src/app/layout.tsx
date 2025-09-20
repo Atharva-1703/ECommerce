@@ -4,8 +4,9 @@ import "./globals.css";
 import Header from "@/components/Common/Header/Header";
 import Footer from "@/components/Common/Footer/Footer";
 import { Toaster } from "react-hot-toast";
+import AuthWrapper from "@/components/AuthWrapper";
 
-const inter=Inter({subsets:["latin"]})
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,15 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={inter.className}
-        >
-        <Header/>
+      <body className={inter.className}>
+        <Header />
         <main className="min-h-screen px-2 md:px-4 max-w-7xl mx-auto py-6 mt-20">
-          {children}
-          <Toaster position="top-center" reverseOrder={false} />
+          <AuthWrapper>
+            {children}
+            <Toaster position="top-center" reverseOrder={false} />
+          </AuthWrapper>
         </main>
-      <Footer/>
+        <Footer />
       </body>
     </html>
   );
