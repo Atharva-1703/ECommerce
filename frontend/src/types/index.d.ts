@@ -28,7 +28,7 @@ export interface Product {
   images?: string[];
   weight?: number;   
   rating: number;
-  reviewCount: number;          
+  reviewCount?: number;          
   dimensions?: Dimensions;
   bigDescription?:string     
   reviews?:string[] | ProductReview[];

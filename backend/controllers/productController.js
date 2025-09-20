@@ -58,7 +58,8 @@ exports.getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find(query)
     .sort(sort)
     .limit(10)
-    .skip(offset ? offset : 0);
+    .skip(offset ? offset : 0)
+    .select("_id title thumbnail stock price discountPercentage rating");
 
   return res.status(200).json({
     success: true,

@@ -87,7 +87,10 @@ exports.removeFavourite = asyncHandler(async (req, res) => {
 exports.getFavourites = asyncHandler(async (req, res) => {
   const user = req.user;
   const userFound = await User.findById(user.id)
-    .populate("favourites")
+    .populate({
+      path: "favourites",
+      select: "_id title thumbnail stock price discountPercentage rating",
+    })
     .select("favourites");
   if (!userFound) {
     return res.status(404).json({
@@ -204,7 +207,10 @@ exports.removeFromCart = asyncHandler(async (req, res) => {
 exports.getCart = asyncHandler(async (req, res) => {
   const user = req.user;
   const userFound = await User.findById(user.id)
-    .populate("cart.product")
+    .populate({
+      path: "cart.product",
+      select: "_id title thumbnail stock price discountPercentage rating",
+    })
     .select("cart");
   if (!userFound) {
     return res.status(404).json({
