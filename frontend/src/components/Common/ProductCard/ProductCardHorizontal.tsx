@@ -3,15 +3,17 @@
 import { Product } from "@/types";
 import Ratings from "../Rating/Ratings";
 import getDiscountedPrice from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import {useRouter} from "next/navigation"
-
+import { useRouter } from "next/navigation";
+import { useCartStore } from "@/stores/useCartStore";
 
 type ProductCardMode = "default" | "cart" | "favourites";
 
 interface ProductCardProps {
+  cartId: string;
   product: Product;
+  cartQuantity?: number;
   mode?: ProductCardMode;
   onAddToCart?: () => void;
   onRemove?: () => void;
@@ -22,25 +24,49 @@ export default function ProductCardResponsive({
   mode = "default",
   onAddToCart,
   onRemove,
+  cartId,
+  cartQuantity,
 }: ProductCardProps) {
   const discountedPrice = getDiscountedPrice(
     product.price,
     product.discountPercentage
   );
-  const [quantity, setQuantity] = useState(1);
   const router = useRouter();
+  const [quantity, setQuantity] = useState(cartQuantity || 1);
+  const { updateQuantity } = useCartStore();
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  const handleIncrement = () => {
+    setQuantity((prev) =>product.stock==0 ? prev : Math.min(prev + 1, product.stock));
+    setHasInteracted(true);
+  };
+
+  const handleDecrement = () => {
+    setQuantity((prev) => Math.max(prev - 1, 1));
+    setHasInteracted(true);
+  };
+  useEffect(() => {
+    if (!hasInteracted) return;
+    const handler = setTimeout(() => {
+      if (quantity !== cartQuantity && product) {
+        updateQuantity(cartId, quantity);
+      }
+    }, 600);
+    return () => clearTimeout(handler);
+  }, [quantity]);
 
   return (
-    <section className="flex flex-col sm:flex-row bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer max-md:w-full min-w-4/5"
-    onClick={() => router.push(`/product/${product._id}`)}
+    <section
+      className="flex flex-col sm:flex-row bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer max-md:w-full min-w-4/5"
+      onClick={() => router.push(`/product/${product._id}`)}
     >
       {/* Image */}
       <div className="w-full sm:w-1/3 lg:w-1/4 bg-gray-100 flex items-center justify-center overflow-hidden aspect-[4/3] relative py-2">
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/15 to-transparent opacity-40" />
         {product.stock === 0 && (
-            <div className="absolute bg-red-700 text-white px-2 py-1 rounded-lg text-xl font-bold scale-150 -rotate-[30deg]">
+          <div className="absolute bg-red-700 text-white px-2 py-1 rounded-lg text-xl font-bold scale-150 -rotate-[30deg]">
             Sold Out
-        </div>
+          </div>
         )}
         <img
           src={product.thumbnail}
@@ -54,7 +80,7 @@ export default function ProductCardResponsive({
         {/* Remove button */}
         {mode !== "default" && (
           <button
-            onClick={(e)=>{
+            onClick={(e) => {
               e.stopPropagation();
               onRemove && onRemove();
             }}
@@ -109,40 +135,44 @@ export default function ProductCardResponsive({
           )}
         </div>
         {mode === "cart" && (
-            <div className="flex flex-col  gap-3">
-              <div className="flex gap-3 items-center">
-                <button
-                  className="bg-gray-900 text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition"
-                  onClick={() =>
-                    setQuantity((prev) => (prev - 1 < 1 ? 1 : prev - 1))
-                  }
-                >
-                  -
-                </button>
-                <p className="font-bold">{quantity}</p>
-                <button
-                  className="bg-gray-900 text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition"
-                  onClick={() =>
-                    setQuantity((prev) => Math.min(prev + 1, product?.stock!))
-                  }
-                >
-                  +
-                </button>
-              </div>
-              <button className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition">
-                Buy Now
+          <div className="flex flex-col  gap-3">
+            <div className="flex gap-3 items-center">
+              <button
+                className="bg-gray-900 text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDecrement();
+                }}
+              >
+                -
+              </button>
+              <p className="font-bold">{quantity}</p>
+              <button
+                className="bg-gray-900 text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleIncrement();
+                }}
+              >
+                +
               </button>
             </div>
-          )}
+            <button className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition">
+              Buy Now
+            </button>
+          </div>
+        )}
         {mode === "favourites" && (
-            <button className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition"
-            onClick={(e)=>{
+          <button
+            className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition"
+            onClick={(e) => {
               e.stopPropagation();
               onAddToCart && onAddToCart();
-            }}>
-              Add to Cart
-            </button>
-          )}
+            }}
+          >
+            Add to Cart
+          </button>
+        )}
       </aside>
     </section>
   );

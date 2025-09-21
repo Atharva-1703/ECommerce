@@ -49,21 +49,27 @@ export const useCartStore = create<CartState>((set, get) => ({
     }
   },
 
-  updateQuantity: async (productId, quantity) => {
+  updateQuantity: async (cartId, quantity) => {
+    const { cart } = get();
     try {
       const res = await fetcher(`${API_URL}/api/user/cart/edit`, "PUT", {
-        productId,
+        cartId,
         quantity,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update quantity");
 
-      // ✅ Update locally instead of full replace
-      // set((state) => ({
-      //   cart: state.cart.map((item) =>
-      //     item.product === productId ? { ...item, quantity } : item
-      //   ),
-      // }));
+      set({
+        cart:cart.map((item)=>{
+          if(item._id===cartId){
+            return {
+              ...item,
+              quantity
+            }
+          }
+          return item
+        })
+      })
     } catch (err: any) {
       toast.error(err.message);
     }

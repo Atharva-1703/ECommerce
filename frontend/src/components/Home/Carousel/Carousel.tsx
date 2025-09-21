@@ -31,6 +31,7 @@ export default function Carousel() {
             title={category.title}
             description={category.description}
             index={index}
+            category={category.key}
             bgColor={category.bgColor}
           />
         </SwiperSlide>

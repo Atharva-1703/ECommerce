@@ -7,7 +7,7 @@ import { useCartStore } from "@/stores/useCartStore";
 import React, { useEffect, useState } from "react";
 
 const CartContainer = () => {
-  const { cart, isLoading, fetchCart, removeFromCart } = useCartStore();
+  const { cart, isLoading, fetchCart, removeFromCart,clearCart } = useCartStore();
   const [cartTotal, setCartTotal]=useState<number>(0);
   const [totalItems, setTotalItems]=useState<number>(0);
   useEffect(() => {
@@ -25,6 +25,9 @@ const CartContainer = () => {
   })
   return (
     <div className="px-4 flex flex-col lg:flex-row gap-6">
+      <div>
+        <button className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition" onClick={clearCart}>Clear Cart</button>
+      </div>
       <div className="flex flex-col gap-4 w-full">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, idx: number) => {
@@ -37,6 +40,7 @@ const CartContainer = () => {
                 key={_id}
                 product={product}
                 mode="cart"
+                cartId={_id}
                 onRemove={() => removeFromCart(_id)}
               />
             );
