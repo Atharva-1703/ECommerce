@@ -3,7 +3,6 @@ interface CategoryHighlight {
   image: string;
   title: string;
   description: string;
-  // link: string;
   bgColor: string;
 }
 

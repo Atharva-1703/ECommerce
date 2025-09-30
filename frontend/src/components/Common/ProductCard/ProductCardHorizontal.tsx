@@ -11,7 +11,7 @@ import { useCartStore } from "@/stores/useCartStore";
 type ProductCardMode = "default" | "cart" | "favourites";
 
 interface ProductCardProps {
-  cartId: string;
+  cartId?: string;
   product: Product;
   cartQuantity?: number;
   mode?: ProductCardMode;
@@ -49,7 +49,7 @@ export default function ProductCardResponsive({
     if (!hasInteracted) return;
     const handler = setTimeout(() => {
       if (quantity !== cartQuantity && product) {
-        updateQuantity(cartId, quantity);
+        updateQuantity(cartId!, quantity);
       }
     }, 600);
     return () => clearTimeout(handler);
