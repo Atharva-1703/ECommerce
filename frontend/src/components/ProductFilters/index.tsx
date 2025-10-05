@@ -8,7 +8,8 @@ interface ProductFiltersFormProps {
 
 export default function ProductFilterForm({}: // onFilter,
 ProductFiltersFormProps) {
-  const { productFilter, setfilters,resetOffset } = useSearchStore();
+  const { productFilter, setfilters, resetOffset, resetProducts } =
+    useSearchStore();
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [category, setCategory] = useState<string>("");
   const [minPrice, setMinPrice] = useState<number | "">("");
@@ -23,6 +24,7 @@ ProductFiltersFormProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    resetProducts();
     resetOffset();
     setfilters({
       brands: selectedBrands,
@@ -37,7 +39,6 @@ ProductFiltersFormProps) {
     setCategory("");
     setMinPrice("");
     setMaxPrice("");
-    
   };
 
   const toggleSection = (section: string) => {

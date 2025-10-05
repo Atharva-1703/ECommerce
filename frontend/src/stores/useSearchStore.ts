@@ -6,7 +6,7 @@ interface Filters {
   category?: string;
   title?: string;
   sortBy?: string;
-  brands?:string[];
+  brands?: string[];
   order: "asc" | "desc";
   minPrice?: number;
   maxPrice?: number;
@@ -23,21 +23,22 @@ interface SearchState {
   offset: number;
   productFilter: ProductFilter;
   loading: boolean;
-  totalProducts:number;
+  totalProducts: number;
   // setBrands: (brands: string[]) => void;
-  fetchProducts: (passedfilters?:Filters) => Promise<void>;
+  fetchProducts: (passedfilters?: Filters) => Promise<void>;
   setfilters: (updates: Partial<Filters>) => void;
   incrementOffset: () => void;
   resetFilters: () => void;
+  resetProducts: () => void;
   resetProductFilter: () => void;
   resetOffset: () => void;
-  fetchProductFilters: (title?:string,category?:string) => Promise<void>;
+  fetchProductFilters: (title?: string, category?: string) => Promise<void>;
 }
 
 export const useSearchStore = create<SearchState>((set, get) => ({
   products: [],
   offset: 0,
-  totalProducts:0,
+  totalProducts: 0,
   filters: {
     order: "asc",
   },
@@ -54,9 +55,9 @@ export const useSearchStore = create<SearchState>((set, get) => ({
   },
   setfilters: (updates: Partial<Filters>) => {
     set({ filters: { ...get().filters, ...updates } });
-    const passedFilters={...get().filters,...updates}
+    const passedFilters = { ...get().filters, ...updates };
     console.log(passedFilters);
-    
+
     get().fetchProducts(passedFilters);
   },
   resetFilters: () => {
@@ -65,17 +66,19 @@ export const useSearchStore = create<SearchState>((set, get) => ({
   resetProductFilter: () => {
     set({ productFilter: { brands: [], categories: [] } });
   },
+  resetProducts: () => {
+    set({ products: [] });
+  },
   fetchProducts: async (passedfilters) => {
     set({ loading: true });
-    const { products,  offset, incrementOffset } = get();
+    const { products, offset, incrementOffset } = get();
 
     const params = new URLSearchParams();
 
-    Object.entries(passedfilters||get().filters).forEach(([key, value]) => {
-      if(Array.isArray(value)) {
+    Object.entries(passedfilters || get().filters).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
         value.forEach((val) => params.append(key, val));
-      }
-      else if (value) {
+      } else if (value) {
         params.set(key, value.toString());
       }
     });
@@ -90,17 +93,19 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     });
     incrementOffset();
   },
-  fetchProductFilters: async (title,category) => {
+  fetchProductFilters: async (title, category) => {
     const { filters } = get();
     const response = await fetch(
-      `${API_URL}/api/products/filters?category=${category||filters.category}&title=${title||filters.title}`
+      `${API_URL}/api/products/filters?category=${
+        category || filters.category
+      }&title=${title || filters.title}`
     );
     const data = await response.json();
-    if(data.filters.categories.length==0) {
-      data.filters.categories=[category]
+    if (data.filters.categories.length == 0) {
+      data.filters.categories = [category];
     }
     set({ productFilter: data.filters });
     // set({productFilter})
-    set({ totalProducts:data.totalProducts });
+    set({ totalProducts: data.totalProducts });
   },
 }));
