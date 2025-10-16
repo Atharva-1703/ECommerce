@@ -17,7 +17,12 @@ const orderSchema = new mongoose.Schema({
     ref: "Product",
     required: true,
   },
-  delivered: { type: Boolean, default: false },
+
+  status: {
+    type: String,
+    enum: ["pending", "delivered", "failed", "cancelled"],
+    default: "pending",
+  },
 
   shippingAddress: {
     address: { type: String, required: true },
@@ -26,6 +31,7 @@ const orderSchema = new mongoose.Schema({
     country: { type: String, required: true },
     phone: { type: String, required: true },
   },
+  deliveryDate: { type: Date, required: true },
 },{
   timestamps: true
 });
