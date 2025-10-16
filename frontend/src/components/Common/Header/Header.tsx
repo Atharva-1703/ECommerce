@@ -62,7 +62,7 @@ export default function Header() {
                 <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 shadow-lg rounded-md p-2">
                   <button
                     onClick={() => handleNavClick("/profile")}
-                    className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md"
+                    className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
                   >
                     My Profile
                   </button>
@@ -73,7 +73,7 @@ export default function Header() {
                         setOpenProfile(false);
                         router.push("/login");
                       }}
-                      className="block w-full text-left px-3 py-2 text-red-600 hover:bg-gray-100 rounded-md"
+                      className="block w-full text-left px-3 py-2 text-red-600 hover:bg-gray-100 rounded-md cursor-pointer"
                     >
                       Logout
                     </button>
