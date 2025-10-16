@@ -50,7 +50,8 @@ export interface User{
   email:string;
   isAdmin:boolean;
   address:address[];
-  cart:Product[]
+  cart:Product[];
+  createdAt?:string;
 }
 
 export interface Cart{

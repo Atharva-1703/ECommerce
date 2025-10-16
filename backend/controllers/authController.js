@@ -56,7 +56,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
 
   // ? check if User exists
   const userFound = await User.findOne({ email }).select(
-    "_id username email password isAdmin address cart favourites"
+    "_id username email password isAdmin address cart favourites createdAt"
   );
   if (!userFound) {
     return res.status(404).json({
@@ -99,6 +99,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
       email: userFound.email,
       isAdmin: userFound.isAdmin,
       address: userFound.address,
+      createdAt:userFound.createdAt
     },
     favourites: userFound.favourites,
   });
