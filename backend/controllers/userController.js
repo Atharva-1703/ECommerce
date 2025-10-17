@@ -128,22 +128,21 @@ exports.addToCart = asyncHandler(async (req, res) => {
     (item) => item.product.toString() === productId
   );
 
-  if(productExists==-1){
+  if (productExists == -1) {
     userFound.cart.push({
       product: productId,
       quantity: quantity,
     });
-  }
-  else{
-    userFound.cart[productExists].quantity+=quantity;
+  } else {
+    userFound.cart[productExists].quantity += quantity;
   }
   await userFound.save();
-  if(productExists!=-1){
+  if (productExists != -1) {
     return res.status(200).json({
       success: true,
       message: "Product quantity updated in cart",
       cart: userFound.cart,
-    })
+    });
   }
   res.status(200).json({
     success: true,
@@ -199,9 +198,11 @@ exports.removeFromCart = asyncHandler(async (req, res) => {
     });
   }
 
-  const userFound = await User.findByIdAndUpdate(user.id, {
-    $pull: { cart: { _id: cartId } },
-  });
+  const userFound = await User.findByIdAndUpdate(
+    user.id,
+    { $pull: { cart: { _id: new mongoose.Types.ObjectId(cartId) } } },
+    { new: true }
+  );
   if (!userFound) {
     return res.status(404).json({
       success: false,
@@ -282,17 +283,17 @@ exports.addAddress = asyncHandler(async (req, res) => {
 
 exports.removeAddress = asyncHandler(async (req, res) => {
   const user = req.user;
-  const { name } = req.body;
-  name = name.toLowerCase();
-  const userFound = await User.findById(user.id);
+  const { addressId } = req.body;
+
+  const userFound = await User.findByIdAndUpdate(user.id, {
+    $pull: { address: { _id: new mongoose.Types.ObjectId(addressId) } },
+  });
   if (!userFound) {
     return res.status(404).json({
       success: false,
       message: "User not found",
     });
   }
-  userFound.address = userFound.address.filter((item) => item.name !== name);
-  await userFound.save();
   return res.status(200).json({
     success: true,
     message: "Address deleted",
