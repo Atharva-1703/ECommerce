@@ -226,12 +226,12 @@ export const useUserStore = create<UserStoreState>()(
         set({ isLoading: false });
       },
 
-      removeAddress: async (addressID) => {
+      removeAddress: async (addressId) => {
         const { user } = get();
 
         set({ isLoading: true });
         const res = await fetcher(`${API_URL}/api/user/address/remove`, "PUT", {
-          addressID,
+          addressId,
         });
         const data = await res.json();
         if (!data.success) {
@@ -242,7 +242,7 @@ export const useUserStore = create<UserStoreState>()(
         set({
           user: {
             ...user!,
-            address: user!.address?.filter((a) => a._id !== addressID),
+            address: user!.address?.filter((a) => a._id !== addressId),
           },
         });
         toast.success("Address removed successfully");

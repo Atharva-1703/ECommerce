@@ -256,7 +256,7 @@ exports.clearCart = asyncHandler(async (req, res) => {
 
 exports.addAddress = asyncHandler(async (req, res) => {
   const user = req.user;
-  const address = req.body;
+  const { address } = req.body;
   address.name = address.name.toLowerCase();
 
   const userFound = await User.findById(user.id);
@@ -285,9 +285,13 @@ exports.removeAddress = asyncHandler(async (req, res) => {
   const user = req.user;
   const { addressId } = req.body;
 
-  const userFound = await User.findByIdAndUpdate(user.id, {
-    $pull: { address: { _id: new mongoose.Types.ObjectId(addressId) } },
-  });
+  const userFound = await User.findByIdAndUpdate(
+    user.id,
+    {
+      $pull: { address: { _id: new mongoose.Types.ObjectId(addressId) } },
+    },
+    { new: true }
+  );
   if (!userFound) {
     return res.status(404).json({
       success: false,
