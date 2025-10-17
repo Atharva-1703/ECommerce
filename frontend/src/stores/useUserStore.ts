@@ -1,4 +1,4 @@
-import { User, Product } from "@/types";
+import { User, Product, address } from "@/types";
 import { fetcher } from "@/utils/fetcher";
 import { API_URL } from "@/utils/url";
 import toast from "react-hot-toast";
@@ -13,8 +13,10 @@ interface UserStoreState {
   favouritesIds: string[];
   isLoading: boolean;
   errorMessage: string;
-  isRehydrated:boolean;
+  isRehydrated: boolean;
+
   setRehydrated: () => void;
+
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   register: (
@@ -22,9 +24,14 @@ interface UserStoreState {
     email: string,
     password: string
   ) => Promise<boolean>;
+
   fetchFavourites: () => Promise<void>;
   addFavourite: (id: string) => Promise<void>;
   removeFavourite: (id: string) => Promise<void>;
+
+  addAddress: (address: address) => Promise<void>;
+  removeAddress: (addressId: string) => Promise<void>;
+
   clearStore: () => void;
 }
 
@@ -38,10 +45,10 @@ export const useUserStore = create<UserStoreState>()(
       errorMessage: "",
       favourites: [],
       favouritesIds: [],
-      isRehydrated:false,
+      isRehydrated: false,
 
       setRehydrated: () => {
-        set({isRehydrated:true});
+        set({ isRehydrated: true });
       },
 
       login: async (email, password) => {
@@ -146,7 +153,7 @@ export const useUserStore = create<UserStoreState>()(
 
       fetchFavourites: async () => {
         set({ isLoading: true });
-        const res = await fetcher(`${API_URL}/api/user/favourites`,"GET");
+        const res = await fetcher(`${API_URL}/api/user/favourites`, "GET");
         if (!res.ok) {
           toast.error("Failed to fetch favourites\nPlease try again later");
           set({ isLoading: false });
@@ -160,7 +167,10 @@ export const useUserStore = create<UserStoreState>()(
 
       addFavourite: async (id) => {
         set({ isLoading: true });
-        const res = await fetcher(`${API_URL}/api/user/favourite/add/${id}`, "PUT");
+        const res = await fetcher(
+          `${API_URL}/api/user/favourite/add/${id}`,
+          "PUT"
+        );
         const data = await res.json();
         if (!data.success) {
           toast.error("Failed to add favourite\nPlease try again later");
@@ -175,7 +185,10 @@ export const useUserStore = create<UserStoreState>()(
       removeFavourite: async (id) => {
         const { favourites, favouritesIds } = get();
         set({ isLoading: true });
-        const res = await fetcher(`${API_URL}/api/user/favourite/remove/${id}`,"DELETE");
+        const res = await fetcher(
+          `${API_URL}/api/user/favourite/remove/${id}`,
+          "DELETE"
+        );
         const data = await res.json();
         if (!data.success) {
           toast.error("Failed to remove favourite\nPlease try again later");
@@ -187,6 +200,53 @@ export const useUserStore = create<UserStoreState>()(
         if (favourites.length) {
           set({ favourites: favourites.filter((f) => f._id !== id) });
         }
+      },
+
+      addAddress: async (address) => {
+        const { user } = get();
+        set({ isLoading: true });
+        const res = await fetcher(`${API_URL}/api/user/address/add`, "PUT", {
+          address,
+        });
+        const data = await res.json();
+        if (!data.success) {
+          toast.error(data.message);
+          set({ isLoading: false });
+          return;
+        }
+        set({
+          user: {
+            ...user!,
+            address: data.address,
+          },
+        });
+
+        toast.success("Address added successfully");
+
+        set({ isLoading: false });
+      },
+
+      removeAddress: async (addressID) => {
+        const { user } = get();
+
+        set({ isLoading: true });
+        const res = await fetcher(`${API_URL}/api/user/address/remove`, "PUT", {
+          addressID,
+        });
+        const data = await res.json();
+        if (!data.success) {
+          toast.error(data.message);
+          set({ isLoading: false });
+          return;
+        }
+        set({
+          user: {
+            ...user!,
+            address: user!.address?.filter((a) => a._id !== addressID),
+          },
+        });
+        toast.success("Address removed successfully");
+        set({ isLoading: false });
       },
 
       clearStore: () => {

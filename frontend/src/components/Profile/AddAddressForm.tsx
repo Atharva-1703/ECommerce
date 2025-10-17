@@ -1,8 +1,36 @@
+"use client";
+import { useUserStore } from "@/stores/useUserStore";
 import React from "react";
 
 const AddAddressForm = () => {
+  const  {addAddress}=useUserStore()
+  const [formState, setFormState] = React.useState({
+    name: "",
+    street: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "",
+    phone: "",
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormState({
+        ...formState,
+        [e.target.name]: e.target.value,
+      });
+    };
+
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(formState);
+    await addAddress(formState);
+
+  }
+
+
   return (
-    <form className="space-y-5 mb-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+    <form className="space-y-5 mb-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200" onSubmit={handleSubmit}>
       {/* Name */}
       <div>
         <label
@@ -15,6 +43,8 @@ const AddAddressForm = () => {
           id="name"
           name="name"
           type="text"
+          value={formState.name}
+          onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
           placeholder="Home, Office, etc."
           required
@@ -33,6 +63,8 @@ const AddAddressForm = () => {
           id="street"
           name="street"
           type="text"
+          value={formState.street}
+          onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
           placeholder="221B Baker Street"
           required
@@ -51,6 +83,28 @@ const AddAddressForm = () => {
           id="city"
           name="city"
           type="text"
+          value={formState.city}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+          placeholder="London"
+          required
+        />
+      </div>
+
+      {/* State*/}
+      <div>
+        <label
+          htmlFor="state"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          State
+        </label>
+        <input
+          id="state"
+          name="state"
+          type="text"
+          value={formState.state}
+          onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
           placeholder="London"
           required
@@ -69,6 +123,8 @@ const AddAddressForm = () => {
           id="postalCode"
           name="postalCode"
           type="text"
+          value={formState.postalCode}
+          onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
           placeholder="NW1 6XE"
           required
@@ -87,6 +143,8 @@ const AddAddressForm = () => {
           id="country"
           name="country"
           type="text"
+          value={formState.country}
+          onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
           placeholder="United Kingdom"
           required
@@ -105,6 +163,8 @@ const AddAddressForm = () => {
           id="phone"
           name="phone"
           type="tel"
+          value={formState.phone}
+          onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
           placeholder="+44 7911 123456"
           required

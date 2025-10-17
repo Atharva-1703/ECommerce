@@ -3,20 +3,23 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import AddAddressForm from "./AddAddressForm";
+import { useUserStore } from "@/stores/useUserStore";
 
 const dummyAddresses = [
   {
     name: "Home",
-    address: "221B Baker Street",
+    street: "221B Baker Street",
     city: "London",
+    state: "London",
     postalCode: "NW1 6XE",
     country: "United Kingdom",
     phone: "+44 7911 123456",
   },
   {
     name: "Office",
-    address: "742 Evergreen Terrace",
+    street: "742 Evergreen Terrace",
     city: "Springfield",
+    state: "IL",
     postalCode: "62704",
     country: "USA",
     phone: "+1 555-123-4567",
@@ -24,6 +27,12 @@ const dummyAddresses = [
 ];
 
 const ProfileAddresses = () => {
+  const {user,removeAddress}=useUserStore();
+
+  const handleRemoveAddress = async(addressId: string) => {
+    await removeAddress(addressId);
+  };
+
   return (
     <section className="space-y-8">
       {/* Header */}
@@ -36,7 +45,7 @@ const ProfileAddresses = () => {
 
       {/* Address List */}
       <div className="grid gap-6">
-        {dummyAddresses.map((address, index) => (
+        {user?.address.map((address, index) => (
           <div
             key={index}
             className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition"
@@ -45,12 +54,13 @@ const ProfileAddresses = () => {
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium text-gray-900">
                 {address.name}
+                
               </h3>
               <div className="flex gap-3">
                 <button className="text-gray-600 hover:text-gray-900 transition">
                   <Icon icon="mdi:pencil-outline" className="w-5 h-5" />
                 </button>
-                <button className="text-red-500 hover:text-red-700 transition">
+                <button className="text-red-500 cursor-pointer hover:text-red-700 transition" onClick={()=>removeAddress(address._id!)}>
                   <Icon icon="mdi:trash-can-outline" className="w-5 h-5" />
                 </button>
               </div>
@@ -60,12 +70,17 @@ const ProfileAddresses = () => {
             <dl className="grid sm:grid-cols-2 gap-y-3 text-gray-800">
               <div>
                 <dt className="text-sm text-gray-500">Street</dt>
-                <dd className="font-medium">{address.address}</dd>
+                <dd className="font-medium">{address.street}</dd>
               </div>
 
               <div>
                 <dt className="text-sm text-gray-500">City</dt>
                 <dd className="font-medium">{address.city}</dd>
+              </div>
+
+              <div>
+                <dt className="text-sm text-gray-500">State</dt>
+                <dd className="font-medium">{address.state}</dd>
               </div>
 
               <div>
@@ -85,14 +100,6 @@ const ProfileAddresses = () => {
             </dl>
           </div>
         ))}
-      </div>
-
-      {/* Add New Address Button */}
-      <div className="flex justify-end">
-        <button className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition">
-          <Icon icon="mdi:plus" className="w-5 h-5" />
-          Add New Address
-        </button>
       </div>
 
       <AddAddressForm/>

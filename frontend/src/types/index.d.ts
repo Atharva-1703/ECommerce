@@ -37,12 +37,14 @@ export interface Product {
 }
 
 interface address{
-  address:string;
+  _id?:string
+  street:string;
   city:string;
   state:string;
   country:string;
-  pincode:string
+  postalCode:string
   phone:string
+  name:string
 }
 
 export interface User{
