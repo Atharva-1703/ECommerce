@@ -1,9 +1,12 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 import AddAddressForm from "./AddAddressForm";
 import { useUserStore } from "@/stores/useUserStore";
+import AddressCard from "./AddressCard";
+import EditAddressForm from "./EditAddressForm";
+import { address } from "@/types";
 
 const dummyAddresses = [
   {
@@ -27,10 +30,17 @@ const dummyAddresses = [
 ];
 
 const ProfileAddresses = () => {
-  const {user,removeAddress}=useUserStore();
+  const { user, removeAddress ,editAddress} = useUserStore();
+  const [editingId, setEditingId] = useState<string>("");
 
-  const handleRemoveAddress = async(addressId: string) => {
+  const handleRemoveAddress = async (addressId: string) => {
     await removeAddress(addressId);
+  };
+
+  const handleSave = async(updated: address) => {
+    // console.log(updated);
+    await editAddress(editingId,updated)
+    setEditingId("");
   };
 
   return (
@@ -45,64 +55,24 @@ const ProfileAddresses = () => {
 
       {/* Address List */}
       <div className="grid gap-6">
-        {user?.address.map((address, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition"
-          >
-            {/* Header Row */}
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium text-gray-900">
-                {address.name}
-                
-              </h3>
-              <div className="flex gap-3">
-                <button className="text-gray-600 hover:text-gray-900 transition">
-                  <Icon icon="mdi:pencil-outline" className="w-5 h-5" />
-                </button>
-                <button className="text-red-500 cursor-pointer hover:text-red-700 transition" onClick={()=>removeAddress(address._id!)}>
-                  <Icon icon="mdi:trash-can-outline" className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Address Details */}
-            <dl className="grid sm:grid-cols-2 gap-y-3 text-gray-800">
-              <div>
-                <dt className="text-sm text-gray-500">Street</dt>
-                <dd className="font-medium">{address.street}</dd>
-              </div>
-
-              <div>
-                <dt className="text-sm text-gray-500">City</dt>
-                <dd className="font-medium">{address.city}</dd>
-              </div>
-
-              <div>
-                <dt className="text-sm text-gray-500">State</dt>
-                <dd className="font-medium">{address.state}</dd>
-              </div>
-
-              <div>
-                <dt className="text-sm text-gray-500">Postal Code</dt>
-                <dd className="font-medium">{address.postalCode}</dd>
-              </div>
-
-              <div>
-                <dt className="text-sm text-gray-500">Country</dt>
-                <dd className="font-medium">{address.country}</dd>
-              </div>
-
-              <div className="sm:col-span-2">
-                <dt className="text-sm text-gray-500">Phone Number</dt>
-                <dd className="font-medium">{address.phone}</dd>
-              </div>
-            </dl>
-          </div>
-        ))}
+        {user?.address.map((address, index) =>
+          editingId === address._id ? (
+            <EditAddressForm
+              address={address}
+              onCancel={() => setEditingId("")}
+              onSave={(updated) => handleSave(updated)}
+            />
+          ) : (
+            <AddressCard
+              address={address}
+              onEdit={() => setEditingId(address._id!)}
+              handleRemoveAddress={handleRemoveAddress}
+            />
+          )
+        )}
       </div>
 
-      <AddAddressForm/>
+      <AddAddressForm />
     </section>
   );
 };

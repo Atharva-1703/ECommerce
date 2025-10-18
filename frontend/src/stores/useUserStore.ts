@@ -31,6 +31,7 @@ interface UserStoreState {
 
   addAddress: (address: address) => Promise<void>;
   removeAddress: (addressId: string) => Promise<void>;
+  editAddress:(addressId:string, address:address) => Promise<void>;
 
   clearStore: () => void;
 }
@@ -247,6 +248,29 @@ export const useUserStore = create<UserStoreState>()(
         });
         toast.success("Address removed successfully");
         set({ isLoading: false });
+      },
+
+      editAddress:async (addressId, address)=> {
+          const {user}=get();
+          set({isLoading:true});
+          const res = await fetcher(`${API_URL}/api/user/address/edit`, "PUT", {
+            addressId,
+            newAddress:address,
+          });
+          const data = await res.json();
+          if (!data.success) {
+            toast.error(data.message);
+            set({ isLoading: false });
+            return;
+          }
+          set({
+            user: {
+              ...user!,
+              address: user!.address?.map((a) => a._id === addressId ? address : a),
+            },
+          });
+          toast.success("Address edited successfully");
+          set({ isLoading: false });
       },
 
       clearStore: () => {
