@@ -285,13 +285,20 @@ exports.removeAddress = asyncHandler(async (req, res) => {
   const user = req.user;
   const { addressId } = req.body;
 
-  const userFound = await User.findByIdAndUpdate(
-    user.id,
-    {
-      $pull: { address: { _id: new mongoose.Types.ObjectId(addressId) } },
-    },
-    { new: true }
+  const userFound = await User.findById(user.id);
+
+  const addressIndex = userFound.address.findIndex(
+    (item) => item._id.toString() === addressId
   );
+  if (addressIndex == -1) {
+    return res.status(404).json({
+      success: false,
+      message: "Address not found",
+    });
+  }
+  userFound.address.splice(addressIndex, 1);
+  await userFound.save();
+
   if (!userFound) {
     return res.status(404).json({
       success: false,
@@ -301,5 +308,57 @@ exports.removeAddress = asyncHandler(async (req, res) => {
   return res.status(200).json({
     success: true,
     message: "Address deleted",
+  });
+});
+
+exports.editAddress = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { addressId, newAddress } = req.body;
+  if (!addressId || !newAddress) {
+    return res.status(400).json({
+      success: false,
+      message: "Incomplete data provided",
+    });
+  }
+
+  newAddress.name = newAddress.name.toLowerCase();
+  if (userFound.address.find((item) => item.name === address.name)) {
+    return res.status(400).json({
+      success: false,
+      message: "Address with same name already exists",
+    });
+  }
+  if (mongoose.Types.ObjectId.isValid(addressId)) {
+    const userFound = await User.findOneAndUpdate(
+      { _id: user.id, "address._id": addressId },
+      {
+        $set: {
+          "address.$.name": newAddress.name,
+          "address.$.street": newAddress.street,
+          "address.$.city": newAddress.city,
+          "address.$.state": newAddress.state,
+          "address.$.postalCode": newAddress.postalCode,
+          "address.$.country": newAddress.country,
+          "address.$.phone": newAddress.phone,
+        },
+      },
+      { new: true }
+    );
+    if (!userFound) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Address updated",
+      address: userFound.address,
+    });
+  }
+
+  return res.status(400).json({
+    success: false,
+    message: "Invalid ID format",
   });
 });
