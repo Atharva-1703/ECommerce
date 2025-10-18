@@ -119,7 +119,7 @@ export default function Header() {
       >
         <div className="flex flex-col gap-4 p-6 h-full overflow-y-auto">
           {/* Close Button */}
-          <button className="self-end mb-4" onClick={() => setOpenMenu(false)}>
+          <button className="self-end mb-4 cursor-pointer" onClick={() => setOpenMenu(false)}>
             <Icon icon="mdi:close" className="text-2xl" />
           </button>
 
@@ -128,7 +128,7 @@ export default function Header() {
             <button
               key={index}
               onClick={() => handleNavClick(route)}
-              className="flex items-center gap-3 text-gray-700 border-b border-gray-300 pb-2"
+              className="flex items-center gap-3 text-gray-700 border-b border-gray-300 pb-2 cursor-pointer"
             >
               <Icon icon={icon} className="text-2xl" />
               <span className="capitalize">{key}</span>
@@ -143,7 +143,7 @@ export default function Header() {
                 setOpenMenu(false);
                 router.push("/login");
               }}
-              className="flex items-center gap-3 text-red-600 pt-4"
+              className="flex items-center gap-3 cursor-pointer text-red-600 pt-4"
             >
               <Icon icon="mdi:logout" className="text-2xl" />
               <span>Logout</span>
@@ -154,7 +154,7 @@ export default function Header() {
                 setOpenMenu(false);
                 router.push("/login");
               }}
-              className="flex items-center gap-3 text-red-600 pt-4"
+              className="flex items-center gap-3 cursor-pointer text-red-600 pt-4"
             >
               <Icon icon="mdi:login" className="text-2xl" />
               <span>Login</span>

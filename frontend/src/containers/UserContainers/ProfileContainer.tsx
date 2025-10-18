@@ -38,7 +38,7 @@ const ProfileContainer = () => {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`px-4 py-2 text-sm font-medium ${
+                className={`px-4 py-2 text-sm font-medium cursor-pointer ${
                   activetab === tab.key ? "text-blue-600" : "text-gray-600"
                 }`}
               >
