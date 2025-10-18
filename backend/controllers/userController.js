@@ -257,7 +257,6 @@ exports.clearCart = asyncHandler(async (req, res) => {
 exports.addAddress = asyncHandler(async (req, res) => {
   const user = req.user;
   const { address } = req.body;
-  address.name = address.name.toLowerCase();
 
   const userFound = await User.findById(user.id);
   if (!userFound) {
@@ -266,7 +265,12 @@ exports.addAddress = asyncHandler(async (req, res) => {
       message: "User not found",
     });
   }
-  if (userFound.address.find((item) => item.name === address.name)) {
+  if (
+    userFound.address.some(
+    (addr) =>
+      addr.name.toLowerCase() === address.name.toLowerCase()
+  )
+  ) {
     return res.status(400).json({
       success: false,
       message: "Address with same name already exists",
@@ -321,44 +325,48 @@ exports.editAddress = asyncHandler(async (req, res) => {
     });
   }
 
-  newAddress.name = newAddress.name.toLowerCase();
-  if (userFound.address.find((item) => item.name === address.name)) {
+  if (!mongoose.Types.ObjectId.isValid(addressId)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid ID format",
+    });
+  }
+  const userFound = await User.findById(user.id);
+
+  if (!userFound) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  const duplicate = userFound.address.some(
+    (addr) =>
+      addr.name.toLowerCase() === newAddress.name.toLowerCase() &&
+      addr._id.toString() !== addressId
+  );
+  if (duplicate) {
     return res.status(400).json({
       success: false,
       message: "Address with same name already exists",
     });
   }
-  if (mongoose.Types.ObjectId.isValid(addressId)) {
-    const userFound = await User.findOneAndUpdate(
-      { _id: user.id, "address._id": addressId },
-      {
-        $set: {
-          "address.$.name": newAddress.name,
-          "address.$.street": newAddress.street,
-          "address.$.city": newAddress.city,
-          "address.$.state": newAddress.state,
-          "address.$.postalCode": newAddress.postalCode,
-          "address.$.country": newAddress.country,
-          "address.$.phone": newAddress.phone,
-        },
-      },
-      { new: true }
-    );
-    if (!userFound) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      message: "Address updated",
-      address: userFound.address,
+
+  const addressToEdit = userFound.address.id(addressId);
+  if (!addressToEdit) {
+    return res.status(404).json({
+      success: false,
+      message: "Address not found",
     });
   }
 
-  return res.status(400).json({
-    success: false,
-    message: "Invalid ID format",
+  Object.assign(addressToEdit, newAddress);
+
+  await userFound.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "Address updated",
+    address: userFound.address,
   });
 });
