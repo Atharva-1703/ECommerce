@@ -23,7 +23,7 @@ const AddAddressForm = () => {
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formState);
+    // console.log(formState);
     await addAddress(formState);
 
   }
