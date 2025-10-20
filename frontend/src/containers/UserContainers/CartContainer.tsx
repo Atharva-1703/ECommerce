@@ -7,27 +7,33 @@ import { useCartStore } from "@/stores/useCartStore";
 import React, { useEffect, useState } from "react";
 
 const CartContainer = () => {
-  const { cart, isLoading, fetchCart, removeFromCart,clearCart } = useCartStore();
-  const [cartTotal, setCartTotal]=useState<number>(0);
-  const [totalItems, setTotalItems]=useState<number>(0);
+  const { cart, isLoading, fetchCart, removeFromCart, clearCart } =
+    useCartStore();
+  const [cartTotal, setCartTotal] = useState<number>(0);
+  const [totalItems, setTotalItems] = useState<number>(0);
   useEffect(() => {
     fetchCart();
   }, []);
-  useEffect(()=>{
-    let total=0;
-    let items=0;
-    cart.forEach((item)=>{
-      total+=item.product.price*item.quantity;
-      items+=item.quantity
-    })
+  useEffect(() => {
+    let total = 0;
+    let items = 0;
+    cart.forEach((item) => {
+      total += item.product.price * item.quantity;
+      items += item.quantity;
+    });
     setTotalItems(items);
     setCartTotal(total);
-  })
+  });
   return (
     <div className="px-4 flex flex-col lg:flex-row gap-6">
-      <div>
-        <button className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition" onClick={clearCart}>Clear Cart</button>
-      </div>
+      {cart.length > 0 && (
+        <button
+          onClick={clearCart}
+          className="text-red-600 text-sm font-semibold"
+        >
+          Clear Cart
+        </button>
+      )}
       <div className="flex flex-col gap-4 w-full">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, idx: number) => {
@@ -53,7 +59,9 @@ const CartContainer = () => {
           />
         )}
       </div>
-      <CartBudget items={totalItems} subtotal={cartTotal}/>
+      {cart.length > 0 && (
+        <CartBudget items={totalItems} subtotal={cartTotal} />
+      )}
     </div>
   );
 };
