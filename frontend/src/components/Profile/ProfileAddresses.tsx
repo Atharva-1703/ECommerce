@@ -7,26 +7,6 @@ import AddressCard from "./AddressCard";
 import EditAddressForm from "./EditAddressForm";
 import { address } from "@/types";
 
-const dummyAddresses = [
-  {
-    name: "Home",
-    street: "221B Baker Street",
-    city: "London",
-    state: "London",
-    postalCode: "NW1 6XE",
-    country: "United Kingdom",
-    phone: "+44 7911 123456",
-  },
-  {
-    name: "Office",
-    street: "742 Evergreen Terrace",
-    city: "Springfield",
-    state: "IL",
-    postalCode: "62704",
-    country: "USA",
-    phone: "+1 555-123-4567",
-  },
-];
 
 const ProfileAddresses = () => {
   const { user, removeAddress ,editAddress} = useUserStore();
