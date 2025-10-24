@@ -3,7 +3,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import React from "react";
 
 const AddAddressForm = () => {
-  const  {addAddress}=useUserStore()
+  const { addAddress } = useUserStore();
   const [formState, setFormState] = React.useState({
     name: "",
     street: "",
@@ -12,25 +12,35 @@ const AddAddressForm = () => {
     postalCode: "",
     country: "",
     phone: "",
-  })
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormState({
-        ...formState,
-        [e.target.name]: e.target.value,
-      });
-    };
+    setFormState({
+      ...formState,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // console.log(formState);
     await addAddress(formState);
-
-  }
-
+    setFormState({
+      name: "",
+      street: "",
+      city: "",
+      state: "",
+      postalCode: "",
+      country: "",
+      phone: "",
+    });
+  };
 
   return (
-    <form className="space-y-5 mb-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200" onSubmit={handleSubmit}>
+    <form
+      className="space-y-5 mb-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+      onSubmit={handleSubmit}
+    >
       {/* Name */}
       <div>
         <label
