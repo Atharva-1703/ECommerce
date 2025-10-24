@@ -1,6 +1,7 @@
 "use client";
 import AddressList from "@/components/Checkout/AddressList";
 import OrderDetails from "@/components/Checkout/OrderDetails";
+import PaymentDetails from "@/components/Checkout/PaymentDetails";
 import { useState } from "react";
 
 const steps: string[] = ["Order Details", "Select Address", "Payment"];
@@ -59,7 +60,7 @@ const CheckoutContainer = () => {
 
       {currentStep === 1 && <OrderDetails/>}
       {currentStep === 2 && <AddressList/>}
-      {currentStep === 3 && <div>Payment</div>}
+      {currentStep === 3 && <PaymentDetails/>}
 
       <div className="flex justify-between mt-8">
         {currentStep > 1 ? (
