@@ -1,0 +1,173 @@
+"use client";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import React from "react";
+import Accordion from "../Common/Accordion";
+import toast from "react-hot-toast";
+import useCheckoutStore from "@/stores/useCheckoutStore";
+
+const CardPaymentForm = () => {
+  const { setIsCompleted } = useCheckoutStore();
+  const [formData, setFormData] = React.useState({
+    cardNumber: "",
+    nameOnCard: "",
+    expirationDate: "",
+    cvv: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Optional simple formatters:
+    let newValue = value;
+    if (name === "cardNumber") {
+      newValue = value
+        .replace(/\D/g, "")
+        .slice(0, 16)
+        .replace(/(\d{4})(?=\d)/g, "$1 ");
+    }
+    if (name === "expirationDate") {
+      newValue = value
+        .replace(/\D/g, "")
+        .slice(0, 4)
+        .replace(/^(\d{2})(\d{0,2})/, "$1/$2");
+    }
+    if (name === "cvv") {
+      newValue = value.replace(/\D/g, "").slice(0, 3);
+    }
+
+    setFormData({ ...formData, [name]: newValue });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Payment successful");
+    setIsCompleted(true);
+    setFormData({
+      cardNumber: "",
+      nameOnCard: "",
+      expirationDate: "",
+      cvv: "",
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <input
+        type="text"
+        name="cardNumber"
+        value={formData.cardNumber}
+        onChange={handleChange}
+        placeholder="0000 0000 0000 0000"
+        className="p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+        required
+      />
+
+      <input
+        type="text"
+        name="nameOnCard"
+        value={formData.nameOnCard}
+        onChange={handleChange}
+        placeholder="Name on Card"
+        className="p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+        required
+      />
+
+      <div className="flex gap-4">
+        <input
+          type="text"
+          name="expirationDate"
+          value={formData.expirationDate}
+          onChange={handleChange}
+          placeholder="MM/YY"
+          className="p-4 border border-gray-200 rounded-xl w-1/2 focus:ring-2 focus:ring-blue-500 outline-none"
+          required
+        />
+        <input
+          type="text"
+          name="cvv"
+          value={formData.cvv}
+          onChange={handleChange}
+          placeholder="CVV"
+          className="p-4 border border-gray-200 rounded-xl w-1/2 focus:ring-2 focus:ring-blue-500 outline-none"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition"
+      >
+        Pay Now
+      </button>
+    </form>
+  );
+};
+
+const UPIPaymentForm = () => {
+  const [upiId, setUpiId] = React.useState<string>("");
+  const { setIsCompleted } = useCheckoutStore();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (/@/.test(upiId)) {
+      toast.success("Payment successful");
+      setIsCompleted(true);
+      setUpiId("");
+    } else {
+      toast.error("Invalid UPI ID");
+    }
+  };
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <input
+        type="text"
+        name="cardNumber"
+        value={upiId}
+        onChange={(e) => setUpiId(e.target.value)}
+        placeholder="Enter UPI ID"
+        className="p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+      />
+      <button
+        type="submit"
+        className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition"
+      >
+        Pay Now
+      </button>
+    </form>
+  );
+};
+
+const PaymentDetails = () => {
+  const { setIsCompleted } = useCheckoutStore();
+  return (
+    <div className="p-6 bg-white rounded-xl shadow-md max-w-2xl mx-auto">
+      <h3 className="text-2xl font-semibold mb-2 text-gray-900 text-center">
+        <Icon icon="mdi:credit-card" className="inline-flex" /> Payment Method
+      </h3>
+      <p className="text-gray-600 text-center mb-5">
+        Select your desired payment method.
+      </p>
+
+      <div className="flex flex-col gap-4">
+        <Accordion title="Credit Card / Debit Card" icon={"entypo:credit-card"}>
+          <CardPaymentForm />
+        </Accordion>
+        <Accordion title="UPI" icon={"material-symbols:upi-pay-outline"}>
+          <UPIPaymentForm />
+        </Accordion>
+      </div>
+      <button
+        className="flex  w-full p-4 border border-gray-200 mt-4 font-medium text-gray-800 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
+        onClick={() => setIsCompleted}
+      >
+        <Icon
+          icon="streamline-cyber:cash-hand-4"
+          className="inline-flex w-6 h-6 mx-2"
+        />
+        Cash on Delivery
+      </button>
+    </div>
+  );
+};
+
+export default PaymentDetails;
