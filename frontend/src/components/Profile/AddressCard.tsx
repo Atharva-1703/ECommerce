@@ -1,34 +1,52 @@
+import useCheckoutStore from "@/stores/useCheckoutStore";
 import { address } from "@/types";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
 
-interface AddressCardProps{
-    address:address;
-    onEdit:()=>void;
-    handleRemoveAddress:(addressId: string) => Promise<void>;
+interface AddressCardProps {
+  address: address;
+  onEdit: () => void;
+  handleRemoveAddress: (addressId: string) => Promise<void>;
+  mode?: "profile" | "checkout";
 }
 
-const AddressCard = ({address,onEdit,handleRemoveAddress}:AddressCardProps) => {
+const AddressCard = ({
+  address,
+  onEdit,
+  handleRemoveAddress,
+  mode = "profile",
+}: AddressCardProps) => {
+  const {addressId,setAddressId}=useCheckoutStore();
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
+    <div className={`rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition ${
+      addressId === address._id ? "bg-gray-100" : ""}
+      ${mode === "checkout" ? "cursor-pointer hover:bg-gray-50" : ""}
+      `}
+    onClick={() => mode === "checkout" && setAddressId(address._id!)}
+    >
       {/* Header Row */}
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-medium text-gray-900">{address.name}</h3>
-        <div className="flex gap-3">
-          <button className="text-gray-600 cursor-pointer hover:text-gray-900 transition" onClick={onEdit}>
-            <Icon icon="mdi:pencil-outline" className="w-5 h-5" />
-          </button>
-          <button
-            className="text-red-500 cursor-pointer hover:text-red-700 transition"
-            onClick={() => handleRemoveAddress(address._id!)}
-          >
-            <Icon icon="mdi:trash-can-outline" className="w-5 h-5" />
-          </button>
-        </div>
+        {mode === "profile" && (
+          <div className="flex gap-3">
+            <button
+              className="text-gray-600 cursor-pointer hover:text-gray-900 transition"
+              onClick={onEdit}
+            >
+              <Icon icon="mdi:pencil-outline" className="w-5 h-5" />
+            </button>
+            <button
+              className="text-red-500 cursor-pointer hover:text-red-700 transition"
+              onClick={() => handleRemoveAddress(address._id!)}
+            >
+              <Icon icon="mdi:trash-can-outline" className="w-5 h-5" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Address Details */}
-      <dl className="grid sm:grid-cols-2 gap-y-3 text-gray-800">
+      <dl className="grid sm:grid-cols-2 gap-y-3 gap-x-2 text-gray-800">
         <div>
           <dt className="text-sm text-gray-500">Street</dt>
           <dd className="font-medium">{address.street}</dd>
