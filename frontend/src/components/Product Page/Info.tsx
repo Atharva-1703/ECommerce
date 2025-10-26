@@ -8,23 +8,51 @@ import { useEffect, useState } from "react";
 import { Product } from "@/types";
 import Ratings from "../Common/Rating/Ratings";
 import getDiscountedPrice from "@/lib/utils";
+import useCheckoutStore from "@/stores/useCheckoutStore";
+import toast from "react-hot-toast";
+import { useCartStore } from "@/stores/useCartStore";
+import { useRouter } from "next/navigation";
+
 
 export default function ProductInfo({ product }: { product: Product }) {
+  const { setCheckoutItems, CheckoutItems } = useCheckoutStore();
+  const { addToCart } = useCartStore();
   const [quantity, setQuantity] = useState<number>(1);
   const [discountedPrice, setDiscountedPrice] = useState<number>(0);
+  const router = useRouter();
+
+  const handleBuyNow = async () => {
+    if (product.stock<quantity) {
+      toast.error("Out of Stock");
+      return;
+    }
+    const toastId = toast.loading("Adding to Checkout...");
+    setCheckoutItems([
+      {
+        product: product,
+        quantity: quantity,
+      },
+    ]);
+    toast.remove(toastId);
+    router.push("/checkout");
+  };
+
+  useEffect(() => {
+    console.log(CheckoutItems);
+  }, [CheckoutItems]);
+
   useEffect(() => {
     setDiscountedPrice(
       getDiscountedPrice(product.price, product.discountPercentage)
     );
   }, []);
   return (
-    <>
+    <div className="relative">
       <section className="flex max-sm:flex-col ">
         <aside className="w-1/2 max-sm:w-full ">
           <Swiper
             slidesPerView={1}
             spaceBetween={0}
-            // navigation={true}
             pagination={{
               clickable: true,
               dynamicBullets: true,
@@ -101,22 +129,28 @@ export default function ProductInfo({ product }: { product: Product }) {
 
           {/* Action Buttons */}
           <div className="flex gap-4 mt-4 ">
-            <button className="bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition flex-1 hover:scale-105">
+            <button
+              className="bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-gray-800 transition flex-1 hover:scale-105"
+              onClick={() => addToCart(product._id)}
+            >
               Add to Cart
             </button>
             <button
               className={`text-white px-6 py-2 rounded-full hover:scale-105 ${
                 product?.stock! == 0
-                  ? "bg-red-500 hover:bg-red-400"
-                  : "bg-yellow-500 hover:bg-yellow-400"
+                  ? "bg-red-500 hover:bg-red-400 cursor-not-allowed"
+                  : "bg-yellow-500 hover:bg-yellow-400 cursor-pointer"
               }  transition flex-1`}
+              disabled={product?.stock! == 0}
+              onClick={handleBuyNow}
             >
               {product?.stock! == 0 ? "Out of Stock" : "Buy Now"}
             </button>
           </div>
         </div>
       </section>
-
+      
+              
       {/* Product Details */}
       <section className="mt-8 px-4">
         <h2 className="text-2xl font-bold">Product Details</h2>
@@ -143,6 +177,6 @@ export default function ProductInfo({ product }: { product: Product }) {
           </li>
         </ul>
       </section>
-    </>
+    </div>
   );
 }
