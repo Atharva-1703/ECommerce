@@ -1,11 +1,14 @@
-const express=require('express');
-const { addOrderDirectly, getOrders, cancelOrder, addOrderFromCart } = require('../controllers/orderController');
+const express = require("express");
+const {
+  getOrders,
+  cancelOrder,
+  addOrders,
+} = require("../controllers/orderController");
 
-const orderRoutes=express.Router();
+const orderRoutes = express.Router();
 
-orderRoutes.post('/add/directly',addOrderDirectly);
-orderRoutes.get('/user',getOrders);
-orderRoutes.delete('/cancel',cancelOrder);
-orderRoutes.post('/add/cart',addOrderFromCart);
+orderRoutes.get("/user", getOrders);
+orderRoutes.delete("/cancel", cancelOrder);
+orderRoutes.post("/add", addOrders);
 
-module.exports=orderRoutes
+module.exports = orderRoutes;
