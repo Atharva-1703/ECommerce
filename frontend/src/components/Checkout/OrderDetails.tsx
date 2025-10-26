@@ -1,19 +1,9 @@
 "use client";
-import { dummyProducts } from "@/sample data/discountedProducts";
+import useCheckoutStore from "@/stores/useCheckoutStore";
 import React from "react";
 
-const CheckoutItems = [
-  { product: dummyProducts[0], quantity: 2 },
-  { product: dummyProducts[1], quantity: 1 },
-  { product: dummyProducts[2], quantity: 3 },
-];
-
 const OrderDetails = () => {
-  const subtotal = CheckoutItems.reduce((sum, { product, quantity }) => {
-    const discountedPrice =
-      product.price * (1 - product.discountPercentage / 100);
-    return sum + discountedPrice * quantity;
-  }, 0);
+  const { CheckoutItems, totalCost } = useCheckoutStore();
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-md max-w-2xl mx-auto">
@@ -73,7 +63,7 @@ const OrderDetails = () => {
       <div className="mt-6 border-t pt-4">
         <div className="flex justify-between text-gray-700 mb-2">
           <span>Subtotal</span>
-          <span>₹{subtotal.toFixed(2)}</span>
+          <span>₹{totalCost.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-gray-700 mb-2">
           <span>Shipping</span>
@@ -81,7 +71,7 @@ const OrderDetails = () => {
         </div>
         <div className="flex justify-between text-lg font-bold text-gray-900">
           <span>Total</span>
-          <span>₹{subtotal.toFixed(2)}</span>
+          <span>₹{totalCost.toFixed(2)}</span>
         </div>
       </div>
       <div className="mt-4">

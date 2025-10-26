@@ -12,6 +12,7 @@ const AddressList = () => {
       <p className="text-gray-600 text-center mb-5">
         Choose one of your saved addresses or add a new one.
       </p>
+      <p className="text-gray-600 text-center ">By Default Your First Address will be selected</p>
       <ProfileAddresses mode="checkout"/>
     </div>
   );

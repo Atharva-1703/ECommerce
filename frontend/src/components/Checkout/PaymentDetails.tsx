@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 
 const CardPaymentForm = () => {
-  const { setIsCompleted } = useCheckoutStore();
+  const { placeOrder } = useCheckoutStore();
   const [formData, setFormData] = React.useState({
     cardNumber: "",
     nameOnCard: "",
@@ -41,7 +41,7 @@ const CardPaymentForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Payment successful");
-    setIsCompleted(true);
+    placeOrder("card");
     setFormData({
       cardNumber: "",
       nameOnCard: "",
@@ -105,13 +105,13 @@ const CardPaymentForm = () => {
 
 const UPIPaymentForm = () => {
   const [upiId, setUpiId] = React.useState<string>("");
-  const { setIsCompleted } = useCheckoutStore();
+  const { placeOrder } = useCheckoutStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (/@/.test(upiId)) {
       toast.success("Payment successful");
-      setIsCompleted(true);
+      placeOrder("upi");
       setUpiId("");
     } else {
       toast.error("Invalid UPI ID");
@@ -138,7 +138,7 @@ const UPIPaymentForm = () => {
 };
 
 const PaymentDetails = () => {
-  const { setIsCompleted } = useCheckoutStore();
+  const { placeOrder } = useCheckoutStore();
   return (
     <div className="p-6 bg-white rounded-xl shadow-md max-w-2xl mx-auto">
       <h3 className="text-2xl font-semibold mb-2 text-gray-900 text-center">
@@ -146,6 +146,9 @@ const PaymentDetails = () => {
       </h3>
       <p className="text-gray-600 text-center mb-5">
         Select your desired payment method.
+      </p>
+      <p className="text-gray-600 text-center mb-5">
+        By Default Cash on Delivery is enabled
       </p>
 
       <div className="flex flex-col gap-4">
@@ -155,17 +158,18 @@ const PaymentDetails = () => {
         <Accordion title="UPI" icon={"material-symbols:upi-pay-outline"}>
           <UPIPaymentForm />
         </Accordion>
+        <Accordion
+          title="Cash on Delivery"
+          icon={"streamline-cyber:cash-hand-4"}
+        >
+          <button
+            className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition"
+            onClick={() => placeOrder("cod")}
+          >
+            Pay the Delivery Agent Directly
+          </button>
+        </Accordion>
       </div>
-      <button
-        className="flex  w-full p-4 border border-gray-200 mt-4 font-medium text-gray-800 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
-        onClick={() => setIsCompleted}
-      >
-        <Icon
-          icon="streamline-cyber:cash-hand-4"
-          className="inline-flex w-6 h-6 mx-2"
-        />
-        Cash on Delivery
-      </button>
     </div>
   );
 };

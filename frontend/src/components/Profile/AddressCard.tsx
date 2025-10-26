@@ -16,13 +16,15 @@ const AddressCard = ({
   handleRemoveAddress,
   mode = "profile",
 }: AddressCardProps) => {
-  const {addressId,setAddressId}=useCheckoutStore();
+  const { addressId, setAddressId } = useCheckoutStore();
   return (
-    <div className={`rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition ${
-      addressId === address._id ? "bg-gray-100" : ""}
-      ${mode === "checkout" ? "cursor-pointer hover:bg-gray-50" : ""}
-      `}
-    onClick={() => mode === "checkout" && setAddressId(address._id!)}
+    <div
+      className={`rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition ${
+        addressId === address._id
+          ? "bg-gray-200"
+          : mode === "checkout" && "cursor-pointer hover:bg-gray-50"
+      }`}
+      onClick={() => mode === "checkout" && setAddressId(address._id!)}
     >
       {/* Header Row */}
       <div className="flex justify-between items-center mb-4">
