@@ -72,16 +72,12 @@ const CheckoutContainer = () => {
           </button>
         )}
 
-        {currentStep < steps.length ? (
+        {currentStep < steps.length && (
           <button
             onClick={() => setCurrentStep((prev) => prev + 1)}
             className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
           >
             Next
-          </button>
-        ) : (
-          <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-            Place Order
           </button>
         )}
       </div>
