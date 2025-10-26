@@ -26,7 +26,7 @@ const CheckoutContainer = () => {
             >
               {index !== 0 && (
                 <div
-                  className={`absolute top-1/4 -left-[50%] w-full h-[2px] -z-10 ${
+                  className={`absolute top-1/4 -left-[50%] w-full h-0.5 -z-10 ${
                     isActive || isCompleted ? "bg-green-500" : "bg-gray-300"
                   } `}
                 ></div>
@@ -58,20 +58,18 @@ const CheckoutContainer = () => {
         })}
       </div>
 
-      {currentStep === 1 && <OrderDetails/>}
-      {currentStep === 2 && <AddressList/>}
-      {currentStep === 3 && <PaymentDetails/>}
+      {currentStep === 1 && <OrderDetails />}
+      {currentStep === 2 && <AddressList />}
+      {currentStep === 3 && <PaymentDetails />}
 
       <div className="flex justify-between mt-8">
-        {currentStep > 1 ? (
+        {currentStep > 1 && (
           <button
             onClick={() => setCurrentStep((prev) => prev - 1)}
             className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
           >
             Back
           </button>
-        ) : (
-          <div></div>
         )}
 
         {currentStep < steps.length ? (

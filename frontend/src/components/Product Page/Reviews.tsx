@@ -15,7 +15,7 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
       <h2 className="text-2xl font-bold">Product Reviews</h2>
       <div className="mt-4 flex max-sm:flex-col-reverse  gap-4">
         <aside
-          className="sm:flex-shrink-0 max-sm:pt-3 flex flex-col justify-center  items-center sm:border-r max-sm:border-t border-gray-500 px-3"
+          className="sm:shrink-0 max-sm:pt-3 flex flex-col justify-center  items-center sm:border-r max-sm:border-t border-gray-500 px-3"
           aria-label="Average rating"
         >
           <Ratings rating={rating} size={32} />
