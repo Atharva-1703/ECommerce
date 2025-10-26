@@ -8,6 +8,10 @@ exports.addOrders = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { items, addressId, paymentMethod = "cod" } = req.body;
 
+  if(paymentMethod !== "cod" && paymentMethod !== "upi" && paymentMethod !== "card"){
+    return res.status(400).json({ success: false, message: "Invalid payment method" });
+  }
+
   const user = await User.findById(userId);
   if (!user || !items || items.length === 0) {
     return res.status(400).json({
@@ -62,6 +66,7 @@ exports.addOrders = asyncHandler(async (req, res) => {
     shippingAddress,
     totalCost,
     paymentMethod,
+    isPaid: paymentMethod !== "cod",
   });
 
   user.orders.push(newOrder._id);

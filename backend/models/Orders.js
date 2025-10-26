@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema(
           ref: "Product",
           required: true,
         },
-        name: { type: String, required: true }, 
+        name: { type: String, required: true },
         price: { type: Number, required: true },
         quantity: { type: Number, required: true, min: 1 },
         totalItemCost: { type: Number, required: true },
@@ -23,8 +23,9 @@ const orderSchema = new mongoose.Schema(
     ],
 
     shippingAddress: {
-      address: { type: String, required: true },
+      street: { type: String, required: true },
       city: { type: String, required: true },
+      state: { type: String, required: true },
       postalCode: { type: String, required: true },
       country: { type: String, required: true },
       phone: { type: String, required: true },
@@ -34,7 +35,7 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ["card", "cod", "upi"],
       default: "cod",
-    }, 
+    },
 
     totalCost: { type: Number, required: true },
 
@@ -49,9 +50,8 @@ const orderSchema = new mongoose.Schema(
     deliveredAt: { type: Date },
 
     deliveryDate: { type: Date },
-
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Orders", orderSchema);
