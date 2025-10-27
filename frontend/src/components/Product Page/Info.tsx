@@ -37,9 +37,6 @@ export default function ProductInfo({ product }: { product: Product }) {
     router.push("/checkout");
   };
 
-  useEffect(() => {
-    console.log(CheckoutItems);
-  }, [CheckoutItems]);
 
   useEffect(() => {
     setDiscountedPrice(
