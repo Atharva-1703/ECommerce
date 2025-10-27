@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/useCartStore";
+import useCheckoutStore from "@/stores/useCheckoutStore";
+import toast from "react-hot-toast";
 
 type ProductCardMode = "default" | "cart" | "favourites";
 
@@ -15,14 +17,12 @@ interface ProductCardProps {
   product: Product;
   cartQuantity?: number;
   mode?: ProductCardMode;
-  onAddToCart?: () => void;
   onRemove?: () => void;
 }
 
 export default function ProductCardResponsive({
   product,
   mode = "default",
-  onAddToCart,
   onRemove,
   cartId,
   cartQuantity,
@@ -31,18 +31,43 @@ export default function ProductCardResponsive({
     product.price,
     product.discountPercentage
   );
+  const { addToCart } = useCartStore();
   const router = useRouter();
   const [quantity, setQuantity] = useState(cartQuantity || 1);
   const { updateQuantity } = useCartStore();
   const [hasInteracted, setHasInteracted] = useState(false);
+  const { setCheckoutItems, setTotalCost } = useCheckoutStore();
+
+  const handleBuyNow = () => {
+    if (product.stock < quantity) {
+      toast.error("Out of Stock");
+      return;
+    }
+    if (quantity == 0) {
+      toast.error("please Select a valid quantity");
+      return;
+    }
+    const toastId = toast.loading("Adding to Checkout...");
+    setTotalCost(product.price * quantity);
+    setCheckoutItems([
+      {
+        product: product,
+        quantity: quantity,
+      },
+    ]);
+    toast.remove(toastId);
+    router.push("/checkout");
+  };
 
   const handleIncrement = () => {
-    setQuantity((prev) =>product.stock==0 ? prev : Math.min(prev + 1, product.stock));
+    setQuantity((prev) =>
+      product.stock == 0 ? prev : Math.min(prev + 1, product.stock)
+    );
     setHasInteracted(true);
   };
 
   const handleDecrement = () => {
-    setQuantity((prev) => Math.max(prev - 1, 1));
+    setQuantity((prev) => Math.max(prev - 1, 0));
     setHasInteracted(true);
   };
   useEffect(() => {
@@ -61,10 +86,10 @@ export default function ProductCardResponsive({
       onClick={() => router.push(`/product/${product._id}`)}
     >
       {/* Image */}
-      <div className="w-full sm:w-1/3 lg:w-1/4 bg-gray-100 flex items-center justify-center overflow-hidden aspect-[4/3] relative py-2">
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/15 to-transparent opacity-40" />
+      <div className="w-full sm:w-1/3 lg:w-1/4 bg-gray-100 flex items-center justify-center overflow-hidden aspect-4/3 relative py-2">
+        <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/15 to-transparent opacity-40" />
         {product.stock === 0 && (
-          <div className="absolute bg-red-700 text-white px-2 py-1 rounded-lg text-xl font-bold scale-150 -rotate-[30deg]">
+          <div className="absolute bg-red-700 text-white px-2 py-1 rounded-lg text-xl font-bold scale-150 -rotate-30">
             Sold Out
           </div>
         )}
@@ -123,12 +148,21 @@ export default function ProductCardResponsive({
           {mode === "default" && (
             <>
               <button
-                onClick={onAddToCart}
-                className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition hover:scale-105 w-32 max-sm:w-[90%]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCart(product._id, quantity);
+                }}
+                className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition cursor-pointer hover:scale-105 w-32 max-sm:w-[90%]"
               >
                 Add to Cart
               </button>
-              <button className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition hover:scale-105 w-32 max-sm:w-[90%]">
+              <button
+                className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 cursor-pointer transition hover:scale-105 w-32 max-sm:w-[90%]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleBuyNow();
+                }}
+              >
                 Buy Now
               </button>
             </>
@@ -138,7 +172,7 @@ export default function ProductCardResponsive({
           <div className="flex flex-col  gap-3">
             <div className="flex gap-3 items-center">
               <button
-                className="bg-gray-900 text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition"
+                className="bg-gray-900 text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleDecrement();
@@ -148,7 +182,7 @@ export default function ProductCardResponsive({
               </button>
               <p className="font-bold">{quantity}</p>
               <button
-                className="bg-gray-900 text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition"
+                className="bg-gray-900 text-white px-3 py-1.5 rounded-full hover:bg-gray-800 transition cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleIncrement();
@@ -157,17 +191,23 @@ export default function ProductCardResponsive({
                 +
               </button>
             </div>
-            <button className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition">
+            <button
+              className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleBuyNow();
+              }}
+            >
               Buy Now
             </button>
           </div>
         )}
         {mode === "favourites" && (
           <button
-            className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition"
+            className="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
-              onAddToCart && onAddToCart();
+              addToCart(product._id, quantity);
             }}
           >
             Add to Cart
