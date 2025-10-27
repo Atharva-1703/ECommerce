@@ -24,25 +24,22 @@ const categories = [
 ];
 
 export default function CategoriesGrid() {
-  const handleClick = (category: string) => {};
   return (
     <section className=" rounded-2xl p-6  ">
       <h2 className=" text-2xl font-semibold mb-4">Shop by Categories</h2>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-y-auto max-h-[9rem]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-y-auto max-h-36">
         {categories.map((category, idx) => (
-          <div
+          <Link
             key={idx}
-            className="bg-black text-white rounded-xl py-4 px-3 text-center font-medium hover:bg-neutral-900 transition capitalize"
+            href={`/search?category=${category
+              .replace(/\s+/g, "-")
+              .toLowerCase()}`}
           >
-            <Link
-              href={`/search?category=${category
-                .replace(/\s+/g, "-")
-                .toLowerCase()}`}
-            >
+            <div className="bg-black text-white rounded-xl py-4 px-3 text-center font-medium hover:bg-neutral-900 cursor-pointer transition capitalize">
               {category}
-            </Link>
-          </div>
+            </div>
+          </Link>
         ))}
       </div>
     </section>
