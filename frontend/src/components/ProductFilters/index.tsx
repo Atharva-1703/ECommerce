@@ -1,13 +1,15 @@
 "use client";
 import { useSearchStore } from "@/stores/useSearchStore";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 interface ProductFiltersFormProps {
-  // onFilter?: (filters: ProductFilters) => void;
+  onReset: () => void;
 }
 
-export default function ProductFilterForm({}: // onFilter,
-ProductFiltersFormProps) {
+export default function ProductFilterForm({
+  onReset,
+}: ProductFiltersFormProps) {
   const { productFilter, setfilters, resetOffset, resetProducts } =
     useSearchStore();
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -35,10 +37,11 @@ ProductFiltersFormProps) {
   };
 
   const handleReset = () => {
-    setSelectedBrands([]);
     setCategory("");
-    setMinPrice("");
     setMaxPrice("");
+    setMinPrice("");
+    setSelectedBrands([]);
+    onReset();
   };
 
   const toggleSection = (section: string) => {

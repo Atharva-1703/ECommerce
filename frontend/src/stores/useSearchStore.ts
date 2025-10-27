@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Product } from "@/types";
 import { API_URL } from "@/utils/url";
 
-interface Filters {
+export interface Filters {
   category?: string;
   title?: string;
   sortBy?: string;

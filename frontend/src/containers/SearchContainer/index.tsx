@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useSearchStore } from "@/stores/useSearchStore";
+import { Filters, useSearchStore } from "@/stores/useSearchStore";
 import ProductCardHorizontal from "@/components/Common/ProductCard/ProductCardHorizontal";
 import ProductFilterForm from "@/components/ProductFilters";
 import { ProductCardSkeletonHorizontal } from "@/components/skeletons/ProductCards/horizontal";
@@ -20,12 +20,14 @@ export default function SearchPage() {
     fetchProductFilters,
     offset,
     resetOffset,
+    resetProducts,
   } = useSearchStore();
   const [showFilters, setShowFilters] = useState(false);
+  let initialFilters: Filters;
 
   // Load filters from URL on mount
   useEffect(() => {
-    const initialFilters = {
+    initialFilters = {
       category: searchParams.get("category") || "",
       title: searchParams.get("title") || "",
       sortBy: searchParams.get("sortBy") || "",
@@ -43,6 +45,13 @@ export default function SearchPage() {
 
   const loadMore = () => {
     fetchProducts(filters);
+  };
+
+  const handleReset = () => {
+    resetProducts();
+    resetOffset();
+
+    setfilters({ ...initialFilters, brands: [] });
   };
 
   const handleSortBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -109,7 +118,7 @@ export default function SearchPage() {
           <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
             {/* Sidebar Filters (Desktop) */}
             <aside className="hidden lg:block h-screen sticky top-32">
-              <ProductFilterForm />
+              <ProductFilterForm onReset={handleReset} />
             </aside>
 
             {/* Products Section */}
@@ -179,7 +188,7 @@ export default function SearchPage() {
                     ✕
                   </button>
                 </div>
-                <ProductFilterForm />
+                <ProductFilterForm onReset={handleReset} />
               </div>
             </div>
           )}
