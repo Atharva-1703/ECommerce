@@ -3,14 +3,19 @@ import React from "react";
 
 interface CartBudgetProps {
   subtotal?: number;
-  items?: number
+  items?: number;
+  onCheckout?: () => void;
 }
 
-const CartBudget: React.FC<CartBudgetProps> = ({ subtotal=0, items=0 }) => {
-  const total = subtotal
+const CartBudget: React.FC<CartBudgetProps> = ({
+  subtotal = 0,
+  items = 0,
+  onCheckout,
+}) => {
+  const total = subtotal;
 
   return (
-    <div className="w-full lg:w-1/3 bg-white shadow-md rounded-2xl p-6 flex flex-col gap-4 max-h-[320px] sticky max-md:bottom-0 top-24">
+    <div className="w-full lg:w-1/3 bg-white shadow-md rounded-2xl p-6 flex flex-col gap-4 max-h-80 sticky max-md:bottom-0 top-24">
       <h2 className="text-lg font-semibold text-gray-800">Order Summary </h2>
 
       <div className="flex justify-between text-sm text-gray-600">
@@ -33,7 +38,10 @@ const CartBudget: React.FC<CartBudgetProps> = ({ subtotal=0, items=0 }) => {
         <span>₹{total.toFixed(2)}</span>
       </div>
 
-      <button className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition">
+      <button
+        className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition cursor-pointer"
+        onClick={onCheckout}
+      >
         Proceed to Checkout
       </button>
     </div>
