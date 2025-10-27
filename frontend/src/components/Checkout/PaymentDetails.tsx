@@ -138,7 +138,7 @@ const UPIPaymentForm = () => {
 };
 
 const PaymentDetails = () => {
-  const { placeOrder } = useCheckoutStore();
+  const { placeOrder, totalCost } = useCheckoutStore();
   return (
     <div className="p-6 bg-white rounded-xl shadow-md max-w-2xl mx-auto">
       <h3 className="text-2xl font-semibold mb-2 text-gray-900 text-center">
@@ -147,8 +147,8 @@ const PaymentDetails = () => {
       <p className="text-gray-600 text-center mb-5">
         Select your desired payment method.
       </p>
-      <p className="text-gray-600 text-center mb-5">
-        By Default Cash on Delivery is enabled
+      <p className="text-green-600 text-center mb-5 text-lg font-semibold">
+        Total Cost : ₹ {totalCost}
       </p>
 
       <div className="flex flex-col gap-4">
