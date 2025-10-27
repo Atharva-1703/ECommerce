@@ -18,7 +18,8 @@ export default function SearchPage() {
     products,
     loading,
     fetchProductFilters,
-    offset
+    offset,
+    resetOffset,
   } = useSearchStore();
   const [showFilters, setShowFilters] = useState(false);
 
@@ -44,6 +45,33 @@ export default function SearchPage() {
     fetchProducts(filters);
   };
 
+  const handleSortBy = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    resetOffset();
+    const value = e.target.value;
+    if (value.includes("-")) {
+      const [sortBy, order] = value.split("-");
+      if (order === "asc" || order === "desc") {
+        setfilters({
+          ...filters,
+          sortBy,
+          order,
+        });
+      }
+    } else if (value === "rating") {
+      setfilters({
+        ...filters,
+        sortBy: value,
+        order: "desc",
+      });
+    } else {
+      setfilters({
+        ...filters,
+        sortBy: value,
+        order: "asc",
+      });
+    }
+  };
+
   return (
     <div className="px-4 py-6">
       {!loading && products.length === 0 ? (
@@ -67,16 +95,14 @@ export default function SearchPage() {
             {/* Sort Dropdown */}
             <select
               value={filters.sortBy}
-              onChange={(e) =>
-                setfilters({ ...filters, sortBy: e.target.value })
-              }
+              onChange={(e) => handleSortBy(e)}
               className="p-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-1 focus:ring-black"
             >
               <option value="">Sort By</option>
               <option value="price-asc">Price: Low → High</option>
               <option value="price-desc">Price: High → Low</option>
               <option value="rating">Top Rated</option>
-              <option value="">Newest</option>
+              <option value="createdAt">Newest</option>
             </select>
           </div>
 
@@ -92,16 +118,14 @@ export default function SearchPage() {
               <div className="hidden lg:flex justify-end mb-4">
                 <select
                   value={filters.sortBy}
-                  onChange={(e) =>
-                    setfilters({ ...filters, sortBy: e.target.value })
-                  }
+                  onChange={(e) => handleSortBy(e)}
                   className="p-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-1 focus:ring-black"
                 >
                   <option value="">Sort By</option>
                   <option value="price-asc">Price: Low → High</option>
                   <option value="price-desc">Price: High → Low</option>
                   <option value="rating-desc">Top Rated</option>
-                  <option value="newest">Newest</option>
+                  <option value="createdAt">Newest</option>
                 </select>
               </div>
 
