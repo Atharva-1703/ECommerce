@@ -6,10 +6,21 @@ const Product = require("../models/Product");
 
 exports.addOrders = asyncHandler(async (req, res) => {
   const userId = req.user.id;
-  const { items, addressId, paymentMethod = "cod" } = req.body;
+  const {
+    items,
+    addressId,
+    paymentMethod = "cod",
+    expectedDeliveryDate,
+  } = req.body;
 
-  if(paymentMethod !== "cod" && paymentMethod !== "upi" && paymentMethod !== "card"){
-    return res.status(400).json({ success: false, message: "Invalid payment method" });
+  if (
+    paymentMethod !== "cod" &&
+    paymentMethod !== "upi" &&
+    paymentMethod !== "card"
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid payment method" });
   }
 
   const user = await User.findById(userId);
@@ -33,16 +44,15 @@ exports.addOrders = asyncHandler(async (req, res) => {
   let totalCost = 0;
 
   for (const item of items) {
-    const product = await Product.findById(item.productId);
+    const product = await Product.findOneAndUpdate(
+      { _id: item.productId, stock: { $gte: item.quantity } },
+      { $inc: { stock: -item.quantity } },
+      { new: true }
+    );
     if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found" });
-    }
-
-    if (product.stock < item.quantity) {
-      return res.status(400).json({
-        success: false,
-        message: `Insufficient stock for ${product.title}`,
-      });
+      return res
+        .status(404)
+        .json({ success: false, message: "Not Sufficient Stock" });
     }
 
     const totalItemCost = product.price * item.quantity;
@@ -56,8 +66,6 @@ exports.addOrders = asyncHandler(async (req, res) => {
       totalItemCost,
     });
 
-    product.stock -= item.quantity;
-    await product.save();
   }
 
   const newOrder = await Orders.create({
@@ -67,6 +75,7 @@ exports.addOrders = asyncHandler(async (req, res) => {
     totalCost,
     paymentMethod,
     isPaid: paymentMethod !== "cod",
+    deliveryDate: new Date(expectedDeliveryDate),
   });
 
   user.orders.push(newOrder._id);
