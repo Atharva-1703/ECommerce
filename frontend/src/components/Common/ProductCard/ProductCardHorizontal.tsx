@@ -2,7 +2,7 @@
 
 import { Product } from "@/types";
 import Ratings from "../Rating/Ratings";
-import getDiscountedPrice from "@/lib/utils";
+import getDiscountedPrice from "@/utils/getDiscountedPrice";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";

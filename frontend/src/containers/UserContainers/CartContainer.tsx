@@ -3,7 +3,7 @@ import CartBudget from "@/components/Cart/CartBudget";
 import EmptyState from "@/components/Common/EmptyState";
 import ProductCardResponsive from "@/components/Common/ProductCard/ProductCardHorizontal";
 import { ProductCardSkeletonHorizontal } from "@/components/skeletons/ProductCards/horizontal";
-import getDiscountedPrice from "@/lib/utils";
+import getDiscountedPrice from "@/utils/getDiscountedPrice";
 import { useCartStore } from "@/stores/useCartStore";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import { useRouter } from "next/navigation";

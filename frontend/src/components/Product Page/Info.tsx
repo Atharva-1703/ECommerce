@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import { useEffect, useState } from "react";
 import { Product } from "@/types";
 import Ratings from "../Common/Rating/Ratings";
-import getDiscountedPrice from "@/lib/utils";
+import getDiscountedPrice from "@/utils/getDiscountedPrice";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import toast from "react-hot-toast";
 import { useCartStore } from "@/stores/useCartStore";
