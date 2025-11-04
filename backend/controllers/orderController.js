@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Orders = require("../models/Orders");
 const User = require("../models/User");
 const Product = require("../models/Product");
+const getDiscountedPrice = require("../utils/getdiscountedPrice");
 
 exports.addOrders = asyncHandler(async (req, res) => {
   const userId = req.user.id;
@@ -55,7 +56,9 @@ exports.addOrders = asyncHandler(async (req, res) => {
         .json({ success: false, message: "Not Sufficient Stock" });
     }
 
-    const totalItemCost = product.price * item.quantity;
+    const totalItemCost =
+      getDiscountedPrice(product.price, product.discountPercentage) *
+      item.quantity;
     totalCost += totalItemCost;
 
     orderItems.push({
@@ -65,7 +68,6 @@ exports.addOrders = asyncHandler(async (req, res) => {
       quantity: item.quantity,
       totalItemCost,
     });
-
   }
 
   const newOrder = await Orders.create({
