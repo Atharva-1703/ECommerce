@@ -1,6 +1,6 @@
 
 
-export default function getDiscountedPrice(price: number, discountPercentage: number) {
+export default function getDiscountedPrice(price: number, discountPercentage: number):number {
      const discounted = (price * (100 - discountPercentage)) / 100;
   return Math.round(discounted);
 }
