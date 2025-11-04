@@ -4,8 +4,12 @@ import React from "react";
 import Accordion from "../Common/Accordion";
 import toast from "react-hot-toast";
 import useCheckoutStore from "@/stores/useCheckoutStore";
+import { useRouter } from "next/navigation";
+
+let success: boolean = false;
 
 const CardPaymentForm = () => {
+  const router = useRouter();
   const { placeOrder } = useCheckoutStore();
   const [formData, setFormData] = React.useState({
     cardNumber: "",
@@ -38,16 +42,19 @@ const CardPaymentForm = () => {
     setFormData({ ...formData, [name]: newValue });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Payment successful");
-    placeOrder("card");
-    setFormData({
-      cardNumber: "",
-      nameOnCard: "",
-      expirationDate: "",
-      cvv: "",
-    });
+    success = await placeOrder("card");
+    if (success) {
+      setFormData({
+        cardNumber: "",
+        nameOnCard: "",
+        expirationDate: "",
+        cvv: "",
+      });
+      router.push("/orders");
+    }
   };
 
   return (
@@ -106,13 +113,17 @@ const CardPaymentForm = () => {
 const UPIPaymentForm = () => {
   const [upiId, setUpiId] = React.useState<string>("");
   const { placeOrder } = useCheckoutStore();
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (/@/.test(upiId)) {
       toast.success("Payment successful");
-      placeOrder("upi");
-      setUpiId("");
+      success = await placeOrder("upi");
+      if (success) {
+        setUpiId("");
+        router.push("/orders");
+      }
     } else {
       toast.error("Invalid UPI ID");
     }
@@ -138,7 +149,14 @@ const UPIPaymentForm = () => {
 };
 
 const PaymentDetails = () => {
-  const { placeOrder, totalCost,label } = useCheckoutStore();
+  const router = useRouter();
+  const { placeOrder, totalCost, label } = useCheckoutStore();
+  const handlePlaceOrder=async()=>{
+    success = await placeOrder("cod");
+    if (success) {
+      router.push("/orders");
+    }
+  }
   return (
     <div className="p-6 bg-white rounded-xl shadow-md max-w-2xl mx-auto">
       <h3 className="text-2xl font-semibold mb-2 text-gray-900 text-center">
@@ -150,9 +168,7 @@ const PaymentDetails = () => {
       <p className="text-green-600 text-center mb-2 text-lg font-semibold">
         Total Cost : ₹ {totalCost}
       </p>
-      <p className="text-center font-semibold text-gray-700 mb-5">
-        {label}
-      </p>
+      <p className="text-center font-semibold text-gray-700 mb-5">{label}</p>
 
       <div className="flex flex-col gap-4">
         <Accordion title="Credit Card / Debit Card" icon={"entypo:credit-card"}>
@@ -167,7 +183,7 @@ const PaymentDetails = () => {
         >
           <button
             className="w-full py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition"
-            onClick={() => placeOrder("cod")}
+            onClick={handlePlaceOrder}
           >
             Pay the Delivery Agent Directly
           </button>
