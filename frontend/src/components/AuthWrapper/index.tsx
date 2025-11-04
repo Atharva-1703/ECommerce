@@ -30,10 +30,13 @@ export default function AuthWrapper({
     if (token && (pathname === "/login" || pathname === "/register")) {
       router.replace("/");
     }
-  }, [token, pathname, router,isRehydrated]);
+  }, [token, pathname, router, isRehydrated]);
 
-  if (!isRehydrated || (!token && protectedPages.some((p) => pathname.startsWith(p)))) {
-    return <Icon icon="eos-icons:loading" className="animate-spin" />
+  if (
+    !isRehydrated ||
+    (!token && protectedPages.some((p) => pathname.startsWith(p)))
+  ) {
+    return <Icon icon="eos-icons:loading" className="animate-spin" />;
   }
 
   return <>{children}</>;
