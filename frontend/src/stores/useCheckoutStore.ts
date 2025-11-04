@@ -8,6 +8,8 @@ interface CheckoutState {
   CheckoutItems: { product: Product; quantity: number }[];
   addressId: string;
   totalCost: number;
+  date:string;
+  label:string;
 
   setCheckoutItems: (items: { product: Product; quantity: number }[]) => void;
 
@@ -15,19 +17,23 @@ interface CheckoutState {
 
   setAddressId: (id: string) => void;
 
-  placeOrder: (paymentMethod:"cod"|"upi"|"card") => Promise<void>;
+  placeOrder: (paymentMethod:"cod"|"upi"|"card") => Promise<boolean>;
+
+  setDateNLabel:(date:string,label:string)=>void
 }
 
 const useCheckoutStore = create<CheckoutState>((set, get) => ({
   CheckoutItems: [],
   totalCost: 0,
   addressId: "",
+  date: "",
+  label: "",
 
   setCheckoutItems: (items) => set({ CheckoutItems: items }),
   setTotalCost: (cost) => set({ totalCost: cost }),
   setAddressId: (id) => set({ addressId: id }),
   placeOrder: async (paymentMethod) => {
-    const { CheckoutItems, addressId} = get();
+    const { CheckoutItems, addressId,date} = get();
     const items = CheckoutItems.map(({ product, quantity }) => ({
       productId: product._id,
       quantity,
@@ -36,15 +42,19 @@ const useCheckoutStore = create<CheckoutState>((set, get) => ({
     const res = await fetcher(`${API_URL}/api/orders/add`, "POST", {
       items,
       addressId,
-      paymentMethod
+      paymentMethod,
+      expectedDeliveryDate:date
     });
     const data = await res.json();
     if (!data.success) {
       toast.error(data.message, { id: toastId });
-      return;
+      return false;
     }
     toast.success("Order placed successfully", { id: toastId });
+    return true;
+
   },
+  setDateNLabel:(date,label)=>set({date,label})
 
 }));
 

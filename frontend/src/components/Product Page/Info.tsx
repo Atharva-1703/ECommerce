@@ -12,21 +12,30 @@ import useCheckoutStore from "@/stores/useCheckoutStore";
 import toast from "react-hot-toast";
 import { useCartStore } from "@/stores/useCartStore";
 import { useRouter } from "next/navigation";
-
+import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
 
 export default function ProductInfo({ product }: { product: Product }) {
-  const { setCheckoutItems, CheckoutItems } = useCheckoutStore();
+  const { setCheckoutItems, date, label, setDateNLabel } = useCheckoutStore();
   const { addToCart } = useCartStore();
   const [quantity, setQuantity] = useState<number>(1);
   const [discountedPrice, setDiscountedPrice] = useState<number>(0);
   const router = useRouter();
 
+  useEffect(() => {
+    if (!date || !label) {
+      const date = getExpectedDeliveryDate();
+      const label = getExpectedDeliveryDate();
+      setDateNLabel(date.date, date.label);
+    }
+  }, []);
+
   const handleBuyNow = async () => {
-    if (product.stock<quantity) {
+    if (product.stock < quantity) {
       toast.error("Out of Stock");
       return;
     }
     const toastId = toast.loading("Adding to Checkout...");
+
     setCheckoutItems([
       {
         product: product,
@@ -36,7 +45,6 @@ export default function ProductInfo({ product }: { product: Product }) {
     toast.remove(toastId);
     router.push("/checkout");
   };
-
 
   useEffect(() => {
     setDiscountedPrice(
@@ -124,6 +132,8 @@ export default function ProductInfo({ product }: { product: Product }) {
             </button>
           </div>
 
+          <div className="text-gray-500 -mb-2 font-bold">{label}</div>
+
           {/* Action Buttons */}
           <div className="flex gap-4 mt-4 ">
             <button
@@ -146,8 +156,7 @@ export default function ProductInfo({ product }: { product: Product }) {
           </div>
         </div>
       </section>
-      
-              
+
       {/* Product Details */}
       <section className="mt-8 px-4">
         <h2 className="text-2xl font-bold">Product Details</h2>

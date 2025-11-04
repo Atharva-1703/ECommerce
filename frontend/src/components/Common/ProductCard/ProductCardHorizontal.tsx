@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/useCartStore";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import toast from "react-hot-toast";
+import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
 
 type ProductCardMode = "default" | "cart" | "favourites";
 
@@ -36,7 +37,8 @@ export default function ProductCardResponsive({
   const [quantity, setQuantity] = useState(cartQuantity || 1);
   const { updateQuantity } = useCartStore();
   const [hasInteracted, setHasInteracted] = useState(false);
-  const { setCheckoutItems, setTotalCost } = useCheckoutStore();
+  const { setCheckoutItems, setTotalCost, setDateNLabel } = useCheckoutStore();
+  const { date, label } = getExpectedDeliveryDate();
 
   const handleBuyNow = () => {
     if (product.stock < quantity) {
@@ -48,7 +50,8 @@ export default function ProductCardResponsive({
       return;
     }
     const toastId = toast.loading("Adding to Checkout...");
-    setTotalCost(product.price * quantity);
+    setDateNLabel(date, label);
+    setTotalCost(discountedPrice * quantity);
     setCheckoutItems([
       {
         product: product,
@@ -141,6 +144,10 @@ export default function ProductCardResponsive({
           <p className="text-green-600 font-bold text-lg sm:text-xl mt-1">
             ₹{discountedPrice}
           </p>
+        </div>
+
+        <div className="">
+          <p className="text-sm text-gray-500 font-bold">{label}</p>
         </div>
 
         {/* Actions */}

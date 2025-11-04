@@ -138,7 +138,7 @@ const UPIPaymentForm = () => {
 };
 
 const PaymentDetails = () => {
-  const { placeOrder, totalCost } = useCheckoutStore();
+  const { placeOrder, totalCost,label } = useCheckoutStore();
   return (
     <div className="p-6 bg-white rounded-xl shadow-md max-w-2xl mx-auto">
       <h3 className="text-2xl font-semibold mb-2 text-gray-900 text-center">
@@ -147,8 +147,11 @@ const PaymentDetails = () => {
       <p className="text-gray-600 text-center mb-5">
         Select your desired payment method.
       </p>
-      <p className="text-green-600 text-center mb-5 text-lg font-semibold">
+      <p className="text-green-600 text-center mb-2 text-lg font-semibold">
         Total Cost : ₹ {totalCost}
+      </p>
+      <p className="text-center font-semibold text-gray-700 mb-5">
+        {label}
       </p>
 
       <div className="flex flex-col gap-4">

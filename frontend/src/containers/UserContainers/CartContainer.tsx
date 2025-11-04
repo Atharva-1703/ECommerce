@@ -8,12 +8,15 @@ import { useCartStore } from "@/stores/useCartStore";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
 
 const CartContainer = () => {
   const { cart, isLoading, fetchCart, removeFromCart, clearCart } =
     useCartStore();
 
-  const { setCheckoutItems, setTotalCost } = useCheckoutStore();
+  const { setCheckoutItems, setTotalCost, setDateNLabel } = useCheckoutStore();
+
+  const {date,label}=getExpectedDeliveryDate();
 
   const router = useRouter();
   const [cartTotal, setCartTotal] = useState<number>(0);
@@ -21,8 +24,9 @@ const CartContainer = () => {
 
   const handleCheckout = () => {
     const checkoutItems = cart.filter((item) => item.quantity > 0);
-    setCheckoutItems(checkoutItems);
+    setDateNLabel(date, label);
     setTotalCost(cartTotal);
+    setCheckoutItems(checkoutItems);
     router.push("/checkout");
   };
 
@@ -86,6 +90,8 @@ const CartContainer = () => {
           items={totalItems}
           subtotal={cartTotal}
           onCheckout={handleCheckout}
+          date={date}
+          label={label}
         />
       )}
     </div>

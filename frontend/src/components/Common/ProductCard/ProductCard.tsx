@@ -7,13 +7,17 @@ import { useEffect, useState } from "react";
 import { useCartStore } from "@/stores/useCartStore";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import toast from "react-hot-toast";
+import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
+import getDiscountedPrice from "@/utils/getDiscountedPrice";
 
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
   const { addFavourite, favouritesIds, removeFavourite } = useUserStore();
   const { addToCart } = useCartStore();
-  const { setCheckoutItems, setTotalCost } = useCheckoutStore();
+  const { setCheckoutItems, setTotalCost, setDateNLabel } = useCheckoutStore();
+  const { date, label } = getExpectedDeliveryDate();
+  const discountedPrice =getDiscountedPrice(product.price, product.discountPercentage)
 
   const handleBuyNow = () => {
     if (product.stock < 1) {
@@ -21,6 +25,8 @@ export default function ProductCard({ product }: { product: Product }) {
       return;
     }
     const toastId = toast.loading("Adding to Checkout...");
+    setTotalCost(discountedPrice);
+    setDateNLabel(date, label);
     setCheckoutItems([
       {
         product: product,
@@ -45,14 +51,11 @@ export default function ProductCard({ product }: { product: Product }) {
     }
   };
 
-  const discountedPrice = (
-    product.price *
-    (1 - product.discountPercentage / 100)
-  ).toFixed(2);
   return (
     <article
-      className="relative cursor-pointer  min-w-56 h-[465px] p-4 rounded-2xl bg-[#f6f6f6] flex flex-col  gap-3 "
+      className="relative cursor-pointer  min-w-56 h-[500px] p-4 rounded-2xl bg-[#f6f6f6] flex flex-col  gap-2.5 "
       onClick={() => {
+        setDateNLabel(date, label);
         router.push(`/product/${product._id}`);
       }}
     >
@@ -98,6 +101,10 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="flex flex-col items-center gap-1">
         <Ratings rating={product.rating} size={24} />
         <p className="text-sm text-gray-500 font-bold">{product.rating}</p>
+      </div>
+
+      <div className="text-center mx-2">
+        <p className="text-sm text-gray-500 font-bold">{label}</p>
       </div>
 
       <div className="flex flex-col  justify-center gap-4 mt-1 w-full">
