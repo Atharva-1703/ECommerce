@@ -58,13 +58,13 @@ export interface User{
 
 export interface Cart{
   _id:string;
-  product:Partial<Product>;
+  product:Product;
   quantity:number
 }
 
 interface orderItem{
   _id:string;
-  product:Product;
+  product:Partial<Product>;
   quantity:number;
   name:string;
   price:number;
