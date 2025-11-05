@@ -44,7 +44,7 @@ interface address{
   country:string;
   postalCode:string
   phone:string
-  name:string
+  name?:string
 }
 
 export interface User{
@@ -58,6 +58,29 @@ export interface User{
 
 export interface Cart{
   _id:string;
-  product:Product;
+  product:Partial<Product>;
   quantity:number
+}
+
+interface orderItem{
+  _id:string;
+  product:Product;
+  quantity:number;
+  name:string;
+  price:number;
+  totalItemCost:number
+}
+
+export interface Order{
+  _id:string;
+  shippingAddress:address;
+  status:"pending"| "processing"| "delivered"| "cancelled";
+  items:orderItem[];
+  paymentMethod:"cod"|"upi"|"card";
+  totalCost:number;
+  deliveryDate:string
+  deliveryedAt?:string
+  isPaid:boolean
+  createdAt?:string;
+  updatedAt?:string;
 }

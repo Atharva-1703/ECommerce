@@ -1,4 +1,4 @@
-import { Product } from "@/types";
+import { Order, Product } from "@/types";
 import { fetcher } from "@/utils/fetcher";
 import { API_URL } from "@/utils/url";
 import toast from "react-hot-toast";
@@ -8,8 +8,10 @@ interface CheckoutState {
   CheckoutItems: { product: Product; quantity: number }[];
   addressId: string;
   totalCost: number;
-  date:string;
-  label:string;
+  date: string;
+  label: string;
+
+  orders: Order[];
 
   setCheckoutItems: (items: { product: Product; quantity: number }[]) => void;
 
@@ -17,9 +19,11 @@ interface CheckoutState {
 
   setAddressId: (id: string) => void;
 
-  placeOrder: (paymentMethod:"cod"|"upi"|"card") => Promise<boolean>;
+  placeOrder: (paymentMethod: "cod" | "upi" | "card") => Promise<boolean>;
 
-  setDateNLabel:(date:string,label:string)=>void
+  setDateNLabel: (date: string, label: string) => void;
+
+  fetchOrders: () => Promise<void>;
 }
 
 const useCheckoutStore = create<CheckoutState>((set, get) => ({
@@ -28,12 +32,13 @@ const useCheckoutStore = create<CheckoutState>((set, get) => ({
   addressId: "",
   date: "",
   label: "",
+  orders: [],
 
   setCheckoutItems: (items) => set({ CheckoutItems: items }),
   setTotalCost: (cost) => set({ totalCost: cost }),
   setAddressId: (id) => set({ addressId: id }),
   placeOrder: async (paymentMethod) => {
-    const { CheckoutItems, addressId,date} = get();
+    const { CheckoutItems, addressId, date } = get();
     const items = CheckoutItems.map(({ product, quantity }) => ({
       productId: product._id,
       quantity,
@@ -43,7 +48,7 @@ const useCheckoutStore = create<CheckoutState>((set, get) => ({
       items,
       addressId,
       paymentMethod,
-      expectedDeliveryDate:date
+      expectedDeliveryDate: date,
     });
     const data = await res.json();
     if (!data.success) {
@@ -52,10 +57,19 @@ const useCheckoutStore = create<CheckoutState>((set, get) => ({
     }
     toast.success("Order placed successfully", { id: toastId });
     return true;
-
   },
-  setDateNLabel:(date,label)=>set({date,label})
+  setDateNLabel: (date, label) => set({ date, label }),
 
+  fetchOrders: async () => {
+    const res = await fetcher(`${API_URL}/api/orders/user`, "GET");
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      toast.error(data.message);
+      return;
+    }
+    toast.success("Orders fetched successfully");
+    set({ orders: data.orders });
+  },
 }));
 
 export default useCheckoutStore;
