@@ -1,4 +1,4 @@
-import { Product } from "@/types";
+import { Order, Product } from "@/types";
 
 export const dummyProducts: Product[] = [
   {
@@ -131,5 +131,118 @@ export const dummyProducts: Product[] = [
     reviews: [],
     rating: 4.6,
     reviewCount: 210,
-  }
+  },
+];
+
+export const orders: Order[] = [
+  {
+    shippingAddress: {
+      street: "Balwant Colony,Walhekarwadi Road, Chinchwadenagar,Chinchwad",
+      city: "Pimpri-Chinchwad",
+      state: "Maharashtra",
+      postalCode: "411033",
+      country: "India",
+      phone: "+917499977942",
+    },
+    _id: "6909d484798558d31cb6c2a1",
+    items: [
+      {
+        product: {
+          _id: "688ddc5cfd1f7ed32581317e",
+          title: "Tennis Racket",
+          price: 3999.2000000000003,
+          thumbnail:
+            "https://cdn.dummyjson.com/product-images/sports-accessories/tennis-racket/thumbnail.webp",
+        },
+        name: "Tennis Racket",
+        price: 3999.2000000000003,
+        quantity: 1,
+        totalItemCost: 3215,
+        _id: "6909d484798558d31cb6c2a2",
+      },
+      {
+        product: {
+          _id: "688ddc5bfd1f7ed3258130c1",
+          title: "Samsung Galaxy S7",
+          price: 23999.2,
+          thumbnail:
+            "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s7/thumbnail.webp",
+        },
+        name: "Samsung Galaxy S7",
+        price: 23999.2,
+        quantity: 1,
+        totalItemCost: 19307,
+        _id: "6909d484798558d31cb6c2a3",
+      },
+      {
+        product: {
+          _id: "688ddc52fd1f7ed325812c5c",
+          title: "Calvin Klein CK One",
+          price: 3999.2000000000003,
+          thumbnail:
+            "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp",
+        },
+        name: "Calvin Klein CK One",
+        price: 3999.2000000000003,
+        quantity: 1,
+        totalItemCost: 3924,
+        _id: "6909d484798558d31cb6c2a4",
+      },
+      {
+        product: {
+          _id: "688ddc52fd1f7ed325812c65",
+          title: "Chanel Coco Noir Eau De",
+          price: 10399.2,
+          thumbnail:
+            "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp",
+        },
+        name: "Chanel Coco Noir Eau De",
+        price: 10399.2,
+        quantity: 1,
+        totalItemCost: 8682,
+        _id: "6909d484798558d31cb6c2a5",
+      },
+    ],
+    paymentMethod: "cod",
+    totalCost: 35128,
+    status: "pending",
+    isPaid: false,
+    deliveryDate: "2025-11-09T10:24:54.246Z",
+    createdAt: "2025-11-04T10:25:08.671Z",
+    updatedAt: "2025-11-04T10:25:08.671Z",
+  },
+  {
+    shippingAddress: {
+      street: "Balwant Colony,Walhekarwadi Road, Chinchwadenagar,Chinchwad",
+      city: "Pimpri-Chinchwad",
+      state: "Maharashtra",
+      postalCode: "411033",
+      country: "India",
+      phone: "+917499977942",
+    },
+    _id: "6909c216f6593135df6a286b",
+    items: [
+      {
+        product: {
+          _id: "688ddc5ffd1f7ed3258132f8",
+          title: "Women's Wrist Watch",
+          price: 10399.2,
+          thumbnail:
+            "https://cdn.dummyjson.com/product-images/womens-watches/women's-wrist-watch/thumbnail.webp",
+        },
+        name: "Women's Wrist Watch",
+        price: 10399.2,
+        quantity: 1,
+        totalItemCost: 10399.2,
+        _id: "6909c216f6593135df6a286c",
+      },
+    ],
+    paymentMethod: "cod",
+    totalCost: 10399.2,
+    status: "pending",
+    isPaid: false,
+    deliveryDate: "2025-11-07T09:06:19.065Z",
+    createdAt: "2025-11-04T09:06:30.067Z",
+    updatedAt: "2025-11-04T09:06:30.067Z",
+  },
 ];
