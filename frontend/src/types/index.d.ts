@@ -79,8 +79,8 @@ export interface Order{
   paymentMethod:"cod"|"upi"|"card";
   totalCost:number;
   deliveryDate:string
-  deliveryedAt?:string
+  deliveredAt?:string
   isPaid:boolean
-  createdAt?:string;
+  createdAt:string;
   updatedAt?:string;
 }
