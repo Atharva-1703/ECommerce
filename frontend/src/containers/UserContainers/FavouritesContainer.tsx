@@ -14,7 +14,7 @@ const FavouritesContainer = () => {
   }, []);
   const removeFavourite = useUserStore((state) => state.removeFavourite);
   return (
-    <div className=" flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4">
       {isLoading ? (
         Array.from({ length: 3 }).map((_, idx: number) => {
           return <ProductCardSkeletonHorizontal key={idx} />;
@@ -27,7 +27,6 @@ const FavouritesContainer = () => {
               product={product}
               mode="favourites"
               onRemove={() => removeFavourite(product._id)}
-              onAddToCart={() => addToCart(product._id)}
             />
           );
         })
