@@ -12,6 +12,7 @@ interface CheckoutState {
   label: string;
 
   orders: Order[];
+  orderData: Order | null;
 
   setCheckoutItems: (items: { product: Product; quantity: number }[]) => void;
 
@@ -24,6 +25,8 @@ interface CheckoutState {
   setDateNLabel: (date: string, label: string) => void;
 
   fetchOrders: () => Promise<void>;
+
+  fetchOrderData: (id: string) => Promise<void>;
 }
 
 const useCheckoutStore = create<CheckoutState>((set, get) => ({
@@ -33,6 +36,7 @@ const useCheckoutStore = create<CheckoutState>((set, get) => ({
   date: "",
   label: "",
   orders: [],
+  orderData: null,
 
   setCheckoutItems: (items) => set({ CheckoutItems: items }),
   setTotalCost: (cost) => set({ totalCost: cost }),
@@ -69,6 +73,17 @@ const useCheckoutStore = create<CheckoutState>((set, get) => ({
     }
     toast.success("Orders fetched successfully");
     set({ orders: data.orders });
+  },
+
+  fetchOrderData: async (id) => {
+    const res = await fetcher(`${API_URL}/api/orders/${id}`, "GET");
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      toast.error(data.message);
+      return;
+    }
+    toast.success("Order fetched successfully");
+    set({ orderData: data.order });
   },
 }));
 
