@@ -1,14 +1,13 @@
 "use client";
 import OrderCard from "@/components/Orders/OrderCard";
-import { orders } from "@/sample data/discountedProducts";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import React, { useEffect } from "react";
 
 const OrdersContainer = () => {
-  // const { fetchOrders, orders } = useCheckoutStore();
-  // useEffect(() => {
-  //   fetchOrders();
-  // }, []);
+  const { fetchOrders, orders } = useCheckoutStore();
+  useEffect(() => {
+    fetchOrders();
+  }, []);
   // console.log(orders);
 
   return (
