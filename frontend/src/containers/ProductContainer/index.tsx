@@ -39,7 +39,7 @@ export default function ProductContainer() {
             <Reviews
               reviews={productData.reviews as ProductReview[]}
               rating={productData.rating}
-              ratingCount={productData.reviewCount}
+              ratingCount={productData.reviewCount!}
             />
           </>
         )
