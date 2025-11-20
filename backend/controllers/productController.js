@@ -70,7 +70,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
 
 exports.getProductById = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({
       success: false,
       message: "Invalid Product ID format",
@@ -99,7 +99,7 @@ exports.updateProduct = asyncHandler(async (req, res) => {
       message: "Incomplete fields",
     });
   }
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({
       success: false,
       message: "Invalid Product ID format",
@@ -131,7 +131,7 @@ exports.updateProduct = asyncHandler(async (req, res) => {
 
 exports.removeProduct = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({
       success: false,
       message: "Invalid Product ID format",

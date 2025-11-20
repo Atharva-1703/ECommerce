@@ -6,7 +6,7 @@ const User = require("../models/User");
 
 exports.addRating = asyncHandler(async (req, res) => {
   const { rating, comment, productId } = req.body;
-  if (!mongoose.Types.ObjectId.isValid(productId)) {
+  if (!mongoose.isValidObjectId(productId)) {
     return res.status(400).json({
       success: false,
       message: "Invalid Product ID format",
@@ -19,7 +19,7 @@ exports.addRating = asyncHandler(async (req, res) => {
     });
   }
   const user = req.user;
-  if (!mongoose.Types.ObjectId.isValid(user.id)) {
+  if (!mongoose.isValidObjectId(user.id)) {
     return res.status(400).json({
       success: false,
       message: "Invalid User ID format",
@@ -73,7 +73,7 @@ exports.addRating = asyncHandler(async (req, res) => {
 
 exports.updateRating = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({
       success: false,
       message: "Invalid Rating ID format",
@@ -113,7 +113,7 @@ exports.updateRating = asyncHandler(async (req, res) => {
 
 exports.removeRating=asyncHandler(async(req,res)=>{
     const id=req.params.id;
-    if(!mongoose.Types.ObjectId.isValid(id)){
+    if(!mongoose.isValidObjectId(id)){
         return res.status(400).json({
             success:false,
             message:"Invalid Rating ID format"

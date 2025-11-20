@@ -37,7 +37,7 @@ exports.getReviews = asyncHandler(async (req, res) => {
 exports.addFavourite = asyncHandler(async (req, res) => {
   const user = req.user;
   const { productId } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(productId)) {
+  if (!mongoose.isValidObjectId(productId)) {
     return res.status(400).json({
       success: false,
       message: "Invalid Product ID format",
@@ -61,7 +61,7 @@ exports.addFavourite = asyncHandler(async (req, res) => {
 exports.removeFavourite = asyncHandler(async (req, res) => {
   const user = req.user;
   const { productId } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(productId)) {
+  if (!mongoose.isValidObjectId(productId)) {
     return res.status(400).json({
       success: false,
       message: "Invalid Product ID format",
@@ -107,7 +107,7 @@ exports.getFavourites = asyncHandler(async (req, res) => {
 exports.addToCart = asyncHandler(async (req, res) => {
   const user = req.user;
   const { productId, quantity } = req.body;
-  if (!mongoose.Types.ObjectId.isValid(productId)) {
+  if (!mongoose.isValidObjectId(productId)) {
     return res.status(400).json({
       success: false,
       message: "Invalid Product ID format",
@@ -154,7 +154,7 @@ exports.addToCart = asyncHandler(async (req, res) => {
 exports.editCart = asyncHandler(async (req, res) => {
   const user = req.user;
   const { cartId, quantity } = req.body;
-  if (!mongoose.Types.ObjectId.isValid(cartId)) {
+  if (!mongoose.isValidObjectId(cartId)) {
     return res.status(400).json({
       success: false,
       message: "Invalid ID format",
@@ -191,7 +191,7 @@ exports.editCart = asyncHandler(async (req, res) => {
 exports.removeFromCart = asyncHandler(async (req, res) => {
   const user = req.user;
   const { cartId } = req.body;
-  if (!mongoose.Types.ObjectId.isValid(cartId)) {
+  if (!mongoose.isValidObjectId(cartId)) {
     return res.status(400).json({
       success: false,
       message: "Invalid ID format",
@@ -325,7 +325,7 @@ exports.editAddress = asyncHandler(async (req, res) => {
     });
   }
 
-  if (!mongoose.Types.ObjectId.isValid(addressId)) {
+  if (!mongoose.isValidObjectId(addressId)) {
     return res.status(400).json({
       success: false,
       message: "Invalid ID format",

@@ -107,7 +107,7 @@ exports.cancelOrder = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const { orderId } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(orderId)) {
+  if (!mongoose.isValidObjectId(orderId)) {
     return res.status(400).json({
       success: false,
       message: "Invalid order ID",
