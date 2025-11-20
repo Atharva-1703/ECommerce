@@ -143,3 +143,31 @@ exports.cancelOrder = asyncHandler(async (req, res) => {
     order,
   });
 });
+
+exports.getOrderById = asyncHandler(async (req, res) => {
+  const orderId = req.params.id;
+  if (!mongoose.isValidObjectId(orderId)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid order ID",
+    });
+  }
+
+  const order = await Orders.findById(orderId).populate(
+    "items.product",
+    "title price thumbnail"
+  );
+
+  if (!order) {
+    return res.status(404).json({
+      success: false,
+      message: "Order not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    order,
+    message: "Order fetched successfully",
+  });
+});
