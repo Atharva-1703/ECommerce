@@ -10,6 +10,7 @@ import { useCartStore } from "@/stores/useCartStore";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import toast from "react-hot-toast";
 import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
+import Image from "next/image";
 
 type ProductCardMode = "default" | "cart" | "favourites";
 
@@ -92,14 +93,14 @@ export default function ProductCardResponsive({
       <div className="w-full sm:w-1/3 lg:w-1/4 bg-gray-100 flex items-center justify-center overflow-hidden aspect-4/3 relative py-2">
         <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/15 to-transparent opacity-40" />
         {product.stock === 0 && (
-          <div className="absolute bg-red-700 text-white px-2 py-1 rounded-lg text-xl font-bold scale-150 -rotate-30">
+          <div className="absolute bg-red-700 text-white px-2 py-1 rounded-lg text-xl font-bold scale-150 -rotate-30 z-20">
             Sold Out
           </div>
         )}
-        <img
-          src={product.thumbnail}
-          alt={product.title}
-          className="w-full h-full object-contain"
+        <Image src={product.thumbnail} alt={product.title} 
+        fill
+        className="object-contain"
+        sizes="100%"
         />
       </div>
 

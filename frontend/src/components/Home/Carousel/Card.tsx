@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 interface CardProps {
@@ -33,11 +34,14 @@ export default function Card({
       </div>
 
       <div className="md:w-1/2 w-full">
-        <img
-          src={image}
-          alt="Men's Watch"
-          className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-contain rounded-xl"
-        />
+        <div className="relative w-full h-[250px] sm:h-[300px] md:h-[400px] rounded-xl ">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-contain rounded-xl"
+          />
+        </div>
       </div>
     </section>
   );

@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { useCartStore } from "@/stores/useCartStore";
 import { useRouter } from "next/navigation";
 import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
+import Image from "next/image";
 
 export default function ProductInfo({ product }: { product: Product }) {
   const { setCheckoutItems, date, label, setDateNLabel } = useCheckoutStore();
@@ -68,11 +69,15 @@ export default function ProductInfo({ product }: { product: Product }) {
           >
             {product?.images?.map((image: string, index: number) => (
               <SwiperSlide key={index} className="">
-                <img
-                  src={image}
-                  alt={product?.title}
-                  className="w-full max-h-96  object-contain transition-transform ease-in-out duration-500 hover:scale-105 py-4"
-                />
+                <div className="w-full max-h-96 h-96 relative   overflow-hidden">
+                  <Image
+                    src={image}
+                    alt={product?.title}
+                    fill
+                    className="object-contain transition-transform ease-in-out duration-500 hover:scale-105 lg:py-4"
+                    priority={index === 0}
+                  />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>

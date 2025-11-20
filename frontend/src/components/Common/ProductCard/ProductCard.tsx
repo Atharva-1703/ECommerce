@@ -9,6 +9,7 @@ import useCheckoutStore from "@/stores/useCheckoutStore";
 import toast from "react-hot-toast";
 import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
 import getDiscountedPrice from "@/utils/getDiscountedPrice";
+import Image from "next/image";
 
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
@@ -17,7 +18,10 @@ export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCartStore();
   const { setCheckoutItems, setTotalCost, setDateNLabel } = useCheckoutStore();
   const { date, label } = getExpectedDeliveryDate();
-  const discountedPrice =getDiscountedPrice(product.price, product.discountPercentage)
+  const discountedPrice = getDiscountedPrice(
+    product.price,
+    product.discountPercentage
+  );
 
   const handleBuyNow = () => {
     if (product.stock < 1) {
@@ -80,12 +84,15 @@ export default function ProductCard({ product }: { product: Product }) {
           -{product.discountPercentage}%
         </div>
       )}
-      <img
-        src={product.thumbnail}
-        alt={product.title}
-        className="w-full h-40 rounded-2xl object-contain"
-        loading="lazy"
-      />
+      <div className="relative w-full h-40 rounded-2xl ">
+        <Image
+          src={product.thumbnail}
+          alt={product.title}
+          fill
+          className="object-contain rounded-2xl"
+          loading="lazy"
+        />
+      </div>
       <h2 className="text-xl text-center font-bold truncate">
         {product.title}
       </h2>

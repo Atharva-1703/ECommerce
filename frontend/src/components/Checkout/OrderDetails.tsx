@@ -1,5 +1,6 @@
 "use client";
 import useCheckoutStore from "@/stores/useCheckoutStore";
+import Image from "next/image";
 import React from "react";
 
 const OrderDetails = () => {
@@ -27,11 +28,14 @@ const OrderDetails = () => {
               className="flex flex-col  sm:flex-row sm:items-center justify-between py-4 gap-4"
             >
               {/* Left: Image */}
-              <img
-                src={product.thumbnail}
-                alt={product.title}
-                className="w-24 h-24 object-cover rounded-md bg-gray-100 mx-auto sm:mx-0"
-              />
+              <div className="relative w-24 h-24 rounded-md bg-gray-100 mx-auto sm:mx-0 ">
+                <Image
+                  src={product.thumbnail}
+                  alt={product.title}
+                  fill
+                  className="object-cover  p-1"
+                />
+              </div>
 
               {/* Middle: Product Details */}
               <div className="flex-1 text-center sm:text-left">
