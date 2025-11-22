@@ -15,6 +15,7 @@ const FavouritesContainer = () => {
   const removeFavourite = useUserStore((state) => state.removeFavourite);
   return (
     <div className="flex flex-col items-center gap-4">
+      <h1 className="text-2xl font-bold w-full pl-3">Favourites</h1>
       {isLoading ? (
         Array.from({ length: 3 }).map((_, idx: number) => {
           return <ProductCardSkeletonHorizontal key={idx} />;
