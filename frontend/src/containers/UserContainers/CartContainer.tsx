@@ -8,7 +8,7 @@ import { useCartStore } from "@/stores/useCartStore";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
+import { getExpectedDeliveryDate } from "@/utils/Dates";
 
 const CartContainer = () => {
   const { cart, isLoading, fetchCart, removeFromCart, clearCart } =

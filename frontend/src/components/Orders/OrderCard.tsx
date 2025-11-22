@@ -1,4 +1,5 @@
 import { Order } from "@/types";
+import { getFormattedDate } from "@/utils/Dates";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -15,15 +16,7 @@ const statusColors: Record<Order["status"], string> = {
 };
 
 const OrderCard: React.FC<CardProps> = ({ order }) => {
-  const getFormattedDate = (UTCDate: string) => {
-    const date = new Date(UTCDate);
-    const day = date.getDate();
-    const weekDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
-      date.getDay()
-    ];
-    const month = date.toLocaleString("default", { month: "short" });
-    return `${day} ${month}, ${weekDay}`;
-  };
+
   return (
     <Link href={`/order/${order._id}`}>
       <section className="flex flex-col sm:flex-row bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer max-md:w-full min-w-4/5 max-sm:py-2">

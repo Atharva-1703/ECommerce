@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/useCartStore";
 import useCheckoutStore from "@/stores/useCheckoutStore";
 import toast from "react-hot-toast";
-import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
+import { getExpectedDeliveryDate } from "@/utils/Dates";
 import Image from "next/image";
 
 type ProductCardMode = "default" | "cart" | "favourites";

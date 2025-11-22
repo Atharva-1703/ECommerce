@@ -12,7 +12,7 @@ import useCheckoutStore from "@/stores/useCheckoutStore";
 import toast from "react-hot-toast";
 import { useCartStore } from "@/stores/useCartStore";
 import { useRouter } from "next/navigation";
-import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
+import { getExpectedDeliveryDate } from "@/utils/Dates";
 import Image from "next/image";
 
 export default function ProductInfo({ product }: { product: Product }) {

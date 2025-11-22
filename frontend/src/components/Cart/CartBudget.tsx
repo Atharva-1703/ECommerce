@@ -1,5 +1,5 @@
 "use client";
-import { getExpectedDeliveryDate } from "@/utils/getExpectedDate";
+import { getExpectedDeliveryDate } from "@/utils/Dates";
 import React from "react";
 
 interface CartBudgetProps {
