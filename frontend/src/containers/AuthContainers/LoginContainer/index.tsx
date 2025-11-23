@@ -102,7 +102,7 @@ const LoginContainer = () => {
         </form>
 
         <p className="w-full mx-auto text-sm text-center text-gray-600">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link className="text-blue-600 hover:underline" href="/register">
             Register
           </Link>

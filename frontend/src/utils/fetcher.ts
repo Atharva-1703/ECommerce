@@ -1,7 +1,7 @@
 import { useUserStore } from "@/stores/useUserStore";
 
 
-export async function fetcher(url: string,method:string,body?:any) {
+export async function fetcher(url: string,method:string,body?:unknown) {
     const res = await fetch(url,{
         method,
         headers:{"Content-Type":"application/json"},

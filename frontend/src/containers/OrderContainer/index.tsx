@@ -92,18 +92,18 @@ export default function OrderContainer() {
           <div>
             <dt className="text-sm text-gray-500">Ordered Date</dt>
             <dd className="font-medium">
-              {getFormattedDate(orderData?.createdAt!)}
+              {orderData && getFormattedDate(orderData.createdAt!)}
             </dd>
           </div>
           <div>
             <dt className="text-sm text-gray-500">Delivery Date</dt>
-            {orderData?.status === "delivered" ? (
+            {(orderData &&orderData?.status === "delivered") ? (
               <dd className="font-medium">
-                {getFormattedDate(orderData?.deliveredAt!)}
+                {getFormattedDate(orderData.deliveredAt!)}
               </dd>
             ) : (
               <dd className="font-medium">
-                {getFormattedDate(orderData?.deliveryDate!)}
+                {orderData && getFormattedDate(orderData.deliveryDate!)}
               </dd>
             )}
           </div>

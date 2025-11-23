@@ -24,7 +24,7 @@ export default function Carousel() {
     slidesPerView={1}
     className="w-full h-auto"
     >
-      {categoryHighlights.map((category: any, index: number) => (
+      {categoryHighlights.map((category, index: number) => (
         <SwiperSlide key={index}>
           <Card
             image={category.image}

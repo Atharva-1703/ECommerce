@@ -31,7 +31,7 @@ interface UserStoreState {
 
   addAddress: (address: address) => Promise<void>;
   removeAddress: (addressId: string) => Promise<void>;
-  editAddress:(addressId:string, address:address) => Promise<void>;
+  editAddress: (addressId: string, address: address) => Promise<void>;
 
   clearStore: () => void;
 }
@@ -82,7 +82,8 @@ export const useUserStore = create<UserStoreState>()(
             favouritesIds: data.favourites,
           });
           return true;
-        } catch (err: any) {
+        } catch (error) {
+          const err = error as Error;
           set({ errorMessage: err.message, isLoading: false });
           return false;
         }
@@ -146,7 +147,8 @@ export const useUserStore = create<UserStoreState>()(
 
           set({ isLoading: false });
           return true;
-        } catch (err: any) {
+        } catch (error) {
+          const err = error as Error;
           set({ errorMessage: err.message, isLoading: false });
           return false;
         }
@@ -250,27 +252,29 @@ export const useUserStore = create<UserStoreState>()(
         set({ isLoading: false });
       },
 
-      editAddress:async (addressId, address)=> {
-          const {user}=get();
-          set({isLoading:true});
-          const res = await fetcher(`${API_URL}/api/user/address/edit`, "PUT", {
-            addressId,
-            newAddress:address,
-          });
-          const data = await res.json();
-          if (!data.success) {
-            toast.error(data.message);
-            set({ isLoading: false });
-            return;
-          }
-          set({
-            user: {
-              ...user!,
-              address: user!.address?.map((a) => a._id === addressId ? address : a),
-            },
-          });
-          toast.success("Address edited successfully");
+      editAddress: async (addressId, address) => {
+        const { user } = get();
+        set({ isLoading: true });
+        const res = await fetcher(`${API_URL}/api/user/address/edit`, "PUT", {
+          addressId,
+          newAddress: address,
+        });
+        const data = await res.json();
+        if (!data.success) {
+          toast.error(data.message);
           set({ isLoading: false });
+          return;
+        }
+        set({
+          user: {
+            ...user!,
+            address: user!.address?.map((a) =>
+              a._id === addressId ? address : a
+            ),
+          },
+        });
+        toast.success("Address edited successfully");
+        set({ isLoading: false });
       },
 
       clearStore: () => {

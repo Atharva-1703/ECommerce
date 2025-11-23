@@ -1,7 +1,7 @@
 "use client";
 import { address } from "@/types";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 
 interface EditAddressFormProps {
   address: address;
@@ -12,11 +12,11 @@ interface EditAddressFormProps {
 const EditAddressForm = ({address,onCancel,onSave}:EditAddressFormProps) => {
     const [formData, setFormData] = useState(address);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await onSave(formData);
   };

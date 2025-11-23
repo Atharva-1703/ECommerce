@@ -26,7 +26,8 @@ export const useCartStore = create<CartState>((set, get) => ({
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to fetch cart");
       set({ cart: data.cart, isLoading: false });
-    } catch (err: any) {
+    } catch (error) {
+      const err = error as Error;
       toast.error(err.message);
       set({ isLoading: false });
     }
@@ -44,7 +45,8 @@ export const useCartStore = create<CartState>((set, get) => ({
 
       set({ cart: data.cart });
       toast.success(data.message);
-    } catch (err: any) {
+    } catch (error) {
+      const err = error as Error;
       toast.error(err.message);
     }
   },
@@ -73,7 +75,8 @@ export const useCartStore = create<CartState>((set, get) => ({
           return item;
         }),
       });
-    } catch (err: any) {
+    } catch (error) {
+      const err = error as Error;
       toast.error(err.message);
     }
   },
@@ -93,7 +96,8 @@ export const useCartStore = create<CartState>((set, get) => ({
         cart: cart.filter(({ _id }) => _id !== cartId),
       });
       toast.success("Item removed");
-    } catch (err: any) {
+    } catch (error) {
+      const err = error as Error;
       toast.error(err.message);
     }
   },
@@ -106,7 +110,8 @@ export const useCartStore = create<CartState>((set, get) => ({
 
       set({ cart: [] });
       toast.success("Cart cleared");
-    } catch (err: any) {
+    } catch (error) {
+      const err = error as Error;
       toast.error(err.message);
     }
   },

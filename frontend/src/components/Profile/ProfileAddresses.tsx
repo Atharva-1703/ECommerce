@@ -46,6 +46,7 @@ const ProfileAddresses = ({
         {user?.address.map((address, index) =>
           editingId === address._id ? (
             <EditAddressForm
+              key={index}
               address={address}
               onCancel={() => setEditingId("")}
               onSave={(updated) => handleSave(updated)}
