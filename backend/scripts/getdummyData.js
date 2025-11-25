@@ -1,12 +1,15 @@
-const mongoose = require("mongoose");
 const axios = require("axios");
-const Product = require("./models/Product");
-const Ratings = require("./models/Rating");
+const Product = require("../models/Product");
+const Ratings = require("../models/Rating");
+const mongoose = require("mongoose");
 require("dotenv").config();
+
+// ? run from root folder eg. \backend by typing "node scripts/getdummyData.js"
 
 // ! remove the required field in Rating Model before running the script
 async function importData() {
   try {
+
     await mongoose.connect(process.env.MONGODB_URL);
 
     // Fetch DummyJSON products
