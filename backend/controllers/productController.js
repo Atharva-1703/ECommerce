@@ -164,14 +164,14 @@ exports.removeProduct = asyncHandler(async (req, res) => {
 
 exports.getFilters = asyncHandler(async (req, res) => {
   const { category, title } = req.query;
-  
+
   // Build match conditions
   const matchConditions = {};
-  
+
   if (category) {
     matchConditions.category = category;
   }
-  
+
   if (title) {
     matchConditions.$or = [
       { title: { $regex: title, $options: "i" } },
@@ -180,12 +180,11 @@ exports.getFilters = asyncHandler(async (req, res) => {
   }
 
   // Parallel queries for better performance
-  const [brands, categories,totalProducts] = await Promise.all([
+  const [brands, categories, totalProducts] = await Promise.all([
     Product.distinct("brand", matchConditions),
     category ? [] : Product.distinct("category", matchConditions),
-    Product.countDocuments(matchConditions)
+    Product.countDocuments(matchConditions),
   ]);
-
 
   return res.status(200).json({
     success: true,
@@ -194,6 +193,80 @@ exports.getFilters = asyncHandler(async (req, res) => {
       brands,
       categories,
     },
-    totalProducts
+    totalProducts,
+  });
+});
+
+exports.getSearchSuggestions = asyncHandler(async (req, res) => {
+  const q = req.query.q?.trim();
+  if (!q) return res.json({ success: true, results: [] });
+
+  let results = [];
+
+  const projection = {
+    _id: 1,
+    title: 1,
+    brand: 1,
+    category: 1,
+    score: { $meta: "searchScore" },
+  };
+
+  //  AUTOCOMPLETE per-field
+  const fields = ["title", "brand", "category"];
+
+
+  const autoResults = [];
+
+  for (const field of fields) {
+    const r = await Product.aggregate([
+      {
+        $search: {
+          index: "autocomplete_index",
+          autocomplete: {
+            query: q,
+            path: field
+          },
+        },
+      },
+      { $limit: 5 },
+      { $project: projection },
+    ]);
+    autoResults.push(...r);
+  }
+
+  // Deduplicate
+  results = autoResults.filter(
+    (v, i, a) => a.findIndex((t) => t._id.toString() === v._id.toString()) === i
+  );
+
+  // If autocomplete found results → return them
+  if (results.length > 0) {
+    return res.json({
+      success: true,
+      mode: "autocomplete",
+      results,
+    });
+  }
+
+  // FALLBACK: Full text fuzzy search
+  const fuzzyResults = await Product.aggregate([
+    {
+      $search: {
+        index: "default",
+        text: {
+          query: q,
+          path: ["title", "description", "brand", "category", "tags"],
+          fuzzy: { maxEdits: 2 },
+        },
+      },
+    },
+    { $limit: 10 },
+    { $project: projection },
+  ]);
+
+  return res.json({
+    success: true,
+    mode: "fuzzy-fallback",
+    results: fuzzyResults,
   });
 });
