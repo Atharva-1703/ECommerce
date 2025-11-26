@@ -199,7 +199,7 @@ exports.getFilters = asyncHandler(async (req, res) => {
 
 exports.getSearchSuggestions = asyncHandler(async (req, res) => {
   const q = req.query.q?.trim();
-  if (!q) return res.json({ success: true, results: [] });
+  if (!q) return res.status(200).json({ success: true, results: [] });
 
   let results = [];
 
@@ -211,9 +211,7 @@ exports.getSearchSuggestions = asyncHandler(async (req, res) => {
     score: { $meta: "searchScore" },
   };
 
-  //  AUTOCOMPLETE per-field
   const fields = ["title", "brand", "category"];
-
 
   const autoResults = [];
 
@@ -224,7 +222,7 @@ exports.getSearchSuggestions = asyncHandler(async (req, res) => {
           index: "autocomplete_index",
           autocomplete: {
             query: q,
-            path: field
+            path: field,
           },
         },
       },
@@ -234,12 +232,10 @@ exports.getSearchSuggestions = asyncHandler(async (req, res) => {
     autoResults.push(...r);
   }
 
-  // Deduplicate
   results = autoResults.filter(
     (v, i, a) => a.findIndex((t) => t._id.toString() === v._id.toString()) === i
   );
 
-  // If autocomplete found results → return them
   if (results.length > 0) {
     return res.json({
       success: true,
@@ -248,7 +244,6 @@ exports.getSearchSuggestions = asyncHandler(async (req, res) => {
     });
   }
 
-  // FALLBACK: Full text fuzzy search
   const fuzzyResults = await Product.aggregate([
     {
       $search: {
