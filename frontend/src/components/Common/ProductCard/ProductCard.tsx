@@ -57,7 +57,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <article
-      className="relative cursor-pointer  min-w-56 h-[500px] p-4 rounded-2xl bg-[#f6f6f6] flex flex-col  gap-2.5 "
+      className="relative cursor-pointer  min-w-56 h-[440px] p-4 rounded-2xl bg-[#f6f6f6] flex flex-col  gap-1 "
       onClick={() => {
         setDateNLabel(date, label);
         router.push(`/product/${product._id}`);

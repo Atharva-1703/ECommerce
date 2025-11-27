@@ -26,7 +26,7 @@ export default function Catalogue({ products, title,route }: CatalogueProps) {
           : Array.from({ length: 4 }).map((_, idx) => {
               return <ProductCardSkeletonVertical key={idx} />;
             })}
-        <div className="min-w-56 min-h-[465px] p-6 rounded-2xl bg-white shadow hover:shadow-lg transition flex flex-col items-center justify-center gap-4 cursor-pointer border border-gray-200" onClick={handleSeeMore}>
+        <div className="min-w-56 min-h-[440px] p-6 rounded-2xl bg-white shadow hover:shadow-lg transition flex flex-col items-center justify-center gap-4 cursor-pointer border border-gray-200" onClick={handleSeeMore}>
           <Icon icon="mdi:plus" className="text-4xl text-gray-600" />
           <h1 className="text-lg font-medium text-gray-800">See More</h1>
         </div>
