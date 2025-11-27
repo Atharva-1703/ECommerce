@@ -27,6 +27,7 @@ export default function SearchPage() {
 
   // Load filters from URL on mount
   useEffect(() => {
+    resetOffset();
     initialFilters = {
       category: searchParams.get("category") || "",
       title: searchParams.get("title") || "",
@@ -41,7 +42,7 @@ export default function SearchPage() {
       // fetchProducts(initialFilters),
       fetchProductFilters(initialFilters.title, initialFilters.category),
     ]);
-  }, []);
+  }, [searchParams.toString()]);
 
   const loadMore = () => {
     fetchProducts(filters);
