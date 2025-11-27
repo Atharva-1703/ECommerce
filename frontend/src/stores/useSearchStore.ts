@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Product } from "@/types";
 import { API_URL } from "@/utils/url";
+import { fetcher } from "@/utils/fetcher";
 
 export interface Filters {
   category?: string;
@@ -24,6 +25,7 @@ interface SearchState {
   productFilter: ProductFilter;
   loading: boolean;
   totalProducts: number;
+  suggestions: Partial<Product>[];
   // setBrands: (brands: string[]) => void;
   fetchProducts: (passedfilters?: Filters) => Promise<void>;
   setfilters: (updates: Partial<Filters>) => void;
@@ -33,6 +35,8 @@ interface SearchState {
   resetProductFilter: () => void;
   resetOffset: () => void;
   fetchProductFilters: (title?: string, category?: string) => Promise<void>;
+  fetchSuggestions: (query: string) => Promise<void>;
+  clearSuggestions: () => void;
 }
 
 export const useSearchStore = create<SearchState>((set, get) => ({
@@ -47,6 +51,7 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     categories: [],
   },
   loading: false,
+  suggestions: [],
   incrementOffset: () => {
     set({ offset: get().offset + 10 });
   },
@@ -106,5 +111,17 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     set({ productFilter: data.filters });
     // set({productFilter})
     set({ totalProducts: data.totalProducts });
+  },
+
+  fetchSuggestions: async (query) => {
+    const response = await fetcher(
+      `${API_URL}/api/products/suggestions?q=${query}`,
+      "GET"
+    );
+    const data = await response.json();
+    set({ suggestions: data.results });
+  },
+  clearSuggestions: () => {
+    set({ suggestions: [] });
   },
 }));
