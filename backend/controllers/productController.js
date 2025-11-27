@@ -255,7 +255,7 @@ exports.getSearchSuggestions = asyncHandler(async (req, res) => {
         },
       },
     },
-    { $limit: 10 },
+    { $limit: 5 },
     { $project: projection },
   ]);
 
