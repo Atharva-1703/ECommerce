@@ -60,11 +60,13 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0,
     max: 5,
+    default: 0,
   },
   reviewCount: {
     type: Number,
     required: true,
     min: 0,
+    default:0,
   },
   reviews:[{
     type:mongoose.Schema.Types.ObjectId,
