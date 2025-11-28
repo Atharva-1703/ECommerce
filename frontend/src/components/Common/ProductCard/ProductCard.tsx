@@ -107,7 +107,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <div className="flex flex-col items-center gap-1">
         <Ratings rating={product.rating} size={24} />
-        <p className="text-sm text-gray-500 font-bold">{product.rating}</p>
+        <p className="text-sm text-gray-500 font-bold">{product.rating.toFixed(2)}</p>
       </div>
 
       <div className="text-center mx-2">

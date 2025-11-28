@@ -127,7 +127,7 @@ export default function ProductCardResponsive({
         {/* Ratings */}
         <div className="flex items-center gap-2 mt-1">
           <Ratings rating={product.rating} size={16} />
-          <span className="text-sm text-gray-500">{product.rating}</span>
+          <span className="text-sm text-gray-500">{product.rating.toFixed(2)}</span>
         </div>
 
         {/* Price */}

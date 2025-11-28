@@ -95,7 +95,7 @@ export default function ProductInfo({ product }: { product: Product }) {
               <Ratings rating={product.rating!} size={24} />
             </div>
             <p className="text-sm text-gray-500 font-medium leading-none">
-              {product.rating}/5 ({product.reviewCount} reviews)
+              {product.rating.toFixed(2)}/5 ({product.reviewCount} reviews)
             </p>
           </div>
 
