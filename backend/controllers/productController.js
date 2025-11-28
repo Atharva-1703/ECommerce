@@ -76,7 +76,10 @@ exports.getProductById = asyncHandler(async (req, res) => {
       message: "Invalid Product ID format",
     });
   }
-  const product = await Product.findById(id).populate("reviews");
+  const product = await Product.findById(id).populate({
+    path: "reviews",
+    options: { sort: { createdAt: -1 } },
+  });
   if (!product) {
     return res.status(404).json({
       success: false,
