@@ -59,10 +59,10 @@ exports.addRating = asyncHandler(async (req, res) => {
 
   const ratingAdded = await Rating.create(ratingBody);
 
-  product.reviews.push(ratingId);
+  product.reviews.push(ratingAdded._id);
 
   const oldTotal = product.rating * product.reviewCount;
-  const newTotal = oldTotal + newRating;
+  const newTotal = oldTotal + ratingBody.rating;
 
   product.reviewCount += 1;
   product.rating = newTotal / product.reviewCount;
