@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
         },
-        quantity: { type: Number, required: true,default: 1 ,min: 1 },
+        quantity: { type: Number, required: true, default: 1, min: 1 },
       },
     ],
     orders: [
@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema(
         state: { type: String, required: true },
         postalCode: { type: String, required: true },
         country: { type: String, required: true },
-        phone: { type: String, required: true }
+        phone: { type: String, required: true },
       },
     ],
   },
