@@ -1,20 +1,27 @@
-import { Product } from "@/types";
+import { Product, ProductReview } from "@/types";
+import { fetcher } from "@/utils/fetcher";
 import { API_URL } from "@/utils/url";
+import toast from "react-hot-toast";
 import { create } from "zustand";
 
 interface ProductsState {
   latest: Product[];
   highDiscount: Product[];
   TopRated: Product[];
+
   productData: Product | null;
+
   loading: boolean;
   fetchLatest: () => Promise<void>;
   fetchHighDiscount: () => Promise<void>;
   fetchTopRated: () => Promise<void>;
+
   fetchProductData: (id: string) => Promise<void>;
+
+  addReview: (review: Partial<ProductReview>) => Promise<void>;
 }
 
-export const useProductsStore = create<ProductsState>((set) => ({
+export const useProductsStore = create<ProductsState>((set, get) => ({
   latest: [],
   highDiscount: [],
   TopRated: [],
@@ -44,10 +51,35 @@ export const useProductsStore = create<ProductsState>((set) => ({
     const data = await response.json();
     set({ TopRated: data.products, loading: false });
   },
-  fetchProductData: async (id: string) => {
+  fetchProductData: async (id) => {
     set({ loading: true });
     const response = await fetch(`${API_URL}/api/products/${id}`);
     const data = await response.json();
     set({ productData: data.product, loading: false });
+  },
+  addReview: async (review) => {
+    const product = get().productData;
+    if (!product) {
+      toast.error("Product not found");
+      return;
+    }
+    if(!review.rating){
+      toast.error("Rating is required");
+      return;
+    }
+    if(review.rating<1 || review.rating>5){
+      toast.error("Rating must be between 1 and 5");
+    }
+    // return;
+    set({ loading: true });
+    const res = await fetcher(`${API_URL}/api/reviews/add`, "POST", {...review, productId: product._id});
+    const data = await res.json();
+    if (!data.success) {
+      toast.error(data.message);
+      set({ loading: false });
+      return;
+    }
+    toast.success("Review added successfully");
+    set({ loading: false, productData: data.product });
   },
 }));

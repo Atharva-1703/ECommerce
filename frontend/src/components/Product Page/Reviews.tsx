@@ -3,6 +3,7 @@ import Ratings from "../Common/Rating/Ratings";
 import RatingBar from "./RatingBar";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
+import { useProductsStore } from "@/stores/useProductStore";
 
 interface ReviewProps {
   reviews: ProductReview[];
@@ -15,12 +16,17 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
     rating: 0,
     comment: "",
   });
+  const { addReview } = useProductsStore();
 
   const handleRatingChange = (rating: number) => {
     setReview((prevReview) => ({
       ...prevReview,
       rating,
     }));
+  };
+
+  const handleReviewSubmit = async () => {
+    await addReview(review);
   };
 
   return (
@@ -32,7 +38,7 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
           aria-label="Average rating"
         >
           <Ratings rating={rating} size={32} />
-          <p className="text-sm mt-2">{rating} / 5</p>
+          <p className="text-sm mt-2">{rating.toFixed(2)} / 5</p>
         </aside>
         <div className="flex-1">
           <RatingBar reviews={reviews} totalRatings={ratingCount} />
@@ -42,18 +48,24 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
         <h2 className="text-xl font-bold mb-6">Write a Review</h2>
         <div className="flex justify-center">
           <Ratings
-          rating={review.rating}
-          size={32}
-          mode="input"
-          onChange={handleRatingChange}
-        />
+            rating={review.rating}
+            size={32}
+            mode="input"
+            onChange={handleRatingChange}
+          />
         </div>
         <textarea
-          placeholder="Write a review..."
+          placeholder="(Optional) Write a review..."
           className="w-full p-3 border border-gray-300 rounded-lg min-h-16"
           value={review.comment}
           onChange={(e) => setReview({ ...review, comment: e.target.value })}
         ></textarea>
+        <button
+          className="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
+          onClick={handleReviewSubmit}
+        >
+          Submit
+        </button>
       </div>
       <div className="mt-5 space-y-3">
         <h2 className="text-xl font-bold mb-6">Latest Reviews</h2>
