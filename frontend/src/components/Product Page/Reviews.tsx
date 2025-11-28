@@ -2,6 +2,7 @@ import { ProductReview } from "@/types";
 import Ratings from "../Common/Rating/Ratings";
 import RatingBar from "./RatingBar";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useState } from "react";
 
 interface ReviewProps {
   reviews: ProductReview[];
@@ -10,6 +11,18 @@ interface ReviewProps {
 }
 
 export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
+  const [review, setReview] = useState({
+    rating: 0,
+    comment: "",
+  });
+
+  const handleRatingChange = (rating: number) => {
+    setReview((prevReview) => ({
+      ...prevReview,
+      rating,
+    }));
+  };
+
   return (
     <section className="px-4 mt-4">
       <h2 className="text-2xl font-bold">Product Reviews</h2>
@@ -24,6 +37,23 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
         <div className="flex-1">
           <RatingBar reviews={reviews} totalRatings={ratingCount} />
         </div>
+      </div>
+      <div className="mt-5 space-y-5">
+        <h2 className="text-xl font-bold mb-6">Write a Review</h2>
+        <div className="flex justify-center">
+          <Ratings
+          rating={review.rating}
+          size={32}
+          mode="input"
+          onChange={handleRatingChange}
+        />
+        </div>
+        <textarea
+          placeholder="Write a review..."
+          className="w-full p-3 border border-gray-300 rounded-lg min-h-16"
+          value={review.comment}
+          onChange={(e) => setReview({ ...review, comment: e.target.value })}
+        ></textarea>
       </div>
       <div className="mt-5 space-y-3">
         <h2 className="text-xl font-bold mb-6">Latest Reviews</h2>
