@@ -28,16 +28,21 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
       <div className="mt-5 space-y-3">
         <h2 className="text-xl font-bold mb-6">Latest Reviews</h2>
         {reviews.map((review, idx) => {
+          if (!review.comment) return null;
           return (
             <div key={idx} className="border-b border-gray-500 pb-3">
               <div className="flex items-center gap-2">
                 <span className="flex justify-center items-center w-7 h-7 rounded-full bg-gray-300">
                   <Icon icon="mdi:person" className="w-5 h-5 text-gray-600" />
                 </span>
-                <span className="text-normal font-semibold leading-none text-gray-600">{review.name}</span>
+                <span className="text-normal font-semibold leading-none text-gray-600">
+                  {review.name}
+                </span>
                 <Ratings rating={review.rating} size={18} />
               </div>
-              <p className="text-sm mt-2 text-gray-800 italic ">{review.comment}</p>
+              <p className="text-sm mt-2 text-gray-800 italic ">
+                {review.comment}
+              </p>
             </div>
           );
         })}
