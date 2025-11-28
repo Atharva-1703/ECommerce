@@ -75,7 +75,7 @@ exports.addRating = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .json({ success: true, message: "Rating added successfully" });
+    .json({ success: true, message: "Rating added successfully", product });
 });
 
 exports.updateRating = asyncHandler(async (req, res) => {
@@ -133,6 +133,7 @@ exports.updateRating = asyncHandler(async (req, res) => {
   return res.status(200).json({
     success: true,
     message: "Rating updated successfully",
+    product,
   });
 });
 
@@ -179,5 +180,6 @@ exports.removeRating = asyncHandler(async (req, res) => {
   return res.status(200).json({
     success: true,
     message: "Rating deleted successfully",
+    product,
   });
 });
