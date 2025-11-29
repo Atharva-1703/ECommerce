@@ -155,11 +155,17 @@ exports.removeRating = asyncHandler(async (req, res) => {
       message: "Invalid Rating ID format",
     });
   }
-  const rating = await Rating.findByIdAndDelete(id);
+  const rating = await Rating.findById(id);
   if (!rating) {
     return res.status(404).json({
       success: false,
       message: "Rating not found",
+    });
+  }
+  if (rating.user.toString() !== user.id) {
+    return res.status(403).json({
+      success: false,
+      message: "You are not authorized to delete this rating",
     });
   }
   const product = await Product.findById(rating.product);
@@ -184,6 +190,8 @@ exports.removeRating = asyncHandler(async (req, res) => {
     product.rating = newAvg;
   }
   await product.save();
+
+  await rating.deleteOne();
 
   await product.populate({
     path: "reviews",
