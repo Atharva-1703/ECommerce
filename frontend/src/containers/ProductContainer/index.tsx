@@ -2,9 +2,9 @@
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { ProductReview } from "@/types/index";
-import ProductInfo from "@/components/Product Page/Info";
-import Policies from "@/components/Product Page/Policies";
-import Reviews from "@/components/Product Page/Reviews";
+import ProductInfo from "@/components/ProductPage/Info";
+import Policies from "@/components/ProductPage/Policies";
+import Reviews from "@/components/ProductPage/Reviews";
 import { useProductsStore } from "@/stores/useProductStore";
 import InfoSkeleton from "@/components/skeletons/ProductPage";
 

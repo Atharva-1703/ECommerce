@@ -4,6 +4,7 @@ import RatingBar from "./RatingBar";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import { useProductsStore } from "@/stores/useProductStore";
+import { useUserStore } from "@/stores/useUserStore";
 
 interface ReviewProps {
   reviews: ProductReview[];
@@ -17,6 +18,7 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
     comment: "",
   });
   const { addReview } = useProductsStore();
+  const { user } = useUserStore();
 
   const handleRatingChange = (rating: number) => {
     setReview((prevReview) => ({
@@ -32,6 +34,8 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
   return (
     <section className="px-4 mt-4">
       <h2 className="text-2xl font-bold">Product Reviews</h2>
+
+      {/* Product Ratings*/}
       <div className="mt-4 flex max-sm:flex-col-reverse  gap-4">
         <aside
           className="sm:shrink-0 max-sm:pt-3 flex flex-col justify-center  items-center sm:border-r max-sm:border-t border-gray-500 px-3"
@@ -44,6 +48,8 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
           <RatingBar reviews={reviews} totalRatings={ratingCount} />
         </div>
       </div>
+
+      {/* Give Review section */}
       <div className="mt-5 space-y-5">
         <h2 className="text-xl font-bold mb-6">Write a Review</h2>
         <div className="flex justify-center">
@@ -67,9 +73,13 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
           Submit
         </button>
       </div>
+
+
+      {/* Latest Reviews */}
       <div className="mt-5 space-y-3">
         <h2 className="text-xl font-bold mb-6">Latest Reviews</h2>
         {reviews.map((review, idx) => {
+          if (user && review.user === user.id) return null;
           if (!review.comment) return null;
           return (
             <div key={idx} className="border-b border-gray-500 pb-3">
