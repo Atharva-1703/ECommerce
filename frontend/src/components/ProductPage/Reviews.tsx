@@ -18,8 +18,10 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
     rating: 0,
     comment: "",
   });
-  const { addReview } = useProductsStore();
+  const { addReview, removeReview } = useProductsStore();
   const { user } = useUserStore();
+
+  const [showDelete, setShowDelete] = useState<boolean>(false);
 
   const UserReview = reviews.find((review) => review.user === user?.id);
 
@@ -28,6 +30,12 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
       ...prevReview,
       rating,
     }));
+  };
+
+  const handleReviewDelete = async () => {
+    setShowDelete(!showDelete);
+    if (!UserReview) return;
+    await removeReview(UserReview._id);
   };
 
   const handleReviewSubmit = async () => {
@@ -95,6 +103,47 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
               {UserReview.comment}
             </p>
           </div>
+          <div className="flex justify-end gap-3 mr-4">
+            {/* Edit */}
+            <button className="flex cursor-pointer items-center gap-1 text-blue-600 p-2 rounded-md hover:bg-blue-50 transition ">
+              <Icon icon="line-md:edit" className="w-6 h-6 sm:w-5 sm:h-5" />
+              <span className="text-sm font-medium">Edit</span>
+            </button>
+
+            {/* Delete */}
+            <button
+              className="flex cursor-pointer items-center gap-1 text-red-600 p-2 rounded-md hover:bg-red-50 transition"
+              onClick={() => setShowDelete(true)}
+            >
+              <Icon icon="line-md:trash" className="w-6 h-6 sm:w-5 sm:h-5" />
+              <span className=" hover:visible text-sm font-medium">Delete</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showDelete && (
+        <div className="fixed top-0 left-0  right-0 bottom-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm ">
+          <div className="bg-white w-full max-w-md p-4 m-5 rounded-xl shadow-lg">
+            <h2 className="text-lg font-semibold mb-4">Delete Review</h2>
+            <p className="text-gray-600">
+              Are you sure you want to delete your review?
+            </p>
+            <div className="flex justify-end mt-4">
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2 cursor-pointer"
+                onClick={() => setShowDelete(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md cursor-pointer"
+                onClick={handleReviewDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -117,15 +166,15 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
                   {review.name}
                 </span>
                 <Ratings rating={review.rating} size={18} />
-                <span className="text-sm font-medium text-gray-600">
-                  {"( Posted "}
-                  {getAge(review.createdAt)}
-                  {")"}
-                </span>
               </div>
               <p className="text-sm mt-2 text-gray-800 italic ">
                 {review.comment}
               </p>
+              <span className="flex justify-end text-xs font-medium text-gray-600">
+                {"( Posted "}
+                {getAge(review.createdAt)}
+                {")"}
+              </span>
             </div>
           );
         })}
