@@ -149,6 +149,7 @@ exports.updateRating = asyncHandler(async (req, res) => {
 
 exports.removeRating = asyncHandler(async (req, res) => {
   const id = req.params.id;
+  const user = req.user;
   if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({
       success: false,
