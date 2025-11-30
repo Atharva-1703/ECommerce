@@ -19,6 +19,11 @@ interface ProductsState {
   fetchProductData: (id: string) => Promise<void>;
 
   addReview: (review: Partial<ProductReview>) => Promise<void>;
+  updateReview: (
+    reviewId: string,
+    review: Partial<ProductReview>
+  ) => Promise<void>;
+  removeReview: (reviewId: string) => Promise<void>;
 }
 
 export const useProductsStore = create<ProductsState>((set, get) => ({
@@ -63,16 +68,19 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       toast.error("Product not found");
       return;
     }
-    if(!review.rating){
+    if (!review.rating) {
       toast.error("Rating is required");
       return;
     }
-    if(review.rating<1 || review.rating>5){
+    if (review.rating < 1 || review.rating > 5) {
       toast.error("Rating must be between 1 and 5");
     }
     // return;
     set({ loading: true });
-    const res = await fetcher(`${API_URL}/api/reviews/add`, "POST", {...review, productId: product._id});
+    const res = await fetcher(`${API_URL}/api/reviews/add`, "POST", {
+      ...review,
+      productId: product._id,
+    });
     const data = await res.json();
     if (!data.success) {
       toast.error(data.message);
@@ -80,6 +88,38 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       return;
     }
     toast.success("Review added successfully");
+    set({ loading: false, productData: data.product });
+  },
+  updateReview: async (reviewId, review) => {
+    set({ loading: true });
+    const res = await fetcher(
+      `${API_URL}/api/reviews/update/${reviewId}`,
+      "PUT",
+      review
+    );
+    const data = await res.json();
+    if (!data.success) {
+      toast.error(data.message);
+      set({ loading: false });
+      return;
+    }
+    toast.success("Review updated successfully");
+    set({ loading: false, productData: data.product });
+  },
+  removeReview: async (reviewId) => {
+    set({ loading: true });
+    const toastId = toast.loading("Removing review...");
+    const res = await fetcher(
+      `${API_URL}/api/reviews/delete/${reviewId}`,
+      "DELETE"
+    );
+    const data = await res.json();
+    if (!data.success) {
+      toast.error(data.message, { id: toastId });
+      set({ loading: false });
+      return;
+    }
+    toast.success("Review removed successfully", { id: toastId });
     set({ loading: false, productData: data.product });
   },
 }));
