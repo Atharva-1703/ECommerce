@@ -4,11 +4,18 @@ import { getAge } from "@/utils/Dates";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface UserReviewProps {
-    review: ProductReview;
-    onDelete: () => void;
+  review: ProductReview;
+  onDelete: () => void;
+  onEdit: () => void;
+  disabled: boolean;
 }
 
-export default function UserReviewCard({review,onDelete}: UserReviewProps) {
+export default function UserReviewCard({
+  review,
+  onDelete,
+  onEdit,
+  disabled,
+}: UserReviewProps) {
   return (
     <div className="mt-5 space-y-3">
       <h2 className="text-xl font-bold mb-4">
@@ -28,14 +35,23 @@ export default function UserReviewCard({review,onDelete}: UserReviewProps) {
       </div>
       <div className="flex justify-end gap-3 mr-4">
         {/* Edit */}
-        <button className="flex cursor-pointer items-center gap-1 text-blue-600 p-2 rounded-md hover:bg-blue-50 transition ">
+        <button
+          className={`flex items-center gap-1 text-blue-600 p-2 rounded-md hover:bg-blue-50 transition ${
+            disabled ? "cursor-not-allowed" : "cursor-pointer"
+          } `}
+          disabled={disabled}
+          onClick={onEdit}
+        >
           <Icon icon="line-md:edit" className="w-6 h-6 sm:w-5 sm:h-5" />
           <span className="text-sm font-medium">Edit</span>
         </button>
 
         {/* Delete */}
         <button
-          className="flex cursor-pointer items-center gap-1 text-red-600 p-2 rounded-md hover:bg-red-50 transition"
+          className={`flex  items-center gap-1 text-red-600 p-2 rounded-md hover:bg-red-50 transition ${
+            disabled ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
+          disabled={disabled}
           onClick={onDelete}
         >
           <Icon icon="line-md:trash" className="w-6 h-6 sm:w-5 sm:h-5" />

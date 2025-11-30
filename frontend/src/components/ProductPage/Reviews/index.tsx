@@ -22,13 +22,16 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
   const { user } = useUserStore();
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
+  const [deleting, setDeleting] = useState<boolean>(false);
 
   const UserReview = reviews.find((review) => review.user === user?.id);
 
   const handleReviewDelete = async () => {
     setShowDelete(!showDelete);
     if (!UserReview) return;
+    setDeleting(true);
     await removeReview(UserReview._id);
+    setDeleting(false);
   };
 
   const handleReviewSubmit = async (review: Partial<ProductReview>) => {
@@ -60,7 +63,9 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
       {UserReview && (
         <UserReviewCard
           review={UserReview}
+          onEdit={()=>console.log("edit")}
           onDelete={() => setShowDelete(true)}
+          disabled={deleting}
         />
       )}
 
