@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import { useProductsStore } from "@/stores/useProductStore";
 import { useUserStore } from "@/stores/useUserStore";
+import { getAge } from "@/utils/Dates";
 
 interface ReviewProps {
   reviews: ProductReview[];
@@ -19,6 +20,8 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
   });
   const { addReview } = useProductsStore();
   const { user } = useUserStore();
+
+  const UserReview = reviews.find((review) => review.user === user?.id);
 
   const handleRatingChange = (rating: number) => {
     setReview((prevReview) => ({
@@ -74,6 +77,26 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
         </button>
       </div>
 
+      {/* User Review */}
+      {UserReview && (
+        <div className="mt-5 space-y-3">
+          <h2 className="text-xl font-bold mb-4">
+            Your Review
+            <span className=" text-sm font-medium ml-3">
+              {"( Posted "}
+              {getAge(UserReview.createdAt)}
+              {")"}
+            </span>
+          </h2>
+
+          <div className="flex flex-col ">
+            <Ratings rating={UserReview.rating} size={22} />
+            <p className="text-md font-semibold mt-2 text-gray-800  ">
+              {UserReview.comment}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Latest Reviews */}
       <div className="mt-5 space-y-3">
@@ -82,8 +105,11 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
           if (user && review.user === user.id) return null;
           if (!review.comment) return null;
           return (
-            <div key={idx} className="border-b border-gray-500 pb-3">
-              <div className="flex items-center gap-2">
+            <div
+              key={idx}
+              className="border border-gray-200 rounded-lg p-4 shadow-sm pb-3"
+            >
+              <div className="flex items-center gap-2 mb-1">
                 <span className="flex justify-center items-center w-7 h-7 rounded-full bg-gray-300">
                   <Icon icon="mdi:person" className="w-5 h-5 text-gray-600" />
                 </span>
@@ -91,6 +117,11 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
                   {review.name}
                 </span>
                 <Ratings rating={review.rating} size={18} />
+                <span className="text-sm font-medium text-gray-600">
+                  {"( Posted "}
+                  {getAge(review.createdAt)}
+                  {")"}
+                </span>
               </div>
               <p className="text-sm mt-2 text-gray-800 italic ">
                 {review.comment}
