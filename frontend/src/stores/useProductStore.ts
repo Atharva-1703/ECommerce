@@ -76,7 +76,6 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       toast.error("Rating must be between 1 and 5");
     }
     // return;
-    set({ loading: true });
     const res = await fetcher(`${API_URL}/api/reviews/add`, "POST", {
       ...review,
       productId: product._id,
@@ -88,10 +87,9 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       return;
     }
     toast.success("Review added successfully");
-    set({ loading: false, productData: data.product });
+    set({ productData: data.product });
   },
   updateReview: async (reviewId, review) => {
-    set({ loading: true });
     const res = await fetcher(
       `${API_URL}/api/reviews/update/${reviewId}`,
       "PUT",
@@ -104,10 +102,9 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       return;
     }
     toast.success("Review updated successfully");
-    set({ loading: false, productData: data.product });
+    set({ productData: data.product });
   },
   removeReview: async (reviewId) => {
-    set({ loading: true });
     const toastId = toast.loading("Removing review...");
     const res = await fetcher(
       `${API_URL}/api/reviews/delete/${reviewId}`,
@@ -120,6 +117,6 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       return;
     }
     toast.success("Review removed successfully", { id: toastId });
-    set({ loading: false, productData: data.product });
+    set({ productData: data.product });
   },
 }));
