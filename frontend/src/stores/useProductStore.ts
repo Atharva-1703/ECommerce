@@ -19,10 +19,7 @@ interface ProductsState {
   fetchProductData: (id: string) => Promise<void>;
 
   addReview: (review: Partial<ProductReview>) => Promise<void>;
-  updateReview: (
-    reviewId: string,
-    review: Partial<ProductReview>
-  ) => Promise<void>;
+  updateReview: (review: ProductReview) => Promise<void>;
   removeReview: (reviewId: string) => Promise<void>;
 }
 
@@ -64,16 +61,17 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
   },
   addReview: async (review) => {
     const product = get().productData;
+    const toastId = toast.loading("Adding review...");
     if (!product) {
-      toast.error("Product not found");
+      toast.error("Product not found", { id: toastId });
       return;
     }
     if (!review.rating) {
-      toast.error("Rating is required");
+      toast.error("Rating is required", { id: toastId });
       return;
     }
     if (review.rating < 1 || review.rating > 5) {
-      toast.error("Rating must be between 1 and 5");
+      toast.error("Rating must be between 1 and 5", { id: toastId });
     }
     // return;
     const res = await fetcher(`${API_URL}/api/reviews/add`, "POST", {
@@ -82,26 +80,27 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
     });
     const data = await res.json();
     if (!data.success) {
-      toast.error(data.message);
+      toast.error(data.message, { id: toastId });
       set({ loading: false });
       return;
     }
-    toast.success("Review added successfully");
+    toast.success("Review added successfully", { id: toastId });
     set({ productData: data.product });
   },
-  updateReview: async (reviewId, review) => {
+  updateReview: async (review) => {
+    const toastId = toast.loading("Updating review...");
     const res = await fetcher(
-      `${API_URL}/api/reviews/update/${reviewId}`,
+      `${API_URL}/api/reviews/update/${review._id}`,
       "PUT",
       review
     );
     const data = await res.json();
     if (!data.success) {
-      toast.error(data.message);
+      toast.error(data.message, { id: toastId });
       set({ loading: false });
       return;
     }
-    toast.success("Review updated successfully");
+    toast.success("Review updated successfully", { id: toastId });
     set({ productData: data.product });
   },
   removeReview: async (reviewId) => {

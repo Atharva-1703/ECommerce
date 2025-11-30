@@ -35,7 +35,10 @@ export default function AddReviewForm({ onSubmit }: AddReviewFormProps) {
       ></textarea>
       <button
         className="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
-        onClick={() => onSubmit(review)}
+        onClick={() => {
+          onSubmit(review);
+          setReview({ rating: 0, comment: "" });
+        }}
       >
         Submit
       </button>

@@ -1,15 +1,15 @@
 import { ProductReview } from "@/types";
 import Ratings from "../../Common/Rating/Ratings";
 import RatingBar from "../RatingBar";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import { useProductsStore } from "@/stores/useProductStore";
 import { useUserStore } from "@/stores/useUserStore";
-import { getAge } from "@/utils/Dates";
 import AddReviewForm from "./AddReviewForm";
 import UserReviewCard from "./UserReviewCard";
 import DeleteReviewModal from "./DeleteReviewModal";
 import ReviewCard from "./ReviewCard";
+import EditReview from "./EditReview";
+import toast from "react-hot-toast";
 
 interface ReviewProps {
   reviews: ProductReview[];
@@ -18,25 +18,36 @@ interface ReviewProps {
 }
 
 export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
-  const { addReview, removeReview } = useProductsStore();
+  const { addReview, removeReview,updateReview } = useProductsStore();
   const { user } = useUserStore();
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
-  const [deleting, setDeleting] = useState<boolean>(false);
+  const [processing, setProcessing] = useState<boolean>(false);
+  const [editing, setEditing] = useState<boolean>(false);
 
   const UserReview = reviews.find((review) => review.user === user?.id);
 
   const handleReviewDelete = async () => {
     setShowDelete(!showDelete);
     if (!UserReview) return;
-    setDeleting(true);
+    setProcessing(true);
     await removeReview(UserReview._id);
-    setDeleting(false);
+    setProcessing(false);
   };
 
   const handleReviewSubmit = async (review: Partial<ProductReview>) => {
     await addReview(review);
   };
+
+  const handleReviewEdit=async(review:ProductReview)=>{
+    if (!UserReview) return;
+    if(UserReview.rating===review.rating && UserReview.comment===review.comment){
+      toast.error("No change in review found");
+      return;
+    }
+    setEditing(false);
+    await updateReview(review);
+  }
 
   return (
     <section className="px-4 mt-4">
@@ -60,14 +71,21 @@ export default function Reviews({ reviews, rating, ratingCount }: ReviewProps) {
       <AddReviewForm onSubmit={handleReviewSubmit} />
 
       {/* User Review */}
-      {UserReview && (
-        <UserReviewCard
-          review={UserReview}
-          onEdit={()=>console.log("edit")}
-          onDelete={() => setShowDelete(true)}
-          disabled={deleting}
-        />
-      )}
+      {UserReview &&
+        (editing ? (
+          <EditReview
+            editReview={UserReview}
+            onCancel={() => setEditing(false)}
+            onSave={handleReviewEdit}
+          />
+        ) : (
+          <UserReviewCard
+            review={UserReview}
+            onEdit={() => setEditing(true)}
+            onDelete={() => setShowDelete(true)}
+            disabled={processing}
+          />
+        ))}
 
       {showDelete && (
         <DeleteReviewModal
