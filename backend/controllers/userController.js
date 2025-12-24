@@ -21,7 +21,16 @@ exports.getReviews = asyncHandler(async (req, res) => {
   const user = req.user;
   const userFound = await User.findById(user.id)
     .populate("reviews")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "product",
+        select: "_id title thumbnail ",
+      },
+    })
     .select("reviews");
+
+
   if (!userFound) {
     return res.status(404).json({
       success: false,
@@ -267,9 +276,8 @@ exports.addAddress = asyncHandler(async (req, res) => {
   }
   if (
     userFound.address.some(
-    (addr) =>
-      addr.name.toLowerCase() === address.name.toLowerCase()
-  )
+      (addr) => addr.name.toLowerCase() === address.name.toLowerCase()
+    )
   ) {
     return res.status(400).json({
       success: false,
