@@ -8,6 +8,7 @@ interface UserReviewProps {
   onDelete: () => void;
   onEdit: () => void;
   disabled: boolean;
+  mode?: "product" | "profile";
 }
 
 export default function UserReviewCard({
@@ -15,10 +16,11 @@ export default function UserReviewCard({
   onDelete,
   onEdit,
   disabled,
+  mode = "product",
 }: UserReviewProps) {
   return (
     <div className="mt-5 space-y-3">
-      <h2 className="text-xl font-bold mb-4">
+      <h2 className={`${mode==="product"?"text-xl font-bold mb-4":"text-md font-semibold"}`}>
         Your Review
         <span className=" text-sm font-medium ml-3">
           {"( Posted "}
@@ -33,31 +35,33 @@ export default function UserReviewCard({
           {review.comment}
         </p>
       </div>
-      <div className="flex justify-end gap-3 mr-4">
-        {/* Edit */}
-        <button
-          className={`flex items-center gap-1 text-blue-600 p-2 rounded-md hover:bg-blue-50 transition ${
-            disabled ? "cursor-not-allowed" : "cursor-pointer"
-          } `}
-          disabled={disabled}
-          onClick={onEdit}
-        >
-          <Icon icon="line-md:edit" className="w-6 h-6 sm:w-5 sm:h-5" />
-          <span className="text-sm font-medium">Edit</span>
-        </button>
+      {mode === "product" && (
+        <div className="flex justify-end gap-3 mr-4">
+          {/* Edit */}
+          <button
+            className={`flex items-center gap-1 text-blue-600 p-2 rounded-md hover:bg-blue-50 transition ${
+              disabled ? "cursor-not-allowed" : "cursor-pointer"
+            } `}
+            disabled={disabled}
+            onClick={onEdit}
+          >
+            <Icon icon="line-md:edit" className="w-6 h-6 sm:w-5 sm:h-5" />
+            <span className="text-sm font-medium">Edit</span>
+          </button>
 
-        {/* Delete */}
-        <button
-          className={`flex  items-center gap-1 text-red-600 p-2 rounded-md hover:bg-red-50 transition ${
-            disabled ? "cursor-not-allowed" : "cursor-pointer"
-          }`}
-          disabled={disabled}
-          onClick={onDelete}
-        >
-          <Icon icon="line-md:trash" className="w-6 h-6 sm:w-5 sm:h-5" />
-          <span className=" hover:visible text-sm font-medium">Delete</span>
-        </button>
-      </div>
+          {/* Delete */}
+          <button
+            className={`flex  items-center gap-1 text-red-600 p-2 rounded-md hover:bg-red-50 transition ${
+              disabled ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            disabled={disabled}
+            onClick={onDelete}
+          >
+            <Icon icon="line-md:trash" className="w-6 h-6 sm:w-5 sm:h-5" />
+            <span className=" hover:visible text-sm font-medium">Delete</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
