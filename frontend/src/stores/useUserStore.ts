@@ -1,4 +1,4 @@
-import { User, Product, address } from "@/types";
+import { User, Product, address, ProductReview } from "@/types";
 import { fetcher } from "@/utils/fetcher";
 import { API_URL } from "@/utils/url";
 import toast from "react-hot-toast";
@@ -14,6 +14,7 @@ interface UserStoreState {
   isLoading: boolean;
   errorMessage: string;
   isRehydrated: boolean;
+  reviews:ProductReview[]
 
   setRehydrated: () => void;
 
@@ -33,6 +34,8 @@ interface UserStoreState {
   removeAddress: (addressId: string) => Promise<void>;
   editAddress: (addressId: string, address: address) => Promise<void>;
 
+  fetchReview:()=>Promise<void>;
+
   clearStore: () => void;
 }
 
@@ -47,6 +50,7 @@ export const useUserStore = create<UserStoreState>()(
       favourites: [],
       favouritesIds: [],
       isRehydrated: false,
+      reviews:[],
 
       setRehydrated: () => {
         set({ isRehydrated: true });
@@ -275,6 +279,16 @@ export const useUserStore = create<UserStoreState>()(
         });
         toast.success("Address edited successfully");
         set({ isLoading: false });
+      },
+
+      fetchReview: async()=> {
+        const res=await fetcher(`${API_URL}/api/user/reviews`,'GET')
+        const data=await res.json()
+        if(!res.ok || !data.success){
+          toast.error(data.message)
+          return
+        }
+        set({reviews:data.reviews})
       },
 
       clearStore: () => {

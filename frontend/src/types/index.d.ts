@@ -5,16 +5,6 @@ interface Dimensions{
   height: number;
 }
 
-// ? there is a question mark next to user due to sample data reviews which doesnt have any user associated with it
-export interface ProductReview {
-  _id: string;
-  rating: number;
-  comment: string;
-  name: string;
-  product: string;
-  user?: string;
-  createdAt:string;
-}
 
 export interface Product {
   _id: string;
@@ -36,6 +26,17 @@ export interface Product {
   reviews?:string[] | ProductReview[];
   createdAt?: string;          
   updatedAt?: string; 
+}
+
+// ? there is a question mark next to user due to sample data reviews which doesnt have any user associated with it
+export interface ProductReview {
+  _id: string;
+  rating: number;
+  comment: string;
+  name: string;
+  product: Partial<Product>;
+  user?: string;
+  createdAt:string;
 }
 
 interface address{
