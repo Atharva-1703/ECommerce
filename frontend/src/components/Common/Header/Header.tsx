@@ -118,7 +118,10 @@ export default function Header() {
               {openProfile && (
                 <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 shadow-lg rounded-md p-2">
                   <button
-                    onClick={() => handleNavClick("/profile")}
+                    onClick={() => {
+                      setOpenProfile(false);
+                      handleNavClick("/profile");
+                    }}
                     className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
                   >
                     My Profile
