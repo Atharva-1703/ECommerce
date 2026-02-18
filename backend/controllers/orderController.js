@@ -165,6 +165,13 @@ exports.getOrderById = asyncHandler(async (req, res) => {
     });
   }
 
+  if(order.user.toString()!==req.user.id){
+    return res.status(401).json({
+      success: false,
+      message: "You are not authorized to view this order",
+    });
+  }
+
   res.status(200).json({
     success: true,
     order,
