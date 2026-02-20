@@ -48,7 +48,7 @@ exports.addOrders = asyncHandler(async (req, res) => {
     const product = await Product.findOneAndUpdate(
       { _id: item.productId, stock: { $gte: item.quantity } },
       { $inc: { stock: -item.quantity } },
-      { new: true }
+      { new: true },
     );
     if (!product) {
       return res
@@ -155,7 +155,7 @@ exports.getOrderById = asyncHandler(async (req, res) => {
 
   const order = await Orders.findById(orderId).populate(
     "items.product",
-    "title price thumbnail"
+    "title price thumbnail",
   );
 
   if (!order) {
@@ -165,7 +165,14 @@ exports.getOrderById = asyncHandler(async (req, res) => {
     });
   }
 
-  if(order.user.toString()!==req.user.id){
+  if (req.user.role === "admin") {
+    return res.status(200).json({
+      success: true,
+      order,
+    });
+  }
+
+  if (order.user.toString() !== req.user.id) {
     return res.status(401).json({
       success: false,
       message: "You are not authorized to view this order",
@@ -176,5 +183,62 @@ exports.getOrderById = asyncHandler(async (req, res) => {
     success: true,
     order,
     message: "Order fetched successfully",
+  });
+});
+
+exports.updateOrder = asyncHandler(async (req, res) => {
+  const orderId = req.params.id;
+  const { status } = req.body;
+
+  if (!mongoose.isValidObjectId(orderId)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid order ID",
+    });
+  }
+
+  if (!status) {
+    return res.status(400).json({
+      success: false,
+      message: "Status is required",
+    });
+  }
+
+  const order = await Orders.findByIdAndUpdate(
+    orderId,
+    { status },
+    { new: true },
+  );
+  if (!order) {
+    return res.status(404).json({
+      success: false,
+      message: "Order not found",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    message: "Order updated successfully",
+    order,
+  });
+});
+
+exports.getAllOrders = asyncHandler(async (req, res) => {
+  const { status, paymentMethod } = req.query;
+
+  const query = {};
+  if (status) {
+    query.status = status;
+  }
+  if (paymentMethod) {
+    query.paymentMethod = paymentMethod;
+  }
+  console.log(query);
+  const orders = await Orders.find(query)
+    .populate("items.product", "title price thumbnail")
+    .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    orders,
   });
 });

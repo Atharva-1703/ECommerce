@@ -76,7 +76,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
 
   // ? generate tokens
   const token = jwt.sign(
-    { id: userFound._id, name: userFound.username },
+    { id: userFound._id, name: userFound.username,isAdmin:userFound.isAdmin },
     process.env.JWT_SECRET,
     {
       expiresIn: "30d",

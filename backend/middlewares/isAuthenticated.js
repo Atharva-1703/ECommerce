@@ -25,6 +25,7 @@ const isAuthenticated = async (req, res, next) => {
     req.user = {
       id: verifyToken.id,
       name: verifyToken.name,
+      role:verifyToken.isAdmin?"admin":"user",
     };
     next();
   } else {
