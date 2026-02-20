@@ -33,7 +33,13 @@ export const dummyProducts: Product[] = [
         comment:
           "Excellent product! Quality is top-notch and delivery was super fast.",
         name: "Ravi Kumar",
-        product: "prod1",
+        product: {
+          _id: "688ddc5ffd1f7ed3258132f8",
+          title: "Women's Wrist Watch",
+          price: 10399.2,
+          thumbnail:
+            "https://cdn.dummyjson.com/product-images/womens-watches/women's-wrist-watch/thumbnail.webp",
+        },
         user: "user1",
         createdAt: "2023-06-01T10:00:00.000Z",
       },
@@ -42,7 +48,13 @@ export const dummyProducts: Product[] = [
         rating: 4,
         comment: "Good overall, but the packaging could be better.",
         name: "Ananya Sharma",
-        product: "prod1",
+        product: {
+          _id: "688ddc5ffd1f7ed3258132f8",
+          title: "Women's Wrist Watch",
+          price: 10399.2,
+          thumbnail:
+            "https://cdn.dummyjson.com/product-images/womens-watches/women's-wrist-watch/thumbnail.webp",
+        },
         user: "user2",
         createdAt: "2023-06-01T10:00:00.000Z",
       },
@@ -51,7 +63,13 @@ export const dummyProducts: Product[] = [
         rating: 4,
         comment: "Good overall, but the packaging could be better.",
         name: "Ananya Sharma",
-        product: "prod1",
+        product: {
+          _id: "688ddc5ffd1f7ed3258132f8",
+          title: "Women's Wrist Watch",
+          price: 10399.2,
+          thumbnail:
+            "https://cdn.dummyjson.com/product-images/womens-watches/women's-wrist-watch/thumbnail.webp",
+        },
         user: "user2",
         createdAt: "2023-06-01T10:00:00.000Z",
       },
