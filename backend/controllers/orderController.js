@@ -232,7 +232,7 @@ exports.getAllOrders = asyncHandler(async (req, res) => {
   if (paymentMethod) {
     query.paymentMethod = paymentMethod;
   }
-  console.log(query);
+  // console.log(query);
   const orders = await Orders.find(query)
     .populate("items.product", "title price thumbnail")
     .sort({ createdAt: -1 });
